@@ -1,7 +1,7 @@
-case class Player(nr:Int)
-case class Stone(art:Int, p:Player, color:Int)
+case class Player(color:Int)
+case class Stone(p:Player)
 
-case class Field(x:Int, y:Int, empty:Boolean, s:Stone)
+case class Field(x:Int, y:Int, isEmpty:Boolean)
 
 
 object GameBoard {
@@ -12,13 +12,13 @@ object GameBoard {
 
 for(y <- 0 until 16) {
   for (i <- 0 until 17) {
-    GameBoard.board(i)(y) = Field(i, y, false, Stone(0, Player(0),0))
+    GameBoard.board(i)(y) = Field(i, y,true)
   }
 }
 
 for(y <- 0 until 16) {
   for (i <- 0 until 17) {
-    print("|0|")
+    if (GameBoard.board(i)(y).isEmpty) print("|0|")
   }
   println()
 }
