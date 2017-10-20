@@ -1,7 +1,8 @@
 case class Player(color:Int)
 case class Stone(p:Player)
 abstract class Field( val x:Int,val y:Int,var isEmpty:Boolean)
-case class EmptyField extends Field(x:Int, y:Int,isEmpty:Boolean)
+case class EmptyField (override val x:Int, override val y:Int ,override val isEmpty:Boolean) extends Field(x, y, isEmpty)
+case class StoneField (override val x:Int, override val y:Int ,override val isEmpty:Boolean, s:Stone) extends Field(x, y, isEmpty)
 
 
 
