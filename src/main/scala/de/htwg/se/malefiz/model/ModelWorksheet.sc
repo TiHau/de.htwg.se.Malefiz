@@ -14,7 +14,7 @@ object GameBoard {
 
 for(y <- 0 until 16) {
   for (i <- 0 until 17) {
-    GameBoard.board(i)(y) = EmptyField(i, y,true)
+    GameBoard.board(i)(y) = StoneField(i, y,true, Stone(Player(1)))
   }
 }
 
