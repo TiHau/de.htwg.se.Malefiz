@@ -1,3 +1,3 @@
 package de.htwg.se.malefiz.model
 
-class Stone(p:Player)
+case class Stone(p:Player)
