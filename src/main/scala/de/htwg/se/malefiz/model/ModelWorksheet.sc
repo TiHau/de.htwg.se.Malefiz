@@ -5,8 +5,20 @@ case class Field(x:Int, y:Int, empty:Boolean, s:Stone)
 
 
 object GameBoard {
-  val x=16
-  val y=17
+  val x=17
+  val y=16
   var board = Array.ofDim[Field](x,y)
 }
-GameBoard.board(0)(0)= Field(0,0,false,Stone(0,Player(0)))
+
+for(y <- 0 until 16) {
+  for (i <- 0 until 17) {
+    GameBoard.board(i)(y) = Field(i, y, false, Stone(0, Player(0)))
+  }
+}
+
+for(y <- 0 until 16) {
+  for (i <- 0 until 17) {
+    print("|0|");
+  }
+  println()
+}
