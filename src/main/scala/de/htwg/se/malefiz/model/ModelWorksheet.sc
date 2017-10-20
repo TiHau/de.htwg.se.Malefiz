@@ -1,6 +1,7 @@
 case class Player(color:Int)
 case class Stone(p:Player)
-case class Field(x:Int, y:Int, isEmpty:Boolean, player: Player)
+abstract class Field( val x:Int,val y:Int,var isEmpty:Boolean)
+case class EmptyField extends Field(x:Int, y:Int,isEmpty:Boolean)
 
 
 
@@ -12,7 +13,7 @@ object GameBoard {
 
 for(y <- 0 until 16) {
   for (i <- 0 until 17) {
-    GameBoard.board(i)(y) = Field(i, y,true, Player(0))
+    GameBoard.board(i)(y) = EmptyField(i, y,true)
   }
 }
 
