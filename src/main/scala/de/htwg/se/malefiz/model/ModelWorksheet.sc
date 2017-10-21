@@ -1,6 +1,6 @@
 case class Player(color:Int)
 case class Stone(p:Player)
-//abstract class Field( val x:Int,val y:Int,var isEmpty:Boolean)
+abstract class Field( val x:Int,val y:Int,var isEmpty:Boolean)
 case class EmptyField (override val x:Int, override val y:Int ,override val isEmpty:Boolean) extends Field(x, y, isEmpty)
 case class StoneField (override val x:Int, override val y:Int ,override val isEmpty:Boolean, s:Stone) extends Field(x, y, isEmpty)
 
@@ -9,7 +9,7 @@ case class StoneField (override val x:Int, override val y:Int ,override val isEm
 object GameBoard {
   val x=17
   val y=16
-  var board = Array.ofDim[StoneField](x,y)
+  var board = Array.ofDim[Field](x,y)
 }
 
 for(y <- 0 until 16) {
