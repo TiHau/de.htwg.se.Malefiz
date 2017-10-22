@@ -1,9 +1,10 @@
 package de.htwg.se.malefiz
 
-import de.htwg.se.malefiz.model.Player
+import de.htwg.se.malefiz.model.{GameBoard, Player}
 
 object Malefiz {
   def main(args: Array[String]): Unit = {
-    val student = Player(1)
+    GameBoard.build()
+    GameBoard.pri()
   }
 }
