@@ -1,11 +1,8 @@
 package de.htwg.se.malefiz.model
 object GameBoard {
-  val x=17
-  val y=16
-  var board = Array.ofDim[Field](x,y)
+  var board = Array.ofDim[Field](17,16)
   def build(): Unit ={
     val k = true
-    board(8)(0)= StoneField(8,0,k,null)
     for (i <- 0 to 16) {
       board(i)(1)=StoneField(i,1,k,null)
       board(i)(11)=StoneField(i,11,k,null)
@@ -30,6 +27,7 @@ object GameBoard {
       if(i>=13&&i<=15)
         board(i)(14)=StoneField(i,14,k,null)
     }
+    board(8)(0)= StoneField(8,0,k,null)
     board(12)(8)=StoneField(12,8,k,null)
     board(0)(2)=StoneField(0,2,k,null)
     board(4)(8)=StoneField(4,8,k,null)
@@ -42,9 +40,9 @@ object GameBoard {
     board(10)(10)=StoneField(10,10,k,null)
     board(14)(10)=StoneField(14,10,k,null)
     for(y<-0 to 15) {
-      for (i <- 0 to 16) {
-        if (board(i)(y)==null) {
-          board(i)(y)=EmptyField(i,y,k)
+      for (x <- 0 to 16) {
+        if (board(x)(y)==null) {
+          board(x)(y)=EmptyField(x,y,k)
         }
       }
     }
