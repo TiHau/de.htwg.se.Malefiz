@@ -5,8 +5,8 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class GameBoardSpec extends WordSpec with Matchers{
   "A GameBoard" when {
-    "new" should {
-      GameBoard.build()
+    "initialized" should {
+      InitializeMalefiz.apply().build(GameBoard.board)
 
       "have no null field" in {
         var x:Field=EmptyField(0,0,true)

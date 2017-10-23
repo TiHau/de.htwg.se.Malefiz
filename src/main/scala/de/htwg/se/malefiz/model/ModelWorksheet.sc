@@ -9,7 +9,7 @@ case class StoneField (override val x:Int, override val y:Int ,override val isEm
 object GameBoard {
   val x=17
   val y=16
-  var board = Array.ofDim[Field](x,y)
+  var board: Array[Array[Field]] = Array.ofDim[Field](x,y)
 }
 
 for(y <- 0 until 16) {
