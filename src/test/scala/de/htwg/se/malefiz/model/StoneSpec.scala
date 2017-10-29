@@ -6,9 +6,9 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class StoneSpec extends WordSpec with Matchers {
   "A Stone" when { "new" should {
-    val stone = Stone(Player(1))
+    val stone = PlayerStone(StoneField(1,1,false, stone),Player(1))
     "have a Player"  in {
-      stone.p should be(Player(1))
+      stone.player should be(Player(1))
     }
 
   }}
