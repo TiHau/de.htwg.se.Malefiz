@@ -4,12 +4,12 @@ case class InitializeMalefiz() {
   def buildMalefitzGameBoard(board:Array[Array[Field]]): Array[Array[Field]] ={
     val k = true
     for (i <- 0 to 16) {
-      board(i)(1)=StoneField(i,1,k,PlaceholderStone(board(i)(1)))
-      board(i)(11)=StoneField(i,11,k,PlaceholderStone(board(i)(11)))
-      board(i)(13)=StoneField(i,13,k,PlaceholderStone(board(i)(13)))
-      board(i)(3)=StoneField(i,3,k,PlaceholderStone(board(i)(3)))
+      board(i)(1) = StoneField(i,1,k,PlaceholderStone(board(i)(1)))
+      board(i)(11) = StoneField(i,11,k,PlaceholderStone(board(i)(11)))
+      board(i)(13) = StoneField(i,13,k,PlaceholderStone(board(i)(13)))
+      board(i)(3) = StoneField(i,3,k,PlaceholderStone(board(i)(3)))
       if(i%4==0)
-        board(i)(12)=StoneField(i,12,k,PlaceholderStone(board(i)(12)))
+        board(i)(12) = StoneField(i,12,k,PlaceholderStone(board(i)(12)))
       if(!(i%2==0))
         board(i)(15) = StoneField(i, 15, k, PlaceholderStone(board(i)(15)))
       if(i>=6&&i<=10)
@@ -54,13 +54,38 @@ case class InitializeMalefiz() {
         if (board(i)(y).toString.charAt(0) == "E".charAt(0)) {
           print("   ")
         } else if (board(i)(y).toString.charAt(0) == "S".charAt(0)) {
-          print("|1|")
+          val s:StoneField =board(i)(y).asInstanceOf[StoneField]
+            if(s.stone.toString.charAt(0)=="P".charAt(0))
+              if(s.stone.toString.charAt(4)=="c".charAt(0)) {
+                print("|0|")
+              } else {
+                print("|P|")
+              }
+
+          if(s.stone.toString.charAt(0)=="B".charAt(0))
+            print("|B|")
+
         } else {
           print("|y|")
         }
       }
       println()
     }
+  }
+  def setBlockStones(board:Array[Array[Field]]): Array[Array[Field]] ={
+    board(8)(0)=StoneField(8,0,false,BlockStone(board(8)(0)))
+    board(8)(1)=StoneField(8,1,false,BlockStone(board(8)(1)))
+    board(8)(3)=StoneField(8,3,false,BlockStone(board(8)(3)))
+    board(8)(4)=StoneField(8,4,false,BlockStone(board(8)(4)))
+    board(8)(5)=StoneField(8,5,false,BlockStone(board(8)(5)))
+    board(6)(7)=StoneField(6,7,false,BlockStone(board(6)(7)))
+    board(10)(7)=StoneField(10,7,false,BlockStone(board(10)(7)))
+    board(0)(11)=StoneField(0,11,false,BlockStone(board(0)(11)))
+    board(4)(11)=StoneField(4,11,false,BlockStone(board(4)(11)))
+    board(8)(11)=StoneField(8,11,false,BlockStone(board(8)(11)))
+    board(12)(11)=StoneField(12,11,false,BlockStone(board(12)(11)))
+    board(16)(11)=StoneField(16,11,false,BlockStone(board(16)(11)))
+    board
   }
 
 }
