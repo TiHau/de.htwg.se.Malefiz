@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.model
 
 case class InitializeMalefiz() {
-  def build(board:Array[Array[Field]]): Array[Array[Field]] ={
+  def buildMalefitzGameBoard(board:Array[Array[Field]]): Array[Array[Field]] ={
     val k = true
     for (i <- 0 to 16) {
       board(i)(1)=StoneField(i,1,k,PlaceholderStone(board(i)(1)))
