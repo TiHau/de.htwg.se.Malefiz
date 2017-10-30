@@ -56,7 +56,7 @@ case class InitializeMalefiz() {
         } else if (board(i)(y).toString.charAt(0) == "S".charAt(0)) {
           val s:StoneField =board(i)(y).asInstanceOf[StoneField]
             if(s.stone.toString.charAt(0)=="P".charAt(0))
-              if(s.stone.toString.charAt(4)=="c".charAt(0)) {
+              if(s.stone.toString.charAt(3)=="c".charAt(0)) {
                 print("|0|")
               } else {
                 print("|P|")
@@ -85,6 +85,29 @@ case class InitializeMalefiz() {
     board(8)(11)=StoneField(8,11,false,BlockStone(board(8)(11)))
     board(12)(11)=StoneField(12,11,false,BlockStone(board(12)(11)))
     board(16)(11)=StoneField(16,11,false,BlockStone(board(16)(11)))
+    board
+  }
+  def setPlayerStones(board:Array[Array[Field]]): Array[Array[Field]]  ={
+    board(1)(14)=StoneField(1,14,false,PlayerStone(board(1)(14),Player(1)))
+    board(1)(15)=StoneField(1,15,false,PlayerStone(board(1)(15),Player(1)))
+    board(2)(14)=StoneField(2,14,false,PlayerStone(board(2)(14),Player(1)))
+    board(3)(14)=StoneField(3,14,false,PlayerStone(board(3)(14),Player(1)))
+    board(3)(15)=StoneField(3,15,false,PlayerStone(board(3)(15),Player(1)))
+    board(5)(14)=StoneField(5,14,false,PlayerStone(board(5)(14),Player(2)))
+    board(5)(15)=StoneField(5,15,false,PlayerStone(board(5)(15),Player(2)))
+    board(6)(14)=StoneField(6,14,false,PlayerStone(board(6)(14),Player(2)))
+    board(7)(14)=StoneField(7,14,false,PlayerStone(board(7)(14),Player(2)))
+    board(7)(15)=StoneField(7,15,false,PlayerStone(board(7)(15),Player(2)))
+    board(9)(14)=StoneField(9,14,false,PlayerStone(board(9)(14),Player(3)))
+    board(9)(15)=StoneField(9,15,false,PlayerStone(board(9)(15),Player(3)))
+    board(10)(14)=StoneField(10,14,false,PlayerStone(board(10)(14),Player(3)))
+    board(11)(14)=StoneField(11,14,false,PlayerStone(board(11)(14),Player(3)))
+    board(11)(15)=StoneField(11,15,false,PlayerStone(board(11)(15),Player(3)))
+    board(13)(14)=StoneField(13,14,false,PlayerStone(board(13)(14),Player(4)))
+    board(13)(15)=StoneField(13,15,false,PlayerStone(board(13)(15),Player(4)))
+    board(14)(14)=StoneField(14,14,false,PlayerStone(board(14)(14),Player(4)))
+    board(15)(14)=StoneField(15,14,false,PlayerStone(board(15)(14),Player(4)))
+    board(15)(15)=StoneField(15,15,false,PlayerStone(board(15)(15),Player(4)))
     board
   }
 
