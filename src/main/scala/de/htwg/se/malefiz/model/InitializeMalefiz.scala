@@ -20,8 +20,8 @@ case class InitializeMalefiz() {
   val nu14 = 14
   val nu15 = 15
   val nu16 = 16
-  def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
 
+  def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
     for (i <- nu0 to nu16) {
       board(i)(nu1) = StoneField(i, nu1, k, PlaceholderStone(board(i)(nu1)))
       board(i)(nu11) = StoneField(i, nu11, k, PlaceholderStone(board(i)(nu11)))
@@ -42,16 +42,7 @@ case class InitializeMalefiz() {
       if (i >= nu2 && i <= nu14) {
         board(i)(nu9) = StoneField(i, nu9, k, PlaceholderStone(board(i)(nu9)))
       }
-      if (i >= nu1 && i <= nu3) {
-        board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      }
-      if (i >= nu5 && i <= nu7) {
-        board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      }
-      if (i >= nu9 && i <= nu11) {
-        board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      }
-      if (i >= nu13 && i <= nu15) {
+      if ((i >= nu1 && i <= nu3)||(i >= nu5 && i <= nu7)||(i >= nu9 && i <= nu11)||(i >= nu13 && i <= nu15)) {
         board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
       }
     }
@@ -88,26 +79,23 @@ case class InitializeMalefiz() {
             if (s.stone.toString.charAt(nu3) == "c".charAt(nu0)) {
               print("|0 |")
             } else {
-
-              val ps:PlayerStone=s.stone.asInstanceOf[PlayerStone]
-              if(ps.player.color==nu1) {
+              val ps: PlayerStone = s.stone.asInstanceOf[PlayerStone]
+              if (ps.player.color == nu1) {
                 print("|P1|")
               }
-              if(ps.player.color==nu2) {
+              if (ps.player.color == nu2) {
                 print("|P2|")
               }
-              if(ps.player.color==nu3) {
+              if (ps.player.color == nu3) {
                 print("|P3|")
               }
-              if(ps.player.color==nu4) {
+              if (ps.player.color == nu4) {
                 print("|P4|")
               }
             }
-          if (s.stone.toString.charAt(nu0) == "B".charAt(nu0))
+          if (s.stone.toString.charAt(nu0) == "B".charAt(nu0)) {
             print("|B |")
-
-        } else {
-          print("|y |")
+          }
         }
       }
       println()
@@ -131,10 +119,10 @@ case class InitializeMalefiz() {
   }
 
   def setPlayerStones(board: Array[Array[Field]]): Array[Array[Field]] = {
-    val player1:Player = Player(nu1)
-    val player2:Player = Player(nu2)
-    val player3:Player = Player(nu3)
-    val player4:Player = Player(nu4)
+    val player1: Player = Player(nu1)
+    val player2: Player = Player(nu2)
+    val player3: Player = Player(nu3)
+    val player4: Player = Player(nu4)
     board(nu1)(nu14) = StoneField(nu1, nu14, l, PlayerStone(board(nu1)(nu14), player1))
     board(nu1)(nu15) = StoneField(nu1, nu15, l, PlayerStone(board(nu1)(nu15), player1))
     board(nu2)(nu14) = StoneField(nu2, nu14, l, PlayerStone(board(nu2)(nu14), player1))
