@@ -53,21 +53,30 @@ case class InitializeMalefiz() {
     for (y <- 0 to 15) {
       for (i <- 0 to 16) {
         if (board(i)(y).toString.charAt(0) == "E".charAt(0)) {
-          print("   ")
+          print("    ")
         } else if (board(i)(y).toString.charAt(0) == "S".charAt(0)) {
           val s: StoneField = board(i)(y).asInstanceOf[StoneField]
           if (s.stone.toString.charAt(0) == "P".charAt(0))
             if (s.stone.toString.charAt(3) == "c".charAt(0)) {
-              print("|0|")
+              print("|0 |")
             } else {
-              print("|P|")
+
+              val ps:PlayerStone=s.stone.asInstanceOf[PlayerStone]
+              if(ps.player.color==1)
+                print("|P1|")
+              if(ps.player.color==2)
+                print("|P2|")
+              if(ps.player.color==3)
+                print("|P3|")
+              if(ps.player.color==4)
+                print("|P4|")
             }
 
           if (s.stone.toString.charAt(0) == "B".charAt(0))
-            print("|B|")
+            print("|B |")
 
         } else {
-          print("|y|")
+          print("|y |")
         }
       }
       println()
