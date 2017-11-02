@@ -3,23 +3,23 @@ package de.htwg.se.malefiz.model
 case class InitializeMalefiz() {
   val k = true
   val l = false
-  val nu0 = 0;
-  val nu1 = 1;
-  val nu2 = 2;
-  val nu3 = 3;
-  val nu4 = 4;
-  val nu5 = 5;
-  val nu6 = 6;
-  val nu7 = 7;
-  val nu8 = 8;
-  val nu9 = 9;
-  val nu10 = 10;
-  val nu11 = 11;
-  val nu12 = 12;
-  val nu13 = 13;
-  val nu14 = 14;
-  val nu15 = 15;
-  val nu16 = 16;
+  val nu0 = 0
+  val nu1 = 1
+  val nu2 = 2
+  val nu3 = 3
+  val nu4 = 4
+  val nu5 = 5
+  val nu6 = 6
+  val nu7 = 7
+  val nu8 = 8
+  val nu9 = 9
+  val nu10 = 10
+  val nu11 = 11
+  val nu12 = 12
+  val nu13 = 13
+  val nu14 = 14
+  val nu15 = 15
+  val nu16 = 16
   def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
 
     for (i <- nu0 to nu16) {
