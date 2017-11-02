@@ -27,24 +27,33 @@ case class InitializeMalefiz() {
       board(i)(nu11) = StoneField(i, nu11, k, PlaceholderStone(board(i)(nu11)))
       board(i)(nu13) = StoneField(i, nu13, k, PlaceholderStone(board(i)(nu13)))
       board(i)(nu3) = StoneField(i, nu3, k, PlaceholderStone(board(i)(nu3)))
-      if (i % nu4 == nu0)
+      if (i % nu4 == nu0) {
         board(i)(nu12) = StoneField(i, nu12, k, PlaceholderStone(board(i)(nu12)))
-      if (!(i % nu2 == nu0))
+      }
+      if (!(i % nu2 == nu0)) {
         board(i)(nu15) = StoneField(i, nu15, k, PlaceholderStone(board(i)(nu15)))
-      if (i >= nu6 && i <= nu10)
+      }
+      if (i >= nu6 && i <= nu10) {
         board(i)(nu5) = StoneField(i, nu5, k, PlaceholderStone(board(i)(nu5)))
-      if (i >= nu4 && i <= nu12)
+      }
+      if (i >= nu4 && i <= nu12) {
         board(i)(nu7) = StoneField(i, nu7, k, PlaceholderStone(board(i)(nu7)))
-      if (i >= nu2 && i <= nu14)
+      }
+      if (i >= nu2 && i <= nu14) {
         board(i)(nu9) = StoneField(i, nu9, k, PlaceholderStone(board(i)(nu9)))
-      if (i >= nu1 && i <= nu3)
+      }
+      if (i >= nu1 && i <= nu3) {
         board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      if (i >= nu5 && i <= nu7)
+      }
+      if (i >= nu5 && i <= nu7) {
         board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      if (i >= nu9 && i <= nu11)
+      }
+      if (i >= nu9 && i <= nu11) {
         board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
-      if (i >= nu13 && i <= nu15)
+      }
+      if (i >= nu13 && i <= nu15) {
         board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
+      }
     }
     board(nu8)(nu0) = StoneField(nu8, nu0, k, PlaceholderStone(board(nu8)(nu0)))
     board(nu12)(nu8) = StoneField(nu12, nu8, k, PlaceholderStone(board(nu12)(nu8)))
@@ -81,14 +90,18 @@ case class InitializeMalefiz() {
             } else {
 
               val ps:PlayerStone=s.stone.asInstanceOf[PlayerStone]
-              if(ps.player.color==nu1)
+              if(ps.player.color==nu1) {
                 print("|P1|")
-              if(ps.player.color==nu2)
+              }
+              if(ps.player.color==nu2) {
                 print("|P2|")
-              if(ps.player.color==nu3)
+              }
+              if(ps.player.color==nu3) {
                 print("|P3|")
-              if(ps.player.color==nu4)
+              }
+              if(ps.player.color==nu4) {
                 print("|P4|")
+              }
             }
           if (s.stone.toString.charAt(nu0) == "B".charAt(nu0))
             print("|B |")
