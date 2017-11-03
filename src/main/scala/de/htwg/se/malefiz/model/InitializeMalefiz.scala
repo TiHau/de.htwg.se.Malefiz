@@ -133,7 +133,7 @@ case class InitializeMalefiz() {
     board(nu11)(nu15) = StoneField(nu11, nu15, PlayerStone(board(nu11)(nu15), player3))
     board(nu13)(nu14) = StoneField(nu13, nu14, PlayerStone(board(nu13)(nu14), player4))
     board(nu13)(nu15) = StoneField(nu13, nu15, PlayerStone(board(nu13)(nu15), player4))
-    board(nu14)(nu14) = StoneField(nu14, nu14,PlayerStone(board(nu14)(nu14), player4))
+    board(nu14)(nu14) = StoneField(nu14, nu14, PlayerStone(board(nu14)(nu14), player4))
     board(nu15)(nu14) = StoneField(nu15, nu14, PlayerStone(board(nu15)(nu14), player4))
     board(nu15)(nu15) = StoneField(nu15, nu15, PlayerStone(board(nu15)(nu15), player4))
     board
