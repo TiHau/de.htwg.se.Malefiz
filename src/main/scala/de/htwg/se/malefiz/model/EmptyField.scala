@@ -1,5 +1,5 @@
 package de.htwg.se.malefiz.model
 
-case class EmptyField (x:Int, y:Int ,isEmpty:Boolean) extends Field(x, y, isEmpty, isFieldType = 'e') {
+case class EmptyField (x:Int, y:Int) extends Field(x, y, isFieldType = 'e') {
 
 }

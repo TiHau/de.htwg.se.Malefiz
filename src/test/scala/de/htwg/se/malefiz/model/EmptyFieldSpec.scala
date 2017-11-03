@@ -6,7 +6,7 @@ import org.scalatest.junit.JUnitRunner
 class EmptyFieldSpec extends WordSpec with Matchers {
   "A Field" when {
     "new" should {
-      val field = EmptyField(1, 1, true)
+      val field = EmptyField(1, 1)
 
       "have a x coordinate" in {
         field.x should be(1)
@@ -14,9 +14,7 @@ class EmptyFieldSpec extends WordSpec with Matchers {
       "have a y coordinate" in {
         field.y should be(1)
       }
-      "is the field Empty" in {
-        field.isEmpty should be(true)
-      }
+
     }
   }
 }
