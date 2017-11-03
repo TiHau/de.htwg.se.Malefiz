@@ -59,10 +59,11 @@ case class InitializeMalefiz() {
     board(nu6)(nu10) = StoneField(nu6, nu10, FreeStone(board(nu6)(nu10)))
     board(nu10)(nu10) = StoneField(nu10, nu10, FreeStone(board(nu10)(nu10)))
     board(nu14)(nu10) = StoneField(nu14, nu10, FreeStone(board(nu14)(nu10)))
+    val emptySpace: EmptyField = EmptyField()
     for (y <- nu0 to nu15) {
       for (x <- nu0 to nu16) {
-        if (board(x)(y) == null) {
-          board(x)(y) = EmptyField(x, y)
+        if (board(x)(y) == null ) {
+          board(x)(y) = emptySpace
         }
       }
     }
