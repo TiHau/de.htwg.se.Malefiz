@@ -3,6 +3,7 @@ case class Stone(p:Player)
 abstract class Field(  x:Int, y:Int, isEmpty:Boolean)
 case class EmptyField (x:Int, y:Int ,isEmpty:Boolean) extends Field(x, y, isEmpty){
 
+
 }
 case class StoneField (x:Int, y:Int ,isEmpty:Boolean, s:Stone) extends Field(x, y, isEmpty){
 

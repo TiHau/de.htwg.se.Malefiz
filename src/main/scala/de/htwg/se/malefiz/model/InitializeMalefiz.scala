@@ -80,23 +80,13 @@ case class InitializeMalefiz() {
             }
             if(s.stone.getStoneType()=='p'){
               val stone:PlayerStone = s.stone.asInstanceOf[PlayerStone]
-              if(stone.player.color==1){
-                print("|P1|")
-              }
-              if(stone.player.color==2){
-                print("|P2|")
-              }
-              if(stone.player.color==3){
-                print("|P3|")
-              }
-              if(stone.player.color==4){
-                print("|P4|")
-              }
+
+                print("|P" + stone.player.color + "|")
+
             }
             if(s.stone.getStoneType()=='b'){
               print("|b |")
             }
-         
         }
 
         }
