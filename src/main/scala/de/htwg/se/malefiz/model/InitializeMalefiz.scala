@@ -1,25 +1,28 @@
 package de.htwg.se.malefiz.model
 
 case class InitializeMalefiz() {
-  val nu0 = 0
-  val nu1 = 1
-  val nu2 = 2
-  val nu3 = 3
-  val nu4 = 4
-  val nu5 = 5
-  val nu6 = 6
-  val nu7 = 7
-  val nu8 = 8
-  val nu9 = 9
-  val nu10 = 10
-  val nu11 = 11
-  val nu12 = 12
-  val nu13 = 13
-  val nu14 = 14
-  val nu15 = 15
+  private val nu0 = 0
+  private val nu1 = 1
+  private val nu2 = 2
+  private val nu3 = 3
+  private val nu4 = 4
+  private val nu5 = 5
+  private val nu6 = 6
+  private val nu7 = 7
+  private val nu8 = 8
+  private val nu9 = 9
+  private val nu10 = 10
+  private val nu11 = 11
+  private val nu12 = 12
+  private val nu13 = 13
+  private val nu14 = 14
+  private val nu15 = 15
   val nu16 = 16
+  def buildMalefitz(board: Array[Array[Field]]): Array[Array[Field]] ={
+      setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)))
+  }
 
-  def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
+  private def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
     for (i <- nu0 to nu16) {
       board(i)(nu1) = StoneField(i, nu1, FreeStone(board(i)(nu1)))
       board(i)(nu11) = StoneField(i, nu11, FreeStone(board(i)(nu11)))
@@ -92,7 +95,7 @@ case class InitializeMalefiz() {
     }
   }
 
-  def setBlockStones(board: Array[Array[Field]]): Array[Array[Field]] = {
+  private def setBlockStones(board: Array[Array[Field]]): Array[Array[Field]] = {
     board(nu8)(nu0) = StoneField(nu8, nu0, BlockStone(board(nu8)(nu0)))
     board(nu8)(nu1) = StoneField(nu8, nu1, BlockStone(board(nu8)(nu1)))
     board(nu8)(nu3) = StoneField(nu8, nu3, BlockStone(board(nu8)(nu3)))
@@ -108,7 +111,7 @@ case class InitializeMalefiz() {
     board
   }
 
-  def setPlayerStones(board: Array[Array[Field]]): Array[Array[Field]] = {
+  private def setPlayerStones(board: Array[Array[Field]]): Array[Array[Field]] = {
     val player1: Player = Player(nu1)
     val player2: Player = Player(nu2)
     val player3: Player = Player(nu3)

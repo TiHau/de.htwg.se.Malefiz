@@ -14,9 +14,6 @@ class StoneFieldSpec extends WordSpec with Matchers {
       "have a y coordinate" in {
         field.y should be(1)
       }
-      "is the field Empty" in {
-        field.isEmpty should be(true)
-      }
       "have a stone" in {
         field.stone should be(FreeStone(field))
       }

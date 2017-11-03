@@ -1,4 +1,4 @@
 package de.htwg.se.malefiz.model
 object GameBoard {
-  var board = Array.ofDim[Field](17,16)
+  var board = Array.ofDim[Field]((InitializeMalefiz.apply().nu16) + 1,InitializeMalefiz.apply().nu16)
 }
