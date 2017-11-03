@@ -1,15 +1,15 @@
 package de.htwg.se.malefiz.model
 
-abstract class Field(isFieldType:Char){
-  def getFieldType(): Char ={
-    isFieldType
+abstract class AbstractField() {
+  def isFreeSpace(): Boolean = false
+}
+
+case class EmptySpace () extends AbstractField() {
+  override def isFreeSpace(): Boolean = true
+}
+
+case class Field (x:Int, y:Int, stone:Stone) extends AbstractField(){
+  def isEmpty(): Boolean = {
+    stone.getStoneType() == 'f'
   }
-}
-
-case class EmptyField () extends Field(isFieldType = 'e') {
-
-}
-
-case class StoneField (x:Int, y:Int, stone:Stone) extends Field(isFieldType = 's'){
-
 }
