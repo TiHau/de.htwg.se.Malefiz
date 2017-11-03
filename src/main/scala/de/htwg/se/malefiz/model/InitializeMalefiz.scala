@@ -23,41 +23,41 @@ case class InitializeMalefiz() {
 
   def buildMalefitzGameBoard(board: Array[Array[Field]]): Array[Array[Field]] = {
     for (i <- nu0 to nu16) {
-      board(i)(nu1) = StoneField(i, nu1, k, PlaceholderStone(board(i)(nu1)))
-      board(i)(nu11) = StoneField(i, nu11, k, PlaceholderStone(board(i)(nu11)))
-      board(i)(nu13) = StoneField(i, nu13, k, PlaceholderStone(board(i)(nu13)))
-      board(i)(nu3) = StoneField(i, nu3, k, PlaceholderStone(board(i)(nu3)))
+      board(i)(nu1) = StoneField(i, nu1, k, FreeStone(board(i)(nu1)))
+      board(i)(nu11) = StoneField(i, nu11, k, FreeStone(board(i)(nu11)))
+      board(i)(nu13) = StoneField(i, nu13, k, FreeStone(board(i)(nu13)))
+      board(i)(nu3) = StoneField(i, nu3, k, FreeStone(board(i)(nu3)))
       if (i % nu4 == nu0) {
-        board(i)(nu12) = StoneField(i, nu12, k, PlaceholderStone(board(i)(nu12)))
+        board(i)(nu12) = StoneField(i, nu12, k, FreeStone(board(i)(nu12)))
       }
       if (!(i % nu2 == nu0)) {
-        board(i)(nu15) = StoneField(i, nu15, k, PlaceholderStone(board(i)(nu15)))
+        board(i)(nu15) = StoneField(i, nu15, k, FreeStone(board(i)(nu15)))
       }
       if (i >= nu6 && i <= nu10) {
-        board(i)(nu5) = StoneField(i, nu5, k, PlaceholderStone(board(i)(nu5)))
+        board(i)(nu5) = StoneField(i, nu5, k, FreeStone(board(i)(nu5)))
       }
       if (i >= nu4 && i <= nu12) {
-        board(i)(nu7) = StoneField(i, nu7, k, PlaceholderStone(board(i)(nu7)))
+        board(i)(nu7) = StoneField(i, nu7, k, FreeStone(board(i)(nu7)))
       }
       if (i >= nu2 && i <= nu14) {
-        board(i)(nu9) = StoneField(i, nu9, k, PlaceholderStone(board(i)(nu9)))
+        board(i)(nu9) = StoneField(i, nu9, k, FreeStone(board(i)(nu9)))
       }
       if ((i >= nu1 && i <= nu3)||(i >= nu5 && i <= nu7)||(i >= nu9 && i <= nu11)||(i >= nu13 && i <= nu15)) {
-        board(i)(nu14) = StoneField(i, nu14, k, PlaceholderStone(board(i)(nu14)))
+        board(i)(nu14) = StoneField(i, nu14, k, FreeStone(board(i)(nu14)))
       }
     }
-    board(nu8)(nu0) = StoneField(nu8, nu0, k, PlaceholderStone(board(nu8)(nu0)))
-    board(nu12)(nu8) = StoneField(nu12, nu8, k, PlaceholderStone(board(nu12)(nu8)))
-    board(nu0)(nu2) = StoneField(nu0, nu2, k, PlaceholderStone(board(nu0)(nu2)))
-    board(nu4)(nu8) = StoneField(nu4, nu8, k, PlaceholderStone(board(nu4)(nu8)))
-    board(nu16)(nu2) = StoneField(nu16, nu2, k, PlaceholderStone(board(nu16)(nu2)))
-    board(nu8)(nu4) = StoneField(nu8, nu4, k, PlaceholderStone(board(nu8)(nu4)))
-    board(nu6)(nu6) = StoneField(nu6, nu6, k, PlaceholderStone(board(nu6)(nu6)))
-    board(nu10)(nu6) = StoneField(nu10, nu6, k, PlaceholderStone(board(nu10)(nu6)))
-    board(nu2)(nu10) = StoneField(nu2, nu10, k, PlaceholderStone(board(nu2)(nu10)))
-    board(nu6)(nu10) = StoneField(nu6, nu10, k, PlaceholderStone(board(nu6)(nu10)))
-    board(nu10)(nu10) = StoneField(nu10, nu10, k, PlaceholderStone(board(nu10)(nu10)))
-    board(nu14)(nu10) = StoneField(nu14, nu10, k, PlaceholderStone(board(nu14)(nu10)))
+    board(nu8)(nu0) = StoneField(nu8, nu0, k, FreeStone(board(nu8)(nu0)))
+    board(nu12)(nu8) = StoneField(nu12, nu8, k, FreeStone(board(nu12)(nu8)))
+    board(nu0)(nu2) = StoneField(nu0, nu2, k, FreeStone(board(nu0)(nu2)))
+    board(nu4)(nu8) = StoneField(nu4, nu8, k, FreeStone(board(nu4)(nu8)))
+    board(nu16)(nu2) = StoneField(nu16, nu2, k, FreeStone(board(nu16)(nu2)))
+    board(nu8)(nu4) = StoneField(nu8, nu4, k, FreeStone(board(nu8)(nu4)))
+    board(nu6)(nu6) = StoneField(nu6, nu6, k, FreeStone(board(nu6)(nu6)))
+    board(nu10)(nu6) = StoneField(nu10, nu6, k, FreeStone(board(nu10)(nu6)))
+    board(nu2)(nu10) = StoneField(nu2, nu10, k, FreeStone(board(nu2)(nu10)))
+    board(nu6)(nu10) = StoneField(nu6, nu10, k, FreeStone(board(nu6)(nu10)))
+    board(nu10)(nu10) = StoneField(nu10, nu10, k, FreeStone(board(nu10)(nu10)))
+    board(nu14)(nu10) = StoneField(nu14, nu10, k, FreeStone(board(nu14)(nu10)))
     for (y <- nu0 to nu15) {
       for (x <- nu0 to nu16) {
         if (board(x)(y) == null) {
@@ -71,33 +71,35 @@ case class InitializeMalefiz() {
   def pri(board: Array[Array[Field]]): Unit = {
     for (y <- nu0 to nu15) {
       for (i <- nu0 to nu16) {
-        if (board(i)(y).toString.charAt(nu0) == "E".charAt(nu0)) {
+        if (board(i)(y).getFieldType() == 'e') {
           print("    ")
-        } else if (board(i)(y).toString.charAt(nu0) == "S".charAt(nu0)) {
-          val s: StoneField = board(i)(y).asInstanceOf[StoneField]
-          if (s.stone.toString.charAt(nu0) == "P".charAt(nu0))
-            if (s.stone.toString.charAt(nu3) == "c".charAt(nu0)) {
+        } else if (board(i)(y).getFieldType() == 's') {
+            val s: StoneField = board(i)(y).asInstanceOf[StoneField]
+            if(s.stone.getStoneType()=='f'){
               print("|0 |")
-            } else {
-              val ps: PlayerStone = s.stone.asInstanceOf[PlayerStone]
-              if (ps.player.color == nu1) {
+            }
+            if(s.stone.getStoneType()=='p'){
+              val stone:PlayerStone = s.stone.asInstanceOf[PlayerStone]
+              if(stone.player.color==1){
                 print("|P1|")
               }
-              if (ps.player.color == nu2) {
+              if(stone.player.color==2){
                 print("|P2|")
               }
-              if (ps.player.color == nu3) {
+              if(stone.player.color==3){
                 print("|P3|")
               }
-              if (ps.player.color == nu4) {
+              if(stone.player.color==4){
                 print("|P4|")
               }
             }
-          if (s.stone.toString.charAt(nu0) == "B".charAt(nu0)) {
-            print("|B |")
-          }
+            if(s.stone.getStoneType()=='b'){
+              print("|b |")
+            }
+         
         }
-      }
+
+        }
       println()
     }
   }
