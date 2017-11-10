@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.model
 
-class Dice {
+object Dice {
   var diced:Int = 0
   private val six =6
   def dice(): Unit ={
