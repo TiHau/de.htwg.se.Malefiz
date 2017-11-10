@@ -47,3 +47,4 @@ for(x<- 0 until 600) {
   k.dice()
   println(k.diced)
 }
+val j = "aview-tui-gui,controller,model,util"

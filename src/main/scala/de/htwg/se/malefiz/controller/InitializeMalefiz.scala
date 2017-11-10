@@ -1,5 +1,5 @@
-package de.htwg.se.malefiz.model
-
+package de.htwg.se.malefiz.controller
+import de.htwg.se.malefiz.model.{AbstractField, Field, EmptySpace, FreeStone, BlockStone, PlayerStone, Player}
 case class InitializeMalefiz() {
   private val nu0 = 0
   private val nu1 = 1
