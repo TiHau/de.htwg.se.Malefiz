@@ -8,16 +8,15 @@ class GameBoardSpec extends WordSpec with Matchers{
     "initialized" should {
       InitializeMalefiz.apply().buildMalefitz(GameBoard.board)
 
-      "have no null field" in {
-        var x:Field=EmptyField()
-        for(y<-0 to 15) {
-          for (i <- 0 to 16) {
-            if(GameBoard.board(i)(y)==null)
-              x=null
+      "have empty space" in {
+        GameBoard.board(0)(0).isFreeSpace() should be(true)
+      }
+      "have no field with null" in {
+        for (y <- 0 to 15) {
+          for (x <- 0 to 16) {
+            GameBoard.board(x)(y) shouldNot be(null)
           }
-          println()
         }
-        x shouldNot be(null)
       }
     }
   }

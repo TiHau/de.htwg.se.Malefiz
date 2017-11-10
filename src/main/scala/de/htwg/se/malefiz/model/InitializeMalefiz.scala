@@ -17,7 +17,7 @@ case class InitializeMalefiz() {
   private val nu13 = 13
   private val nu14 = 14
   private val nu15 = 15
-  val nu16 = 16
+  private val nu16 = 16
   def buildMalefitz(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] ={
       setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)))
   }
@@ -29,7 +29,6 @@ case class InitializeMalefiz() {
         board(x)(y) = empty
       }
     }
-
     for (i <- nu0 to nu16) {
       board(i)(nu1) = Field(i, nu1, FreeStone(board(i)(nu1)))
       board(i)(nu11) = Field(i, nu11, FreeStone(board(i)(nu11)))
@@ -74,14 +73,14 @@ case class InitializeMalefiz() {
     for (y <- nu0 to nu15) {
       for (i <- nu0 to nu16) {
         if (board(i)(y).isFreeSpace()) {
-          print("    ")
+          print("   ")
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.getStoneType() match {
-            case 'f' => print("|0 |")
-            case 'p' => print("|P" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
-            case 'b' => print("|b |")
-            case _ => print("|x |")
+            case 'f' => print("|o|")
+            case 'p' => print("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
+            case 'b' => print("|-|")
+            case _ => print("|x|")
           }
         }
       }
