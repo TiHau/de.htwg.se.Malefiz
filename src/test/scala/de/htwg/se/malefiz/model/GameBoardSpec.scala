@@ -2,6 +2,7 @@ package de.htwg.se.malefiz.model
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.junit.JUnitRunner
+import de.htwg.se.malefiz.controller.InitializeMalefiz
 @RunWith(classOf[JUnitRunner])
 class GameBoardSpec extends WordSpec with Matchers{
   "A GameBoard" when {
