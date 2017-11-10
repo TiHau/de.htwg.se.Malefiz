@@ -32,3 +32,18 @@ for(y <- 0 until 16) {
 }
 
 var p =new StoneField(1,1,true,Stone(Player(1)))
+
+case class Dice(){
+  var diced:Int = 0
+  def dice(): Unit ={
+    diced = scala.util.Random.nextInt(6)+1
+  }
+}
+
+val k = Dice()
+k.dice()
+k.diced
+for(x<- 0 until 600) {
+  k.dice()
+  println(k.diced)
+}
