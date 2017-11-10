@@ -1,6 +1,6 @@
-package de.htwg.se.malefiz.controller
-import de.htwg.se.malefiz.model.{AbstractField, Field, EmptySpace, FreeStone, BlockStone, PlayerStone, Player}
+package de.htwg.se.malefiz.model
 case class InitializeMalefiz() {
+  val board = GameBoard()
   private val nu0 = 0
   private val nu1 = 1
   private val nu2 = 2
@@ -69,23 +69,26 @@ case class InitializeMalefiz() {
     board
   }
 
-  def pri(board: Array[Array[AbstractField]]): Unit = {
+  def print(board: Array[Array[AbstractField]]): String = {
+    import scala.collection.mutable.StringBuilder
+    val jsb = new StringBuilder()
     for (y <- nu0 to nu15) {
       for (i <- nu0 to nu16) {
         if (board(i)(y).isFreeSpace()) {
-          print("   ")
+          jsb.append("   ")
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.getStoneType() match {
-            case 'f' => print("|o|")
-            case 'p' => print("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
-            case 'b' => print("|-|")
-            case _ => print("|x|")
+            case 'f' => jsb.append("|o|")
+            case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
+            case 'b' => jsb.append("|-|")
+            case _ => jsb.append("|x|")
           }
         }
       }
-      println()
+      jsb.append("\n")
     }
+    jsb.toString()
   }
 
   private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {

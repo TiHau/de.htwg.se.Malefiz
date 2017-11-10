@@ -1,6 +1,9 @@
 package de.htwg.se.malefiz.model
-object GameBoard {
+case class GameBoard() {
   private val x = 17
   private val y = 16
-  var board = Array.ofDim[AbstractField](x,y)
+  private val board = Array.ofDim[AbstractField](x,y)
+  def getBoard():Array[Array[AbstractField]]  ={
+    board
+  }
 }

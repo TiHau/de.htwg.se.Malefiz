@@ -48,3 +48,12 @@ for(x<- 0 until 600) {
   println(k.diced)
 }
 val j = "aview-tui-gui,controller,model,util"
+
+
+import scala.collection.mutable.StringBuilder
+val sb = new StringBuilder()
+sb.append("h")
+sb.append("\n")
+sb.append("k")
+
+sb.toString()
