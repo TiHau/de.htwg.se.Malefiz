@@ -7,15 +7,15 @@ import org.scalatest.junit.JUnitRunner
 class GameBoardSpec extends WordSpec with Matchers{
   "A GameBoard" when {
     "initialized" should {
-      InitializeMalefiz.apply().buildMalefitz(GameBoard.apply().getBoard())
+      val board = GameBoard(4)
 
       "have empty space" in {
-        GameBoard.apply().getBoard()(0)(0).isFreeSpace() should be(true)
+        board.getBoard()(0)(0).isFreeSpace() should be(true)
       }
       "have no field with null" in {
         for (y <- 0 to 15) {
           for (x <- 0 to 16) {
-            GameBoard.apply().getBoard()(x)(y) shouldNot be(null)
+            board.getBoard()(x)(y) shouldNot be(null)
           }
         }
       }
