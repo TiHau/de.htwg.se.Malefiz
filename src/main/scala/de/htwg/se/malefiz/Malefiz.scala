@@ -3,7 +3,7 @@ import de.htwg.se.malefiz.aview.TUI
 import de.htwg.se.malefiz.model.GameBoard
 object Malefiz {
   def main(args: Array[String]): Unit = {
-    val gameBoard = GameBoard(4)
+    val gameBoard = GameBoard(3)
     val tui = TUI(gameBoard)
 
   }

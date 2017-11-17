@@ -5,6 +5,9 @@ case class TUI (gameBoard: GameBoard){
   private var input:String=""
   print("TUI Malefiz\n")
   print("Herzlich Willkommen!!!\n")
+  print("bitte geben Sie zuerst an zu wievielt sie spielen wollen:\n")
+  input=scala.io.StdIn.readLine()
+
   while(runs){
     input=scala.io.StdIn.readLine()
      input match {
