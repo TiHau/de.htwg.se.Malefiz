@@ -21,7 +21,7 @@ case class GameBoard(howManyPlayer: Int){
   private val nu15 = 15
   private val nu16 = 16
   if(howManyPlayer>4){
-    setPlayerStones(setBlockStones(this.board),nu4)
+    setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), nu4)
   } else if(howManyPlayer<2) {
     setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), nu2)
   } else {
