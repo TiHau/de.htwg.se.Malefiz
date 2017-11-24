@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se)](https://travis-ci.org/HuntedHunter/SE_Rep)------Main Branch
+
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se-Tim)](https://travis-ci.org/HuntedHunter/SE_Rep)-----Tim
+
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se-Fabi)](https://travis-ci.org/HuntedHunter/SE_Rep)-----Fabian
+
 htwg-scala-seed
 =========================
 
