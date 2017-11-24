@@ -5,6 +5,7 @@
 bin/
 .settings/
 .classpath
+classes/
 
 # Intellij
 .idea/
