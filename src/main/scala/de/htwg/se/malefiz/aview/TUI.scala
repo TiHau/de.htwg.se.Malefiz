@@ -4,10 +4,11 @@ case class TUI (gameBoard: GameBoard){
   private var runs:Boolean = true
   private var input:String=""
   print("TUI Malefiz\n")
-  print("Herzlich Willkommen!!!\n")
-  print("bitte geben Sie zuerst an zu wievielt sie spielen wollen:\n")
+  print("Wellcome!!!\n")
+  print("Pleas type in how many Players wan't to play:\n")
   input=scala.io.StdIn.readLine()
-
+  print("Tanks, Malefitz is starting now :) \n")
+  print("C")
   while(runs){
     input=scala.io.StdIn.readLine()
      input match {
