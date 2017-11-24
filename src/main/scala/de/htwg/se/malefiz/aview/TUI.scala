@@ -1,18 +1,20 @@
 package de.htwg.se.malefiz.aview
-import de.htwg.se.malefiz.model.GameBoard
-case class TUI (gameBoard: GameBoard){
+import de.htwg.se.malefiz.controller.Controller
+case class TUI (controller: Controller){
   private var runs:Boolean = true
-  private var input:String=""
+  private var input:Int=4
+  private var in:String=""
   print("TUI Malefiz\n")
   print("Wellcome!!!\n")
   print("Pleas type in how many Players wan't to play:\n")
-  input=scala.io.StdIn.readLine()
+  input=scala.io.StdIn.readInt()
+  controller.setPlayerCount(input)
   print("Tanks, Malefitz is starting now :) \n")
   print("C")
   while(runs){
-    input=scala.io.StdIn.readLine()
-     input match {
-      case "print"=> print(gameBoard.toString())
+    in=scala.io.StdIn.readLine()
+     in match {
+      case "print"=> print(controller.getGameboardToPrint())
       case "exit"=> scala.sys.exit(0)
       case _=>print("Not a Command\n")
     }

@@ -146,8 +146,5 @@ case class GameBoard(howManyPlayer: Int){
       board
     }
 
-  def getBoard():Array[Array[AbstractField]]  ={
-    this.board
-  }
-
+  def getBoard:Array[Array[AbstractField]]=this.board
 }
