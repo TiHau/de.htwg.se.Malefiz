@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se)](https://travis-ci.org/HuntedHunter/SE_Rep)
+
 htwg-scala-seed
 =========================
 
