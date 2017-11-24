@@ -1,10 +1,10 @@
 package de.htwg.se.malefiz
-
-import de.htwg.se.malefiz.model.{InitializeMalefiz, GameBoard}
-
+import de.htwg.se.malefiz.aview.TUI
+import de.htwg.se.malefiz.model.GameBoard
 object Malefiz {
   def main(args: Array[String]): Unit = {
-    InitializeMalefiz.apply().pri(InitializeMalefiz.apply().buildMalefitz(GameBoard.board))
+    val gameBoard = GameBoard(3)
+    val tui = TUI(gameBoard)
 
   }
 }
