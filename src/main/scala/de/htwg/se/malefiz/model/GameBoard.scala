@@ -39,68 +39,68 @@ case class GameBoard(howManyPlayer: Int) {
     for (y <- nu0 to nu15) {
 
       y match {
-        case 0 => board(8)(0) = Field(nu8, nu0, FreeStone())
+        case 0 => board(nu8)(y) = Field(nu8, y, FreeStone())
         case 1 => for (i <- nu0 to nu16) {
-          board(i)(nu1) = Field(i, nu1, FreeStone())
+          board(i)(y) = Field(i, y, FreeStone())
         }
         case 2 => {
-          board(nu0)(nu2) = Field(nu0, nu2, FreeStone())
-          board(nu16)(nu2) = Field(nu16, nu2, FreeStone())
+          board(nu0)(y) = Field(nu0, y, FreeStone())
+          board(nu16)(y) = Field(nu16, y, FreeStone())
         }
         case 3 => for (i <- nu0 to nu16) {
-          board(i)(nu3) = Field(i, nu3, FreeStone())
+          board(i)(y) = Field(i, y, FreeStone())
         }
-        case 4 => board(nu8)(nu4) = Field(nu8, nu4, FreeStone())
+        case 4 => board(nu8)(y) = Field(nu8, y, FreeStone())
         case 5 => for (i <- nu0 to nu16) {
           if (i >= nu6 && i <= nu10) {
-            board(i)(nu5) = Field(i, nu5, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
         case 6 =>
-          board(nu6)(nu6) = Field(nu6, nu6, FreeStone())
-          board(nu10)(nu6) = Field(nu10, nu6, FreeStone())
+          board(nu6)(y) = Field(nu6, y, FreeStone())
+          board(nu10)(y) = Field(nu10, y, FreeStone())
 
 
         case 7 => for (i <- nu0 to nu16) {
           if (i >= nu4 && i <= nu12) {
-            board(i)(nu7) = Field(i, nu7, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
         case 8 =>
-          board(nu12)(nu8) = Field(nu12, nu8, FreeStone())
-          board(nu4)(nu8) = Field(nu4, nu8, FreeStone())
+          board(nu12)(y) = Field(nu12, y, FreeStone())
+          board(nu4)(y) = Field(nu4, y, FreeStone())
 
 
         case 9 => for (i <- nu0 to nu16) {
           if (i >= nu2 && i <= nu14) {
-            board(i)(nu9) = Field(i, nu9, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
         case 10 =>
-          board(nu2)(nu10) = Field(nu2, nu10, FreeStone())
-          board(nu6)(nu10) = Field(nu6, nu10, FreeStone())
-          board(nu10)(nu10) = Field(nu10, nu10, FreeStone())
-          board(nu14)(nu10) = Field(nu14, nu10, FreeStone())
+          board(nu2)(y) = Field(nu2, y, FreeStone())
+          board(nu6)(y) = Field(nu6, y, FreeStone())
+          board(nu10)(y) = Field(nu10, y, FreeStone())
+          board(nu14)(y) = Field(nu14, y, FreeStone())
 
         case 11 => for (i <- nu0 to nu16) {
-          board(i)(nu11) = Field(i, nu11, FreeStone())
+          board(i)(y) = Field(i, y, FreeStone())
         }
         case 12 => for (i <- nu0 to nu16) {
           if (i % nu4 == nu0) {
-            board(i)(nu12) = Field(i, nu12, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
         case 13 => for (i <- nu0 to nu16) {
-          board(i)(nu13) = Field(i, nu13, FreeStone())
+          board(i)(y) = Field(i, y, FreeStone())
         }
         case 14 => for (i <- nu0 to nu16) {
           if ((i >= nu1 && i <= nu3) || (i >= nu5 && i <= nu7) || (i >= nu9 && i <= nu11) || (i >= nu13 && i <= nu15)) {
-            board(i)(nu14) = Field(i, nu14, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
         case 15 => for (i <- nu0 to nu16) {
           if (!(i % nu2 == nu0)) {
-            board(i)(nu15) = Field(i, nu15, FreeStone())
+            board(i)(y) = Field(i, y, FreeStone())
           }
         }
 
