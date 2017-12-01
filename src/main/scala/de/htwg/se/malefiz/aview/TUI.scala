@@ -10,7 +10,6 @@ case class TUI (controller: Controller){
   input=scala.io.StdIn.readInt()
   controller.setPlayerCount(input)
   print("Tanks, Malefitz is starting now :) \n")
-  print("C")
   while(runs){
     in=scala.io.StdIn.readLine()
      in match {

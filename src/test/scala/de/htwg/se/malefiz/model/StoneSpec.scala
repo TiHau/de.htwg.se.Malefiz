@@ -18,19 +18,15 @@ class StoneSpec extends WordSpec with Matchers {
     }
   }}
   "A BlockStone" when { "new" should {
-    val stone:BlockStone = BlockStone(Field(0,0, null))
-    "have a Field" in {
-      stone.field should be(Field(0,0, null))
-    }
+    val stone:BlockStone = BlockStone()
+
     "have stonetype b" in {
       stone.getStoneType() should be('b')
     }
   }}
   "A FreeStone" when { "new" should {
-    val stone:FreeStone = FreeStone(Field(0,0, null))
-    "have a Field" in {
-      stone.field should be(Field(0,0, null))
-    }
+    val stone:FreeStone = FreeStone()
+
     "have stonetype f" in {
       stone.getStoneType() should be('f')
     }
