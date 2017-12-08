@@ -10,12 +10,12 @@ class GameBoardSpec extends WordSpec with Matchers {
       val board = GameBoard(4)
 
       "have empty space" in {
-        board.getBoard()(0)(0).isFreeSpace() should be(true)
+        board.board(0)(0).isFreeSpace() should be(true)
       }
       "have no field with null" in {
         for (y <- 0 to 15) {
           for (x <- 0 to 16) {
-            board.getBoard()(x)(y) shouldNot be(null)
+            board.board(x)(y) shouldNot be(null)
           }
         }
       }
@@ -29,8 +29,8 @@ class GameBoardSpec extends WordSpec with Matchers {
           var count = 0
           for (y <- 0 to 15) {
             for (x <- 0 to 16) {
-              if (!board.getBoard()(x)(y).isFreeSpace()) {
-                val field = board.getBoard()(x)(y).asInstanceOf[Field]
+              if (!board.board(x)(y).isFreeSpace()) {
+                val field = board.board(x)(y).asInstanceOf[Field]
                 if (field.stone.sort == 'p') {
                   count += 1
                 }

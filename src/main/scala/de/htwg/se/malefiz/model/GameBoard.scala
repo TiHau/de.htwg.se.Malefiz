@@ -3,7 +3,7 @@ package de.htwg.se.malefiz.model
 case class GameBoard(howManyPlayer: Int) {
   private val x = 17
   private val y = 16
-  private val board = Array.ofDim[AbstractField](x, y)
+  val board = Array.ofDim[AbstractField](x, y)
   private val nu0 = 0
   private val nu1 = 1
   private val nu2 = 2
@@ -185,7 +185,6 @@ case class GameBoard(howManyPlayer: Int) {
     board
   }
 
-  def getBoard(): Array[Array[AbstractField]] = this.board
 
   def changeTwoStones(f1: Field, f2: Field): Option[Stone] = {
     if (f1.stone.sort == 'p') {

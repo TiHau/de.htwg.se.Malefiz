@@ -11,16 +11,23 @@ case class TUI (controller: Controller){
   print("Tanks, Malefitz is starting now :) \n")
 
   def printGameBoard(): Unit ={
-    print(controller.getGameboardToPrint())
+    print(controller.getGameboardToPrint() + "\n")
   }
 
   def changeStones(): Unit ={
     var inS1=""
     var inS2=""
     print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =1 Y=8): \n")
-    inS1 = scala.io.StdIn.readLine()
+    inS1 = scala.io.StdIn.readLine().trim
     print("Bitte Stein2 Koordinaten eingeben: \n")
-    inS2 = scala.io.StdIn.readLine()
+    inS2 = scala.io.StdIn.readLine().trim
+    if(inS1.length==2){
+      inS1 = inS1.charAt(0) + " " + inS1.charAt(1) + " "
+    }
+    if(inS2.length==2){
+      inS2 = inS2.charAt(0) + " " + inS2.charAt(1) + " "
+    }
+    controller.fieldChange(inS1,inS2)
   }
 
 }
