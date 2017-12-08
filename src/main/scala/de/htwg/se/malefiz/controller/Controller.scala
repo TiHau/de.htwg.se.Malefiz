@@ -10,4 +10,6 @@ case class Controller(var gameBoard: GameBoard) {
   def getGameboardToPrint():String={
     gameBoard.toString()
   }
+
+
 }

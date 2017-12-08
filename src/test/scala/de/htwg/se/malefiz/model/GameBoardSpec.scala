@@ -31,7 +31,7 @@ class GameBoardSpec extends WordSpec with Matchers {
             for (x <- 0 to 16) {
               if (!board.getBoard()(x)(y).isFreeSpace()) {
                 val field = board.getBoard()(x)(y).asInstanceOf[Field]
-                if (field.stone.getStoneType() == 'p') {
+                if (field.stone.sort == 'p') {
                   count += 1
                 }
               }

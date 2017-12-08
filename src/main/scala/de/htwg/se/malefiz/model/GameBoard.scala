@@ -113,12 +113,13 @@ case class GameBoard(howManyPlayer: Int) {
     import scala.collection.mutable.StringBuilder
     val jsb = new StringBuilder()
     for (y <- nu0 to nu15) {
+      jsb.append(y + " ")
       for (i <- nu0 to nu16) {
         if (board(i)(y).isFreeSpace()) {
           jsb.append("   ")
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
-          s.stone.getStoneType() match {
+          s.stone.sort match {
             case 'f' => jsb.append("|o|")
             case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
             case 'b' => jsb.append("|-|")
@@ -128,6 +129,10 @@ case class GameBoard(howManyPlayer: Int) {
       }
       jsb.append("\n")
     }
+    jsb.append("    ")
+    (0 to 9).addString(jsb, "  ")
+    jsb.append(" ")
+    (10 to 16).addString(jsb, " ")
     jsb.toString()
   }
 
@@ -182,13 +187,24 @@ case class GameBoard(howManyPlayer: Int) {
 
   def getBoard(): Array[Array[AbstractField]] = this.board
 
-  def changeTwoStones(f1: Field, f2: Field): Unit = {
-    if (f1.stone.getStoneType() == 'p') {
+  def changeTwoStones(f1: Field, f2: Field): Option[Stone] = {
+    if (f1.stone.sort == 'p') {
+      val save = f2.stone
+      if (f2.stone.sort=='p') {
+        resetPlayerStone(f2)
+      }
+      f2.stone=f1.stone
+      f2.stone.asInstanceOf[PlayerStone].field.asInstanceOf[Field].x= f2.x
+      f2.stone.asInstanceOf[PlayerStone].field.asInstanceOf[Field].y= f2.y
+      f1.stone = FreeStone()
+      Some(save)
 
+    } else{
+      None
     }
   }
 
-  def resetPlayerStone(field: Field): Unit = {
+  private def resetPlayerStone(field: Field): Unit = {
     val player = field.stone.asInstanceOf[PlayerStone]
     val playerField = player.field.asInstanceOf[Field]
     board(playerField.x)(playerField.y).asInstanceOf[Field].stone = field.stone
