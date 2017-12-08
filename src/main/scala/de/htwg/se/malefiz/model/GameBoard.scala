@@ -113,7 +113,12 @@ case class GameBoard(howManyPlayer: Int) {
     import scala.collection.mutable.StringBuilder
     val jsb = new StringBuilder()
     for (y <- nu0 to nu15) {
-      jsb.append(y + " ")
+      if(y<10){
+        jsb.append(y + "  ")
+      } else{
+        jsb.append(y + " ")
+      }
+
       for (i <- nu0 to nu16) {
         if (board(i)(y).isFreeSpace()) {
           jsb.append("   ")

@@ -10,14 +10,14 @@ case class TUI (controller: Controller){
   controller.setPlayerCount(input)
   print("Tanks, Malefitz is starting now :) \n")
 
-  def printGameBoard(): Unit ={
+  def printGameBoard: Unit ={
     print(controller.getGameboardToPrint() + "\n")
   }
 
-  def changeStones(): Unit ={
+  def changeStones: Unit ={
     var inS1=""
     var inS2=""
-    print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =1 Y=8): \n")
+    print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =1 Y=8 oder 1008 für X=10 Y=8): \n")
     inS1 = scala.io.StdIn.readLine().trim
     print("Bitte Stein2 Koordinaten eingeben: \n")
     inS2 = scala.io.StdIn.readLine().trim
@@ -27,7 +27,18 @@ case class TUI (controller: Controller){
     if(inS2.length==2){
       inS2 = inS2.charAt(0) + " " + inS2.charAt(1) + " "
     }
-    controller.fieldChange(inS1,inS2)
+    if(inS1.length==4||inS2.length==4) {
+      controller.setDicedFields(inS1)
+      if (controller.validMove(inS2)) {
+        controller.fieldChange(inS1, inS2)
+      } else {
+        print("wrong move\n")
+      }
+      controller.unsetDicedFields(inS1)
+    } else{
+      print("falsche Eingabe\n")
+    }
+
   }
 
 }
