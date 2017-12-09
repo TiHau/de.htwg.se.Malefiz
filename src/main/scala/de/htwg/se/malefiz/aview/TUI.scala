@@ -17,28 +17,25 @@ case class TUI (controller: Controller){
   def changeStones: Unit ={
     var inS1=""
     var inS2=""
-    print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =1 Y=8 oder 1008 für X=10 Y=8): \n")
+    print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =01 Y=08 oder 1008 für X=10 Y=8): \n")
     inS1 = scala.io.StdIn.readLine().trim
-    print("Bitte Stein2 Koordinaten eingeben: \n")
-    inS2 = scala.io.StdIn.readLine().trim
-    if(inS1.length==2){
-      inS1 = inS1.charAt(0) + " " + inS1.charAt(1) + " "
-    }
-    if(inS2.length==2){
-      inS2 = inS2.charAt(0) + " " + inS2.charAt(1) + " "
-    }
-    if(inS1.length==4||inS2.length==4) {
+    if(inS1.length!=4){
+
+    } else {
       controller.setDicedFields(inS1)
-      if (controller.validMove(inS2)) {
-        controller.fieldChange(inS1, inS2)
+      print("Bitte Stein2 Koordinaten eingeben: \n")
+      inS2 = scala.io.StdIn.readLine().trim
+      if (inS2.length == 4) {
+        if (controller.validMove(inS2)) {
+          controller.fieldChange(inS1, inS2)
+        } else {
+          print("wrong move\n")
+        }
       } else {
-        print("wrong move\n")
+        print("falsche Eingabe\n")
       }
       controller.unsetDicedFields(inS1)
-    } else{
-      print("falsche Eingabe\n")
     }
-
   }
 
 }

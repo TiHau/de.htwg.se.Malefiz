@@ -125,7 +125,7 @@ case class GameBoard(howManyPlayer: Int) {
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.sort match {
-            case 'f' => jsb.append("|o|")
+            case 'f' => if(s.avariable==false){jsb.append("|o|")}else{jsb.append("|x|")}
             case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
             case 'b' => jsb.append("|-|")
             case _ => jsb.append("|x|")
