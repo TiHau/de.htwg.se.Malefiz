@@ -20,7 +20,7 @@ case class TUI (controller: Controller){
     print("Bitte Stein1 Koordinaten eingeben(Bsp: 18 für X =01 Y=08 oder 1008 für X=10 Y=8): \n")
     inS1 = scala.io.StdIn.readLine().trim
     if(inS1.length!=4){
-
+      print("falsche Eingabe\n")
     } else {
       controller.setDicedFields(inS1)
       print("Bitte Stein2 Koordinaten eingeben: \n")
@@ -34,7 +34,7 @@ case class TUI (controller: Controller){
       } else {
         print("falsche Eingabe\n")
       }
-      controller.unsetDicedFields(inS1)
+      controller.unsetDicedFields
     }
   }
 

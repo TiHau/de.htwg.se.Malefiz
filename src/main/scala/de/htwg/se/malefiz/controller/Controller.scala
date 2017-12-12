@@ -28,13 +28,17 @@ case class Controller(var gameBoard: GameBoard) {
     val x1 = (f1.charAt(0).toString + f1.charAt(1)).toInt
     val y1 = (f1.charAt(2).toString + f1.charAt(3)).toInt
     //hier werden alle verfügbaren Felder gesetzt
-    print(getGameboardToPrint()+"\n")
+
   }
 
-  def unsetDicedFields(f1: String): Unit = {
-    val x1 = (f1.charAt(0).toString + f1.charAt(1)).toInt
-    val y1 = (f1.charAt(2).toString + f1.charAt(3)).toInt
-    // hier werden sie wieder deaktiviert
+  def unsetDicedFields(): Unit = {
+    for (y <- 0 to 15) {
+      for (x <- 0 to 16) {
+          if(!gameBoard.board(x)(y).isFreeSpace()){
+            gameBoard.board(x)(y).asInstanceOf[Field].avariable=false
+          }
+      }
+    }
 
   }
 
