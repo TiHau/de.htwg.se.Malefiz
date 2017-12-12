@@ -23,6 +23,7 @@ case class TUI (controller: Controller){
       print("falsche Eingabe\n")
     } else {
       controller.setDicedFields(inS1)
+      print(controller.getGameboardToPrint() + "\n")
       print("Bitte Stein2 Koordinaten eingeben: \n")
       inS2 = scala.io.StdIn.readLine().trim
       if (inS2.length == 4) {
