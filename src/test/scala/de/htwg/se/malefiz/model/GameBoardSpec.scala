@@ -4,23 +4,24 @@ import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class GameBoardSpec extends WordSpec with Matchers{
+class GameBoardSpec extends WordSpec with Matchers {
   "A GameBoard" when {
     "initialized" should {
       val board = GameBoard(4)
 
       "have empty space" in {
-        board.getBoard()(0)(0).isFreeSpace() should be(true)
+        board.board(0)(0).isFreeSpace() should be(true)
       }
       "have no field with null" in {
         for (y <- 0 to 15) {
           for (x <- 0 to 16) {
-            board.getBoard()(x)(y) shouldNot be(null)
+            board.board(x)(y) shouldNot be(null)
           }
         }
       }
     }
-    "A GameBoard" when {
+  }
+  "A GameBoard" when {
       "seted all" should {
         val board = GameBoard(4)
 
@@ -28,27 +29,28 @@ class GameBoardSpec extends WordSpec with Matchers{
           var count = 0
           for (y <- 0 to 15) {
             for (x <- 0 to 16) {
-              if(!board.getBoard()(x)(y).isFreeSpace()){
-                val field = board.getBoard()(x)(y).asInstanceOf[Field]
-                if(field.stone.getStoneType()=='p'){
-                  count+=1
+              if (!board.board(x)(y).isFreeSpace()) {
+                val field = board.board(x)(y).asInstanceOf[Field]
+                if (field.stone.sort == 'p') {
+                  count += 1
                 }
               }
             }
           }
-          count shouldBe(20)
-          }
+          count shouldBe (20)
         }
       }
+    }
     "A GameBoard" when {
       "toSting" should {
         val board = GameBoard(4)
 
         "return a  which is not empty" in {
 
-          board.toString().isEmpty shouldBe(false)
+          board.toString().isEmpty shouldBe (false)
         }
       }
     }
-  }
+
 }
+
