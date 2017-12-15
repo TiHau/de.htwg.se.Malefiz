@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.model
 
-case class GameBoard(howManyPlayer: Int) {
+case class GameBoard(var playerCount: Int) {
   private val x = 17
   private val y = 16
   val board = Array.ofDim[AbstractField](x, y)
@@ -21,13 +21,45 @@ case class GameBoard(howManyPlayer: Int) {
   private val nu14 = 14
   private val nu15 = 15
   private val nu16 = 16
-  if (howManyPlayer > 4) {
-    setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), nu4)
-  } else if (howManyPlayer < 2) {
-    setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), nu2)
-  } else {
-    setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), howManyPlayer)
+
+  if (playerCount > 4) {
+    playerCount = 4
+  } else if (playerCount < 2) {
+    playerCount = 2
   }
+  buildMalefitzGameBoard(board)
+  setBlockStones(board)
+
+  val player1 = Player(nu1)
+  player1.stones(nu2) = PlayerStone(board(nu1)(nu14), board(nu1)(nu14), player1.color)
+  player1.stones(nu1) = PlayerStone(board(nu1)(nu15), board(nu1)(nu15), player1.color)
+  player1.stones(nu0) = PlayerStone(board(nu2)(nu14), board(nu2)(nu14), player1.color)
+  player1.stones(nu3) = PlayerStone(board(nu3)(nu14), board(nu3)(nu14), player1.color)
+  player1.stones(nu4) = PlayerStone(board(nu3)(nu15), board(nu3)(nu15), player1.color)
+  val player2 = Player(nu2)
+  player2.stones(nu2) = PlayerStone(board(nu5)(nu14), board(nu5)(nu14), player2.color)
+  player2.stones(nu1) = PlayerStone(board(nu5)(nu15), board(nu5)(nu15), player2.color)
+  player2.stones(nu0) = PlayerStone(board(nu6)(nu14), board(nu6)(nu14), player2.color)
+  player2.stones(nu3) = PlayerStone(board(nu7)(nu14), board(nu7)(nu14), player2.color)
+  player2.stones(nu4) = PlayerStone(board(nu7)(nu15), board(nu7)(nu15), player2.color)
+  val player3 = Player(nu3)
+  player3.stones(nu2) = PlayerStone(board(nu9)(nu14), board(nu9)(nu14), player3.color)
+  player3.stones(nu1) = PlayerStone(board(nu9)(nu15), board(nu9)(nu15), player3.color)
+  player3.stones(nu0) = PlayerStone(board(nu10)(nu14), board(nu10)(nu14), player3.color)
+  player3.stones(nu3) = PlayerStone(board(nu11)(nu14), board(nu11)(nu14), player3.color)
+  player3.stones(nu4) = PlayerStone(board(nu11)(nu15), board(nu11)(nu15), player3.color)
+  val player4 = Player(nu4)
+  player4.stones(nu2) = PlayerStone(board(nu13)(nu14), board(nu13)(nu14), player4.color)
+  player4.stones(nu1) = PlayerStone(board(nu13)(nu15), board(nu13)(nu15), player4.color)
+  player4.stones(nu0) = PlayerStone(board(nu14)(nu14), board(nu14)(nu14), player4.color)
+  player4.stones(nu3) = PlayerStone(board(nu15)(nu14), board(nu15)(nu14), player4.color)
+  player4.stones(nu4) = PlayerStone(board(nu15)(nu15), board(nu15)(nu15), player4.color)
+
+
+
+
+
+  setPlayerStones(board, playerCount)
 
   private def buildMalefitzGameBoard(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
     val empty = EmptySpace()
@@ -126,9 +158,9 @@ case class GameBoard(howManyPlayer: Int) {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.sort match {
             case 'f' => if(s.avariable==false){jsb.append("|o|")}else{jsb.append("|x|")}
-            case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].player.color + "|")
-            case 'b' => jsb.append("|-|")
-            case _ => jsb.append("|x|")
+            case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].playerColor + "|")
+            case 'b' => if(s.avariable==false){jsb.append("|-|")}else{jsb.append("|C|")}
+            case _ => jsb.append("|e|")
           }
         }
       }
@@ -157,60 +189,58 @@ case class GameBoard(howManyPlayer: Int) {
     board
   }
 
-  private def setPlayerStones(board: Array[Array[AbstractField]], howMany: Int): Array[Array[AbstractField]] = {
-    val player1: Player = Player(nu1)
-    val player2: Player = Player(nu2)
-    val player3: Player = Player(nu3)
-    val player4: Player = Player(nu4)
+  private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]] = {
 
-    board(nu1)(nu14) = Field(nu1, nu14, PlayerStone(board(nu1)(nu14), player1))
-    board(nu1)(nu15) = Field(nu1, nu15, PlayerStone(board(nu1)(nu15), player1))
-    board(nu2)(nu14) = Field(nu2, nu14, PlayerStone(board(nu2)(nu14), player1))
-    board(nu3)(nu14) = Field(nu3, nu14, PlayerStone(board(nu3)(nu14), player1))
-    board(nu3)(nu15) = Field(nu3, nu15, PlayerStone(board(nu3)(nu15), player1))
-    if (howMany >= 3) {
-      board(nu5)(nu14) = Field(nu5, nu14, PlayerStone(board(nu5)(nu14), player2))
-      board(nu5)(nu15) = Field(nu5, nu15, PlayerStone(board(nu5)(nu15), player2))
-      board(nu6)(nu14) = Field(nu6, nu14, PlayerStone(board(nu6)(nu14), player2))
-      board(nu7)(nu14) = Field(nu7, nu14, PlayerStone(board(nu7)(nu14), player2))
-      board(nu7)(nu15) = Field(nu7, nu15, PlayerStone(board(nu7)(nu15), player2))
-      if (howMany == 4) {
-        board(nu9)(nu14) = Field(nu9, nu14, PlayerStone(board(nu9)(nu14), player3))
-        board(nu9)(nu15) = Field(nu9, nu15, PlayerStone(board(nu9)(nu15), player3))
-        board(nu10)(nu14) = Field(nu10, nu14, PlayerStone(board(nu10)(nu14), player3))
-        board(nu11)(nu14) = Field(nu11, nu14, PlayerStone(board(nu11)(nu14), player3))
-        board(nu11)(nu15) = Field(nu11, nu15, PlayerStone(board(nu11)(nu15), player3))
+    board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
+    board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
+    board(nu2)(nu14) = Field(nu2, nu14, player1.stones(nu0))
+    board(nu3)(nu14) = Field(nu3, nu14, player1.stones(nu3))
+    board(nu3)(nu15) = Field(nu3, nu15, player1.stones(nu4))
+
+    board(nu13)(nu14) = Field(nu13, nu14, player4.stones(nu2))
+    board(nu13)(nu15) = Field(nu13, nu15, player4.stones(nu1))
+    board(nu14)(nu14) = Field(nu14, nu14, player4.stones(nu0))
+    board(nu15)(nu14) = Field(nu15, nu14, player4.stones(nu3))
+    board(nu15)(nu15) = Field(nu15, nu15, player4.stones(nu4))
+
+    if (playerCount >= 3) {
+
+
+      board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
+      board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
+      board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
+      board(nu7)(nu14) = Field(nu7, nu14, player2.stones(nu3))
+      board(nu7)(nu15) = Field(nu7, nu15, player2.stones(nu4))
+
+      if (playerCount == 4) {
+
+        board(nu10)(nu14) = Field(nu10, nu14, player3.stones(nu0))
+        board(nu9)(nu15) = Field(nu9, nu15, player3.stones(nu1))
+        board(nu9)(nu14) = Field(nu9, nu14, player3.stones(nu2))
+        board(nu11)(nu14) = Field(nu11, nu14, player3.stones(nu3))
+        board(nu11)(nu15) = Field(nu11, nu15, player3.stones(nu4))
       }
     }
-    board(nu13)(nu14) = Field(nu13, nu14, PlayerStone(board(nu13)(nu14), player4))
-    board(nu13)(nu15) = Field(nu13, nu15, PlayerStone(board(nu13)(nu15), player4))
-    board(nu14)(nu14) = Field(nu14, nu14, PlayerStone(board(nu14)(nu14), player4))
-    board(nu15)(nu14) = Field(nu15, nu14, PlayerStone(board(nu15)(nu14), player4))
-    board(nu15)(nu15) = Field(nu15, nu15, PlayerStone(board(nu15)(nu15), player4))
+
     board
   }
 
 
-  def changeTwoStones(f1: Field, f2: Field): Option[Stone] = {
-    if (f1.stone.sort == 'p') {
-      val save = f2.stone
-      if (f2.stone.sort=='p') {
-        resetPlayerStone(f2)
-      }
-      f2.stone=f1.stone
-      f2.stone.asInstanceOf[PlayerStone].field.asInstanceOf[Field].x= f2.x
-      f2.stone.asInstanceOf[PlayerStone].field.asInstanceOf[Field].y= f2.y
-      f1.stone = FreeStone()
-      Some(save)
-
-    } else{
-      None
+  def changeTwoStones(f1: Field, f2: Field): Stone = {
+    val save = f2.stone
+    if (f2.stone.sort=='p') {
+      resetPlayerStone(f2)
     }
+    f2.stone=f1.stone
+    f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].x= f2.x
+    f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y= f2.y
+    f1.stone = FreeStone()
+    save
   }
 
   private def resetPlayerStone(field: Field): Unit = {
     val player = field.stone.asInstanceOf[PlayerStone]
-    val playerField = player.field.asInstanceOf[Field]
+    val playerField = player.startField.asInstanceOf[Field]
     board(playerField.x)(playerField.y).asInstanceOf[Field].stone = field.stone
     field.stone = FreeStone()
 

@@ -12,9 +12,9 @@ object Malefiz {
     while(runs){
       in=scala.io.StdIn.readLine()
       in match {
-        case "print"=> tui.printGameBoard()
+        case "print"=> tui.printGameBoard
         case "exit"=> runs = false
-        case "change"=> tui.changeStones()
+        case "change"=> tui.changeStones
         case _=>print("Not a Command\n")
       }
     }
