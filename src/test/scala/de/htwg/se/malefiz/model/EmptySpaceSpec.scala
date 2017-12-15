@@ -13,4 +13,3 @@ class EmptySpaceSpec extends WordSpec with Matchers {
     }
   }
 }
-
