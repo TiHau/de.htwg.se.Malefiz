@@ -27,8 +27,30 @@ case class Controller(var gameBoard: GameBoard) {
   def setDicedFields(f1: String): Unit = {
     val x1 = (f1.charAt(0).toString + f1.charAt(1)).toInt
     val y1 = (f1.charAt(2).toString + f1.charAt(3)).toInt
-    //hier werden alle verfügbaren Felder gesetzt
+    val depth = 0
+    if(y1==15){
+      setDicedFieldsR(x1,y1,depth-1)
+    }
+    else{
+      setDicedFieldsR(x1,y1,depth)
+    }
 
+  }
+  private def setDicedFieldsR(x: Int,y: Int,depth: Int):Unit={
+    if(depth==diced){
+      if(x<0||y<0||y>13||x>16){
+      }else if(!gameBoard.board(x)(y).isFreeSpace()) {
+        gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
+      }
+    }else if(x<0||y<0||y>15||x>16){
+    }else if(gameBoard.board(x)(y).isFreeSpace()){
+    }else if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='b'){
+    }else {
+      setDicedFieldsR(x + 1,y,depth + 1)//rechts
+      setDicedFieldsR(x - 1,y,depth + 1)//links
+      setDicedFieldsR(x,y + 1,depth + 1)//oben
+      setDicedFieldsR(x,y - 1,depth + 1)//unten
+    }
   }
 
   def unsetDicedFields(): Unit = {
