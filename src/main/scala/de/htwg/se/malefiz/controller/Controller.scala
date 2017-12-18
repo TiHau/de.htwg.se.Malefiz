@@ -3,7 +3,7 @@ package de.htwg.se.malefiz.controller
 import de.htwg.se.malefiz.model._
 
 case class Controller(var gameBoard: GameBoard) {
-  var onTurn = 1
+  var activePlayer = gameBoard.player1
   var diced = 6
 
   def setPlayerCount(countPlayer: Int): Unit = {
@@ -14,69 +14,107 @@ case class Controller(var gameBoard: GameBoard) {
     gameBoard.toString()
   }
 
-  def validMove(f2: String): Boolean = {
-    val x2 = (f2.charAt(0).toString + f2.charAt(1)).toInt
-    val y2 = (f2.charAt(2).toString + f2.charAt(3)).toInt
-    if (gameBoard.board(x2)(y2).asInstanceOf[Field].avariable) {
+  def markPossibleMoves: Unit = {
+    var markBaseMoves = true
+    for (stone <- activePlayer.stones) {
+      if (stone.actualField == stone.startField) {
+        if (markBaseMoves) {
+          val x = activePlayer.stones(0).startField.asInstanceOf[Field].x
+          val y = activePlayer.stones(0).startField.asInstanceOf[Field].y
+          markPossibleMovesR(x, y, diced, ' ')
+          markBaseMoves = false
+        }
+      } else {
+        val x = stone.actualField.asInstanceOf[Field].x
+        val y = stone.actualField.asInstanceOf[Field].y
+        markPossibleMovesR(x, y, diced, ' ')
+      }
+    }
+  }
+
+  private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
+    if (depth == 0) {
+      gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
+      return
+    } else {
+      // If there is a blocking stone on the way dont go on
+      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'b') {
+        return
+      }
+      // up
+      if (validField(x, y - 1) && cameFrom != 'u') {
+        markPossibleMovesR(x, y - 1, depth - 1, 'd')
+      }
+      // down
+      if (validField(x, y + 1) && cameFrom != 'd') {
+        markPossibleMovesR(x, y - 1, depth - 1, 'u')
+      }
+      // left
+      if (validField(x-1, y) && cameFrom != 'r') {
+        markPossibleMovesR(x -1, y, depth - 1, 'l')
+      }
+      // right
+      if (validField(x + 1, y) && cameFrom != 'l') {
+        markPossibleMovesR(x+1, y, depth - 1, 'r')
+      }
+    }
+  }
+
+  def validField(x: Int, y: Int): Boolean = {
+    // check for a vailid field
+    if (y > 13 || y < 0) {
+      return false
+    }
+    if (x > 16 || x < 0) {
+      return false
+    }
+    if (gameBoard.board(x)(y).isFreeSpace()) {
+      return false
+    }
+    true
+  }
+
+  def fieldHasStoneOfActivePlayer(x: Int, y: Int): Boolean = {
+    if (validField(x, y)) {
+      return false
+    }
+
+    val stoneSort = gameBoard.board(x)(y).asInstanceOf[Field].stone.sort
+    if (stoneSort != 'p') {
+      return false
+    }
+    if (stoneSort.asInstanceOf[PlayerStone].playerColor != activePlayer) {
+      return false
+    }
+    true
+  }
+
+  def vaildDestForMove(x: Int, y: Int): Boolean = {
+    if (gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
       true
     } else {
       false
     }
   }
 
-  def setDicedFields(f1: String): Unit = {
-    val x1 = (f1.charAt(0).toString + f1.charAt(1)).toInt
-    val y1 = (f1.charAt(2).toString + f1.charAt(3)).toInt
-    val depth = 0
-    if(y1==15){
-      setDicedFieldsR(x1,y1,depth-1)
-    }
-    else{
-      setDicedFieldsR(x1,y1,depth)
-    }
-
-  }
-  private def setDicedFieldsR(x: Int,y: Int,depth: Int):Unit={
-    if(depth==diced){
-      if(x<0||y<0||y>13||x>16){
-      }else if(!gameBoard.board(x)(y).isFreeSpace()) {
-        gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
-      }
-    }else if(x<0||y<0||y>15||x>16){
-    }else if(gameBoard.board(x)(y).isFreeSpace()){
-    }else if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='b'){
-    }else {
-      setDicedFieldsR(x + 1,y,depth + 1)//rechts
-      setDicedFieldsR(x - 1,y,depth + 1)//links
-      setDicedFieldsR(x,y + 1,depth + 1)//oben
-      setDicedFieldsR(x,y - 1,depth + 1)//unten
-    }
-  }
-
   def unsetDicedFields(): Unit = {
     for (y <- 0 to 15) {
       for (x <- 0 to 16) {
-          if(!gameBoard.board(x)(y).isFreeSpace()){
-            gameBoard.board(x)(y).asInstanceOf[Field].avariable=false
-          }
+        if (!gameBoard.board(x)(y).isFreeSpace()) {
+          gameBoard.board(x)(y).asInstanceOf[Field].avariable = false
+        }
       }
     }
 
   }
 
-  def fieldChange(f1: String, f2: String): Boolean = {
-    val x1 = (f1.charAt(0).toString + f1.charAt(1)).toInt
-    val y1 = (f1.charAt(2).toString + f1.charAt(3)).toInt
-    val x2 = (f2.charAt(0).toString + f2.charAt(1)).toInt
-    val y2 = (f2.charAt(2).toString + f2.charAt(3)).toInt
+  def fieldChange(x1: Int, y1:Int, x2:Int, y2:Int): Boolean = {
     if (!gameBoard.board(x1)(y1).isFreeSpace() || !gameBoard.board(x2)(y2).isFreeSpace()) {
-      gameBoard.changeTwoStones(gameBoard.board(x1)(y1).asInstanceOf[Field], gameBoard.board(x2)(y2).asInstanceOf[Field]) match {
-        case None => false
-        case Some(l) => l.sort match {
-          case 'f' => true
-          case 'p' => true
-          case 'b' => false
-        }
+      gameBoard.changeTwoStones(gameBoard.board(x1)(y1).asInstanceOf[Field],
+        gameBoard.board(x2)(y2).asInstanceOf[Field]).sort match {
+        case 'f' => true
+        case 'p' => true
+        case 'b' => false
       }
     } else {
       false
