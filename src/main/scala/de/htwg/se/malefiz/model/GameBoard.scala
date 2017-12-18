@@ -29,6 +29,7 @@ case class GameBoard(howManyPlayer: Int) {
     setPlayerStones(setBlockStones(buildMalefitzGameBoard(board)), howManyPlayer)
   }
 
+
   private def buildMalefitzGameBoard(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
     val empty = EmptySpace()
     for (y <- nu0 to nu15) {
