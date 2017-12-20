@@ -10,11 +10,27 @@ case class Controller(var gameBoard: GameBoard) {
     gameBoard = GameBoard(countPlayer)
   }
 
-  def getGameboardToPrint(): String = {
+  def printGameBoard(): String = {
     gameBoard.toString()
   }
 
-  def markPossibleMoves: Unit = {
+  def runGame: Unit = {
+    while(!checkWin) {
+      activePlayer = gameBoard.player1
+      dice()
+      markAllPossibleMoves
+      printGameBoard()
+      markPossibleMovesOfStone(activePlayer.stones(0))
+    }
+    // do stuff if actuall player won the game
+  }
+
+  def dice(): Unit = {
+    val six = 6
+    diced = scala.util.Random.nextInt(six) + 1
+  }
+
+  def markAllPossibleMoves: Unit = {
     var markBaseMoves = true
     for (stone <- activePlayer.stones) {
       if (stone.actualField == stone.startField) {
@@ -30,6 +46,12 @@ case class Controller(var gameBoard: GameBoard) {
         markPossibleMovesR(x, y, diced, ' ')
       }
     }
+  }
+
+  def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
+    val x = stone.actualField.asInstanceOf[Field].x
+    val y = stone.actualField.asInstanceOf[Field].y
+    markPossibleMovesR(x, y, diced, ' ')
   }
 
   private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
@@ -50,12 +72,12 @@ case class Controller(var gameBoard: GameBoard) {
         markPossibleMovesR(x, y - 1, depth - 1, 'u')
       }
       // left
-      if (validField(x-1, y) && cameFrom != 'r') {
-        markPossibleMovesR(x -1, y, depth - 1, 'l')
+      if (validField(x - 1, y) && cameFrom != 'r') {
+        markPossibleMovesR(x - 1, y, depth - 1, 'l')
       }
       // right
       if (validField(x + 1, y) && cameFrom != 'l') {
-        markPossibleMovesR(x+1, y, depth - 1, 'r')
+        markPossibleMovesR(x + 1, y, depth - 1, 'r')
       }
     }
   }
@@ -74,30 +96,7 @@ case class Controller(var gameBoard: GameBoard) {
     true
   }
 
-  def fieldHasStoneOfActivePlayer(x: Int, y: Int): Boolean = {
-    if (validField(x, y)) {
-      return false
-    }
-
-    val stoneSort = gameBoard.board(x)(y).asInstanceOf[Field].stone.sort
-    if (stoneSort != 'p') {
-      return false
-    }
-    if (stoneSort.asInstanceOf[PlayerStone].playerColor != activePlayer) {
-      return false
-    }
-    true
-  }
-
-  def vaildDestForMove(x: Int, y: Int): Boolean = {
-    if (gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
-      true
-    } else {
-      false
-    }
-  }
-
-  def unsetDicedFields(): Unit = {
+  def unmarkPossibleMoves(): Unit = {
     for (y <- 0 to 15) {
       for (x <- 0 to 16) {
         if (!gameBoard.board(x)(y).isFreeSpace()) {
@@ -105,17 +104,30 @@ case class Controller(var gameBoard: GameBoard) {
         }
       }
     }
-
   }
 
-  def fieldChange(x1: Int, y1:Int, x2:Int, y2:Int): Boolean = {
-    if (!gameBoard.board(x1)(y1).isFreeSpace() || !gameBoard.board(x2)(y2).isFreeSpace()) {
-      gameBoard.changeTwoStones(gameBoard.board(x1)(y1).asInstanceOf[Field],
-        gameBoard.board(x2)(y2).asInstanceOf[Field]).sort match {
-        case 'f' => true
-        case 'p' => true
-        case 'b' => false
+  def makeMove(stone: PlayerStone, destField: Field): Boolean = {
+    val xStone = stone.actualField.asInstanceOf[Field].x
+    val yStone = stone.actualField.asInstanceOf[Field].y
+    val xDest = destField.x
+    val yDest = destField.y
+
+    if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
+      val hitStone = gameBoard.changeTwoStones(stone.actualField.asInstanceOf[Field], destField)
+      hitStone.sort match {
+        case 'p' => gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
+        case 'f' => {}
+        case 'b' => {}
       }
+      true
+    } else {
+      false
+    }
+  }
+
+  private def validDestForMove(x: Int, y: Int): Boolean = {
+    if (gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
+      true
     } else {
       false
     }

@@ -229,9 +229,6 @@ case class GameBoard(var playerCount: Int) {
 
   def changeTwoStones(f1: Field, f2: Field): Stone = {
     val save = f2.stone
-    if (f2.stone.sort=='p') {
-      resetPlayerStone(f2)
-    }
     f2.stone=f1.stone
     f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].x= f2.x
     f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y= f2.y
@@ -239,11 +236,10 @@ case class GameBoard(var playerCount: Int) {
     save
   }
 
-  private def resetPlayerStone(field: Field): Unit = {
-    val player = field.stone.asInstanceOf[PlayerStone]
-    val playerField = player.startField.asInstanceOf[Field]
-    board(playerField.x)(playerField.y).asInstanceOf[Field].stone = field.stone
-    field.stone = FreeStone()
-
+   def resetPlayerStone(stone: PlayerStone): Unit = {
+    stone.actualField = stone.startField
+    val x = stone.startField.asInstanceOf[Field].x
+    val y = stone.startField.asInstanceOf[Field].y
+    board(x)(y).asInstanceOf[Field].stone = stone
   }
 }
