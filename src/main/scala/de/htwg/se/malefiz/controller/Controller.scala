@@ -97,7 +97,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       }
       // down
       if (validField(x, y + 1) && cameFrom != 'd') {
-        markPossibleMovesR(x, y - 1, depth - 1, 'u')
+        markPossibleMovesR(x, y + 1, depth - 1, 'u')
       }
       // left
       if (validField(x - 1, y) && cameFrom != 'r') {
@@ -173,7 +173,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   def checkValidPlayerStone(x: Int,y: Int): Boolean ={
-    if(x>0&&x<16&&y>0&&y<16&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
+    if(x>=0&&x<17&&y>=0&&y<16&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
       var retBool:Boolean = false
 
       for(s <- activePlayer.stones){
