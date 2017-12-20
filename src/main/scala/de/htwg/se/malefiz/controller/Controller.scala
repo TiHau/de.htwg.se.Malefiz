@@ -67,9 +67,19 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
-    val x = stone.actualField.asInstanceOf[Field].x
-    val y = stone.actualField.asInstanceOf[Field].y
-    markPossibleMovesR(x, y, diced, ' ')
+    var markBaseMoves = true
+    if (stone.actualField == stone.startField) {
+      if (markBaseMoves) {
+        val x = activePlayer.stones(0).startField.asInstanceOf[Field].x
+        val y = activePlayer.stones(0).startField.asInstanceOf[Field].y
+        markPossibleMovesR(x, y, diced, ' ')
+        markBaseMoves = false
+      }
+    } else {
+      val x = stone.actualField.asInstanceOf[Field].x
+      val y = stone.actualField.asInstanceOf[Field].y
+      markPossibleMovesR(x, y, diced, ' ')
+    }
   }
 
   private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
@@ -163,7 +173,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   def checkValidPlayerStone(x: Int,y: Int): Boolean ={
-    if(x>0&&x<16&&y>0&&y<15&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
+    if(x>0&&x<16&&y>0&&y<16&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
       var retBool:Boolean = false
 
       for(s <- activePlayer.stones){

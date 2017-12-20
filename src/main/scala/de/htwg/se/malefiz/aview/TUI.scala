@@ -18,9 +18,14 @@ case class TUI(controller: Controller)extends Observer{
   private def askForNewPlayerCount: Unit ={
     var input: Int = four
     print("Pleas type in how many Players wan't to play:\n")
-    input = scala.io.StdIn.readInt()
-    controller.setPlayerCount(input)
-    print("Tanks, Malefitz is starting now :) \n")
+    try {
+      input = scala.io.StdIn.readInt()
+    } catch {
+      case _=> print("wrong insert set to 4")
+    }
+      controller.setPlayerCount(input)
+      print("Tanks, Malefitz is starting now :) \n")
+
   }
 
   private def getBlockStoneDest: Unit = {
@@ -28,9 +33,31 @@ case class TUI(controller: Controller)extends Observer{
     while(checkNotFinished){
       print("Set destination for hit Blockstone\n")
       print("X: ")
-      val x = scala.io.StdIn.readInt()
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            x = xS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
       print("Y: ")
-      val y = scala.io.StdIn.readInt()
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            y = yS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
       if(controller.isChosenBlockStone(x,y)){
         checkNotFinished=false
       }
@@ -42,13 +69,38 @@ case class TUI(controller: Controller)extends Observer{
     while(checkNotFinished){
       print("Type in Coordinates of your PlayerStone\n")
       print("X: ")
-      val x = scala.io.StdIn.readInt()
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            x = xS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
       print("Y: ")
-      val y = scala.io.StdIn.readInt()
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            y = yS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
+
+
       if(controller.checkValidPlayerStone(x,y)){
         checkNotFinished=false
+      }else {
+        print("its not your stone\n")
       }
-      print("its not your stone")
     }
   }
   private def askDestination: Unit ={
@@ -56,9 +108,31 @@ case class TUI(controller: Controller)extends Observer{
     while(checkNotFinished){
       print("Set destination for your Stone\n")
       print("X: ")
-      val x = scala.io.StdIn.readInt()
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            x = xS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
       print("Y: ")
-      val y = scala.io.StdIn.readInt()
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit"=> sys.exit(0)
+        case _=> {
+          try {
+            y = yS.toInt
+          } catch {
+            case _ => print("wrong argument\n")
+          }
+        }
+      }
       if(controller.makeAmove(x,y)){
           checkNotFinished=false
       }
