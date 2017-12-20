@@ -1,33 +1,51 @@
 package de.htwg.se.malefiz.controller
-
 import de.htwg.se.malefiz.model._
 
-case class Controller(var gameBoard: GameBoard) {
+case class Controller(var gameBoard: GameBoard) extends Observable {
+  val six = 6
   var activePlayer = gameBoard.player1
-  var diced = 6
+  var diced = six
+  var chosenPlayerStone = gameBoard.player1.stones(0)
+
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
 
-  def printGameBoard(): String = {
-    gameBoard.toString()
-  }
-
   def runGame: Unit = {
+    activePlayer = gameBoard.player1
+    notifyObserversSetPlayerCount
     while(!checkWin) {
-      activePlayer = gameBoard.player1
+      notifyObserversUpdate //print GameBoard
       dice()
       markAllPossibleMoves
-      printGameBoard()
-      markPossibleMovesOfStone(activePlayer.stones(0))
+      notifyObserversUpdate//print maked GameBoard
+      notifyObserversChosePlayer
+      unmarkPossibleMoves()
+      markPossibleMovesOfStone(chosenPlayerStone)
+      notifyObserversChoseTarget
+      unmarkPossibleMoves()
+      notifyObserversUpdate
+      changePlayer
     }
     // do stuff if actuall player won the game
   }
 
   def dice(): Unit = {
-    val six = 6
     diced = scala.util.Random.nextInt(six) + 1
+  }
+  def changePlayer: Unit ={
+    if(activePlayer.color==1){
+      activePlayer = gameBoard.player4
+    } else if(activePlayer.color==4&&gameBoard.player2.stones.length!=0){
+      activePlayer = gameBoard.player2
+    } else if(activePlayer.color==2&&gameBoard.player3.stones.length!=0){
+      activePlayer = gameBoard.player3
+    }else if(activePlayer.color==3){
+      activePlayer = gameBoard.player1
+    } else{
+      activePlayer = gameBoard.player1
+    }
   }
 
   def markAllPossibleMoves: Unit = {
@@ -85,15 +103,14 @@ case class Controller(var gameBoard: GameBoard) {
   def validField(x: Int, y: Int): Boolean = {
     // check for a vailid field
     if (y > 13 || y < 0) {
-      return false
+      false
+    } else if (x > 16 || x < 0) {
+      false
+    } else if (gameBoard.board(x)(y).isFreeSpace()) {
+      false
+    } else {
+      true
     }
-    if (x > 16 || x < 0) {
-      return false
-    }
-    if (gameBoard.board(x)(y).isFreeSpace()) {
-      return false
-    }
-    true
   }
 
   def unmarkPossibleMoves(): Unit = {
@@ -111,13 +128,12 @@ case class Controller(var gameBoard: GameBoard) {
     val yStone = stone.actualField.asInstanceOf[Field].y
     val xDest = destField.x
     val yDest = destField.y
-
     if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
-      val hitStone = gameBoard.changeTwoStones(stone.actualField.asInstanceOf[Field], destField)
+      val hitStone = gameBoard.changeTwoStones(gameBoard.board(xStone)(yStone).asInstanceOf[Field], destField)
       hitStone.sort match {
         case 'p' => gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-        case 'f' => {}
-        case 'b' => {}
+        case 'f' =>
+        case 'b' => notifyObserversSetBlock
       }
       true
     } else {
@@ -133,11 +149,46 @@ case class Controller(var gameBoard: GameBoard) {
     }
   }
 
-  private def isChosenBlockStone: Boolean = {
-    //sende nachricht an benutzer das koordinaten eingegeben werden sollen wo der blockstein hin soll
-    //blocksteine können nur auf freestone felder es muss wiederholt werden bis eines jener gewählt wurde
-    false
+  def isChosenBlockStone(x: Int,y: Int): Boolean = {
+      if(validField(x,y)){
+        if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='f'){
+          gameBoard.setBlockStoneOnField(gameBoard.board(x)(y).asInstanceOf[Field])
+          true
+        }else {
+          false
+        }
+      }else{
+        false
+      }
   }
+
+  def checkValidPlayerStone(x: Int,y: Int): Boolean ={
+    if(x>0&&x<16&&y>0&&y<15&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
+      var retBool:Boolean = false
+
+      for(s <- activePlayer.stones){
+        if((s.actualField.asInstanceOf[Field].x==gameBoard.board(x)(y).asInstanceOf[Field].x)
+          &&(s.actualField.asInstanceOf[Field].y==gameBoard.board(x)(y).asInstanceOf[Field].y)){
+          markPossibleMovesOfStone(gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone])
+          chosenPlayerStone=gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone]
+          retBool=true
+        }
+      }
+      retBool
+    }else{
+      false
+    }
+  }
+
+  def makeAmove(x:Int,y:Int): Boolean ={
+    if(makeMove(chosenPlayerStone,gameBoard.board(x)(y).asInstanceOf[Field])){
+      true
+    }else{
+      false
+    }
+
+  }
+
 
   private def checkWin: Boolean = {
     val xWin = 8
@@ -148,4 +199,5 @@ case class Controller(var gameBoard: GameBoard) {
       false
     }
   }
+
 }

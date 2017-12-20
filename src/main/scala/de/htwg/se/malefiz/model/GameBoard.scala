@@ -236,10 +236,14 @@ case class GameBoard(var playerCount: Int) {
     save
   }
 
-   def resetPlayerStone(stone: PlayerStone): Unit = {
+  def resetPlayerStone(stone: PlayerStone): Unit = {
     stone.actualField = stone.startField
     val x = stone.startField.asInstanceOf[Field].x
     val y = stone.startField.asInstanceOf[Field].y
     board(x)(y).asInstanceOf[Field].stone = stone
+  }
+
+  def setBlockStoneOnField(field: Field): Unit ={
+    board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
 }
