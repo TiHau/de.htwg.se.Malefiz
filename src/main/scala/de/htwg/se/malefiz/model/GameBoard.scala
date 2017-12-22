@@ -230,8 +230,7 @@ case class GameBoard(var playerCount: Int) {
   def changeTwoStones(f1: Field, f2: Field): Stone = {
     val save = f2.stone
     f2.stone=f1.stone
-    f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].x= f2.x
-    f2.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y= f2.y
+    f2.stone.asInstanceOf[PlayerStone].actualField = f2
     f1.stone = FreeStone()
     save
   }
@@ -246,4 +245,10 @@ case class GameBoard(var playerCount: Int) {
   def setBlockStoneOnField(field: Field): Unit ={
     board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
+
+
+
+
+
+
 }

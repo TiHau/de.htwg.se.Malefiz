@@ -12,9 +12,6 @@ case class TUI(controller: Controller)extends Observer{
     print(controller.gameBoard.toString() + "\n")
   }
 
-  def startGame: Unit = {
-    controller.runGame
-  }
   private def askForNewPlayerCount: Unit ={
     var input: Int = four
     print("Pleas type in how many Players wan't to play:\n")
