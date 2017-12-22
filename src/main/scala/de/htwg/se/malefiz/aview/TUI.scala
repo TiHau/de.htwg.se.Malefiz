@@ -9,7 +9,10 @@ case class TUI(controller: Controller)extends Observer{
   print("Welcome!!!\n")
   controller.add(this)
   def printGameBoard: Unit = {
-    print(controller.gameBoard.toString() + "\n")
+    print(controller.gameBoard.toString() +
+      "\nPlayer: " + controller.activePlayer.color +
+      "\nDiced: " + controller.diced
+      +"\n")
   }
 
   private def askForNewPlayerCount: Unit ={
@@ -18,7 +21,7 @@ case class TUI(controller: Controller)extends Observer{
     try {
       input = scala.io.StdIn.readInt()
     } catch {
-      case _=> print("wrong insert set to 4")
+      case _=> print("wrong insert set to 4\n")
     }
       controller.setPlayerCount(input)
       print("Tanks, Malefitz is starting now :) \n")

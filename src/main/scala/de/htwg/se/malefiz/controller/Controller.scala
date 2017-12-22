@@ -28,26 +28,23 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       changePlayer
     }
     // do stuff if actuall player won the game
+    //publishe active player won
   }
 
   def dice(): Unit = {
     diced = scala.util.Random.nextInt(six) + 1
   }
+
   def changePlayer: Unit ={
     if(activePlayer.color==1){
-      print("on 4\n")
       activePlayer = gameBoard.player4
     } else if(activePlayer.color==4&&gameBoard.playerCount>=3){
-      print("on 2\n")
       activePlayer = gameBoard.player2
     } else if(activePlayer.color==2&&gameBoard.playerCount==4){
-      print("on 3\n")
       activePlayer = gameBoard.player3
     }else if(activePlayer.color==3){
-      print("on 1\n")
       activePlayer = gameBoard.player1
     } else{
-      print("on 1\n")
       activePlayer = gameBoard.player1
     }
   }
@@ -66,6 +63,10 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
 
   private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
     if (depth == 0) {
+      //Dont hit your own kind
+      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'p'&&gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor==activePlayer.color){
+        return
+      }
       gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
       return
     } else {
@@ -134,7 +135,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   private def validDestForMove(x: Int, y: Int): Boolean = {
-    if (gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
+    if (validField(x,y) && gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
       true
     } else {
       false
@@ -171,7 +172,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   def makeAmove(x:Int,y:Int): Boolean ={
-    if(makeMove(chosenPlayerStone,gameBoard.board(x)(y).asInstanceOf[Field])){
+    if(validDestForMove(x,y) && makeMove(chosenPlayerStone,gameBoard.board(x)(y).asInstanceOf[Field])){
       true
     }else{
       false

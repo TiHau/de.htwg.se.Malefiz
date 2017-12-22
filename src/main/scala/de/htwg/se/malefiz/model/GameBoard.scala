@@ -56,9 +56,6 @@ case class GameBoard(var playerCount: Int) {
   player4.stones(nu4) = PlayerStone(board(nu15)(nu15), board(nu15)(nu15), player4.color)
 
 
-
-
-
   setPlayerStones(board, playerCount)
 
 
@@ -146,9 +143,9 @@ case class GameBoard(var playerCount: Int) {
     import scala.collection.mutable.StringBuilder
     val jsb = new StringBuilder()
     for (y <- nu0 to nu15) {
-      if(y<10){
+      if (y < 10) {
         jsb.append(y + "  ")
-      } else{
+      } else {
         jsb.append(y + " ")
       }
 
@@ -158,97 +155,111 @@ case class GameBoard(var playerCount: Int) {
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.sort match {
-            case 'f' => if(s.avariable==false){jsb.append("|o|")}else{jsb.append("|x|")}
-            case 'p' => jsb.append("|" + s.stone.asInstanceOf[PlayerStone].playerColor + "|")
-            case 'b' => if(s.avariable==false){jsb.append("|-|")}else{jsb.append("|C|")}
-            case _ => jsb.append("|e|")
+            case 'f' => if (s.avariable == false) {
+              jsb.append("|o|")
+            } else {
+              jsb.append("|x|")
+            }
+            case 'p' => if (s.avariable == false) {
+              jsb.append("|" + s.stone.asInstanceOf[PlayerStone].playerColor + "|")
+            } else {
+              jsb.append("|P|")
+            }
+              case 'b'
+              => if (s.avariable == false) {
+                jsb.append("|-|")
+              } else {
+                jsb.append("|B|")
+              }
+              case _ => jsb.append("|e|")
+            }
           }
         }
+        jsb.append("\n")
       }
-      jsb.append("\n")
-    }
-    jsb.append("    ")
-    (0 to 9).addString(jsb, "  ")
-    jsb.append(" ")
-    (10 to 16).addString(jsb, " ")
-    jsb.toString()
-  }
-
-  private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
-    board(nu8)(nu0) = Field(nu8, nu0, BlockStone())
-    board(nu8)(nu1) = Field(nu8, nu1, BlockStone())
-    board(nu8)(nu3) = Field(nu8, nu3, BlockStone())
-    board(nu8)(nu4) = Field(nu8, nu4, BlockStone())
-    board(nu8)(nu5) = Field(nu8, nu5, BlockStone())
-    board(nu6)(nu7) = Field(nu6, nu7, BlockStone())
-    board(nu10)(nu7) = Field(nu10, nu7, BlockStone())
-    board(nu0)(nu11) = Field(nu0, nu11, BlockStone())
-    board(nu4)(nu11) = Field(nu4, nu11, BlockStone())
-    board(nu8)(nu11) = Field(nu8, nu11, BlockStone())
-    board(nu12)(nu11) = Field(nu12, nu11, BlockStone())
-    board(nu16)(nu11) = Field(nu16, nu11, BlockStone())
-    board
-  }
-
-  private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]] = {
-
-    board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
-    board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
-    board(nu2)(nu14) = Field(nu2, nu14, player1.stones(nu0))
-    board(nu3)(nu14) = Field(nu3, nu14, player1.stones(nu3))
-    board(nu3)(nu15) = Field(nu3, nu15, player1.stones(nu4))
-
-    board(nu13)(nu14) = Field(nu13, nu14, player4.stones(nu2))
-    board(nu13)(nu15) = Field(nu13, nu15, player4.stones(nu1))
-    board(nu14)(nu14) = Field(nu14, nu14, player4.stones(nu0))
-    board(nu15)(nu14) = Field(nu15, nu14, player4.stones(nu3))
-    board(nu15)(nu15) = Field(nu15, nu15, player4.stones(nu4))
-
-    if (playerCount >= 3) {
-
-
-      board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
-      board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
-      board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
-      board(nu7)(nu14) = Field(nu7, nu14, player2.stones(nu3))
-      board(nu7)(nu15) = Field(nu7, nu15, player2.stones(nu4))
-
-      if (playerCount == 4) {
-
-        board(nu10)(nu14) = Field(nu10, nu14, player3.stones(nu0))
-        board(nu9)(nu15) = Field(nu9, nu15, player3.stones(nu1))
-        board(nu9)(nu14) = Field(nu9, nu14, player3.stones(nu2))
-        board(nu11)(nu14) = Field(nu11, nu14, player3.stones(nu3))
-        board(nu11)(nu15) = Field(nu11, nu15, player3.stones(nu4))
-      }
+      jsb.append("    ")
+      (0 to 9).addString(jsb, "  ")
+      jsb.append(" ")
+      (10 to 16).addString(jsb, " ")
+      jsb.toString()
     }
 
-    board
+    private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]]
+
+    =
+    {
+      board(nu8)(nu1) = Field(nu8, nu1, BlockStone())
+      board(nu8)(nu3) = Field(nu8, nu3, BlockStone())
+      board(nu8)(nu4) = Field(nu8, nu4, BlockStone())
+      board(nu8)(nu5) = Field(nu8, nu5, BlockStone())
+      board(nu6)(nu7) = Field(nu6, nu7, BlockStone())
+      board(nu10)(nu7) = Field(nu10, nu7, BlockStone())
+      board(nu0)(nu11) = Field(nu0, nu11, BlockStone())
+      board(nu4)(nu11) = Field(nu4, nu11, BlockStone())
+      board(nu8)(nu11) = Field(nu8, nu11, BlockStone())
+      board(nu12)(nu11) = Field(nu12, nu11, BlockStone())
+      board(nu16)(nu11) = Field(nu16, nu11, BlockStone())
+      board
+    }
+
+    private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]]
+
+    =
+    {
+
+      board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
+      board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
+      board(nu2)(nu14) = Field(nu2, nu14, player1.stones(nu0))
+      board(nu3)(nu14) = Field(nu3, nu14, player1.stones(nu3))
+      board(nu3)(nu15) = Field(nu3, nu15, player1.stones(nu4))
+
+      board(nu13)(nu14) = Field(nu13, nu14, player4.stones(nu2))
+      board(nu13)(nu15) = Field(nu13, nu15, player4.stones(nu1))
+      board(nu14)(nu14) = Field(nu14, nu14, player4.stones(nu0))
+      board(nu15)(nu14) = Field(nu15, nu14, player4.stones(nu3))
+      board(nu15)(nu15) = Field(nu15, nu15, player4.stones(nu4))
+
+      if (playerCount >= 3) {
+
+
+        board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
+        board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
+        board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
+        board(nu7)(nu14) = Field(nu7, nu14, player2.stones(nu3))
+        board(nu7)(nu15) = Field(nu7, nu15, player2.stones(nu4))
+
+        if (playerCount == 4) {
+
+          board(nu10)(nu14) = Field(nu10, nu14, player3.stones(nu0))
+          board(nu9)(nu15) = Field(nu9, nu15, player3.stones(nu1))
+          board(nu9)(nu14) = Field(nu9, nu14, player3.stones(nu2))
+          board(nu11)(nu14) = Field(nu11, nu14, player3.stones(nu3))
+          board(nu11)(nu15) = Field(nu11, nu15, player3.stones(nu4))
+        }
+      }
+
+      board
+    }
+
+
+    def changeTwoStones(f1: Field, f2: Field): Stone = {
+      val save = f2.stone
+      f2.stone = f1.stone
+      f2.stone.asInstanceOf[PlayerStone].actualField = f2
+      f1.stone = FreeStone()
+      save
+    }
+
+    def resetPlayerStone(stone: PlayerStone): Unit = {
+      stone.actualField = stone.startField
+      val x = stone.startField.asInstanceOf[Field].x
+      val y = stone.startField.asInstanceOf[Field].y
+      board(x)(y).asInstanceOf[Field].stone = stone
+    }
+
+    def setBlockStoneOnField(field: Field): Unit = {
+      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
+    }
+
+
   }
-
-
-  def changeTwoStones(f1: Field, f2: Field): Stone = {
-    val save = f2.stone
-    f2.stone=f1.stone
-    f2.stone.asInstanceOf[PlayerStone].actualField = f2
-    f1.stone = FreeStone()
-    save
-  }
-
-  def resetPlayerStone(stone: PlayerStone): Unit = {
-    stone.actualField = stone.startField
-    val x = stone.startField.asInstanceOf[Field].x
-    val y = stone.startField.asInstanceOf[Field].y
-    board(x)(y).asInstanceOf[Field].stone = stone
-  }
-
-  def setBlockStoneOnField(field: Field): Unit ={
-    board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
-  }
-
-
-
-
-
-
-}
