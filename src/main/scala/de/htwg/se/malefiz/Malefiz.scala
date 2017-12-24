@@ -7,8 +7,8 @@ object Malefiz {
   def main(args: Array[String]): Unit ={
     var gameBoard = GameBoard(4)
     val controller = Controller(gameBoard)
-    val tui = TUI(controller)
-    val gui = GUI
+   // val tui = new TUI(controller)
+    val gui = new GUI(controller)
     controller.runGame
 
 

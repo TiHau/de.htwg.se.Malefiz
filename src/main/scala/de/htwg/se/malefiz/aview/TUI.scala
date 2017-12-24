@@ -2,7 +2,7 @@ package de.htwg.se.malefiz.aview
 
 import de.htwg.se.malefiz.controller.{Controller, Observer}
 
-case class TUI(controller: Controller)extends Observer{
+class TUI(controller: Controller)extends Observer{
   private val four = 4
 
   print("TUI Malefiz\n")
@@ -21,7 +21,7 @@ case class TUI(controller: Controller)extends Observer{
     try {
       input = scala.io.StdIn.readInt()
     } catch {
-      case _=> print("wrong insert set to 4\n")
+      case _:Throwable=> print("wrong insert set to 4\n")
     }
       controller.setPlayerCount(input)
       print("Tanks, Malefitz is starting now :) \n")
@@ -41,7 +41,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -54,7 +54,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -77,7 +77,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -90,7 +90,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -116,7 +116,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -129,7 +129,7 @@ case class TUI(controller: Controller)extends Observer{
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }

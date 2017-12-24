@@ -1,13 +1,12 @@
 package de.htwg.se.malefiz.controller
 import de.htwg.se.malefiz.model._
-
+import de.htwg.se.malefiz.controller.State._
 case class Controller(var gameBoard: GameBoard) extends Observable {
   val six = 6
   var activePlayer = gameBoard.player1
   var diced = six
   var chosenPlayerStone = gameBoard.player1.stones(0)
-
-
+  var state = Print
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
@@ -15,14 +14,18 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
 
   def runGame: Unit = {
     activePlayer = gameBoard.player1
+    state=SetPlayerCount
     notifyObserversSetPlayerCount
     while(!checkWin) {
       dice()
+      state=Print
       notifyObserversUpdate//print maked GameBoard
+      state=ChosePlayerStone
       notifyObserversChosePlayer
-      unmarkPossibleMoves
       markPossibleMovesOfStone(chosenPlayerStone)
+      state=Print
       notifyObserversUpdate
+      state=SetTarget
       notifyObserversChoseTarget
       unmarkPossibleMoves
       changePlayer
@@ -126,7 +129,10 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       hitStone.sort match {
         case 'p' => gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
         case 'f' =>
-        case 'b' => notifyObserversSetBlock
+        case 'b' =>{
+          state=SetBlockStone
+          notifyObserversSetBlock
+        }
       }
       true
     } else {
@@ -146,6 +152,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       if(validField(x,y)){
         if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='f'){
           gameBoard.setBlockStoneOnField(gameBoard.board(x)(y).asInstanceOf[Field])
+
           true
         }else {
           false
