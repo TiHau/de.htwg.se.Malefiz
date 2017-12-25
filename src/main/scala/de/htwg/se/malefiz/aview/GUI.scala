@@ -48,7 +48,6 @@ class GUI(controller: Controller) extends Frame with Observer {
 
           }
           case SetBlockStone=>{
-            println("here")
             if(controller.isChosenBlockStone(rectX,rectY)){
               commandNotExecuted=false
             } else{
