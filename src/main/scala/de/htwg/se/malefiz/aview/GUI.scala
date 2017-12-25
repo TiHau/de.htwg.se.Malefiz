@@ -21,40 +21,41 @@ class GUI(controller: Controller) extends Frame with Observer {
     focusable = true
     listenTo(this.mouse.clicks)
     reactions += {
-      case MouseClicked(_,point,_,_,_) => {
+      case MouseClicked(_, point, _, _, _) => {
         val persx = size.width.toDouble / screenX.toDouble
         val persy = size.height.toDouble / screenY.toDouble
-        val posX=point.x-size.width / 4
-        val posY=point.y-100
-        val rectX =(posX/(36 * persx)).round.toInt
-        val rectY =(posY/(38 * persy)).round.toInt
-        controller.state match{
-          case SetPlayerCount=>
-          case ChosePlayerStone=>{
+        val posX = point.x - size.width / 4
+        val posY = point.y - 100
+        val rectX = (posX / (36 * persx)).round.toInt
+        val rectY = (posY / (38 * persy)).round.toInt
+        controller.state match {
+          case SetPlayerCount =>
+          case ChosePlayerStone => {
 
-            if(controller.checkValidPlayerStone(rectX,rectY)){
-              commandNotExecuted=false
-            }else {
+            if (controller.checkValidPlayerStone(rectX, rectY)) {
+              commandNotExecuted = false
+            } else {
               message = "You have to Chose one of your Stones"
             }
 
           }
-          case SetTarget=>{
-            if(controller.makeAmove(rectX,rectY)){
-              commandNotExecuted=false
-            }else{
+          case SetTarget => {
+            if (controller.makeAmove(rectX, rectY)) {
+              commandNotExecuted = false
+            } else {
               message = "You have to chose a valid Target"
             }
 
           }
-          case SetBlockStone=>{
-            if(controller.isChosenBlockStone(rectX,rectY)){
-              commandNotExecuted=false
-            } else{
+          case SetBlockStone => {
+            if (controller.isChosenBlockStone(rectX, rectY)) {
+              commandNotExecuted = false
+            } else {
               message = "You have to chose a valid Field to set BlockStone"
             }
           }
-          case _=> println("error")
+          case Print =>
+          case _ =>
         }
 
 
@@ -66,22 +67,22 @@ class GUI(controller: Controller) extends Frame with Observer {
     override def paint(g: Graphics2D): Unit = {
       //Background
       background = Color.WHITE
-      var activePlayerColorString=""
-      var activePlayerColorasInt =controller.activePlayer.color
-      if(activePlayerColorasInt==1){
-        activePlayerColorString="Red"
-      }else if(activePlayerColorasInt==2){
-        activePlayerColorString="Green"
-      }else if(activePlayerColorasInt==3){
-        activePlayerColorString="Yellow"
-      }else {
-        activePlayerColorString="Blue"
+      var activePlayerColorString = ""
+      var activePlayerColorasInt = controller.activePlayer.color
+      if (activePlayerColorasInt == 1) {
+        activePlayerColorString = "Red"
+      } else if (activePlayerColorasInt == 2) {
+        activePlayerColorString = "Green"
+      } else if (activePlayerColorasInt == 3) {
+        activePlayerColorString = "Yellow"
+      } else {
+        activePlayerColorString = "Blue"
       }
 
       g.setFont(new Font("TimesRoman", Font.BOLD, 18))
-      g.drawString("Player: "+activePlayerColorString,40,40)
-      g.drawString(""+message,size.width/3,40)
-      g.drawString("Diced: "+controller.diced.toString,size.width-120,40)
+      g.drawString("Player: " + activePlayerColorString, 40, 40)
+      g.drawString("" + message, size.width / 3, 40)
+      g.drawString("Diced: " + controller.diced.toString, size.width - 120, 40)
       //Playground
       g.setColor(Color.LIGHT_GRAY)
       g.fillRect(10, 80, size.width - 20, size.height - 100)
@@ -174,10 +175,10 @@ class GUI(controller: Controller) extends Frame with Observer {
           }
           case 'x' => {
             if (check == 1) {
-              g.setColor(new Color(238,118,0))
+              g.setColor(new Color(238, 118, 0))
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
               check += 1
-              g.setColor(new Color(238,118,0))
+              g.setColor(new Color(238, 118, 0))
             }
           }
           case 'P' => {
@@ -243,41 +244,35 @@ class GUI(controller: Controller) extends Frame with Observer {
   visible = true
   resizable = true
   size = dim
-  title= "Malefitz"
+  title = "Malefitz"
+
   override def closeOperation(): Unit = sys.exit(0)
 
 
   //repaint thread
   val thread = new Thread {
     override def run {
-        while (true){
-          try {
-           repaint
-          }catch{
-            case _:Throwable=> print("Error painting\n")
-          }
+      while (true) {
+        try {
+          repaint
+        } catch {
+          case _: Throwable => print("Error painting\n")
         }
+      }
     }
   }
   thread.start
 
-
-
-
-
-
-
-
   override def update: Unit = {}
 
   override def setBlockstone: Unit = {
-    commandNotExecuted=true
-    message= "Set a BlockStone"
+    commandNotExecuted = true
+    message = "Set a BlockStone"
     mwait
   }
 
   override def choseAPlayerstone: Unit = {
-    commandNotExecuted=true
+    commandNotExecuted = true
     message = "Chose one of your Stones"
     mwait
   }
@@ -285,18 +280,16 @@ class GUI(controller: Controller) extends Frame with Observer {
   override def setPlayerCountNew: Unit = {}
 
   override def askTarget: Unit = {
-    commandNotExecuted=true
-    message="Chose a Target Field"
+    commandNotExecuted = true
+    message = "Chose a Target Field"
     mwait
   }
 
-  private def mwait: Unit ={
-     while (commandNotExecuted){
-        for(_<-0 to 100000){}
-     }
+  private def mwait: Unit = {
+    while (commandNotExecuted) {
+      for (_ <- 0 to 100000) {} //short spin routine
+    }
   }
-
-
 
 
 }
