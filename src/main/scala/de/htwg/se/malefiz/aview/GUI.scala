@@ -11,17 +11,17 @@ import de.htwg.se.malefiz.controller.State._
 
 
 class GUI(controller: Controller) extends Frame with Observer {
-  val dim = Toolkit.getDefaultToolkit.getScreenSize
-  val screenX = dim.width
-  val screenY = dim.height
-  var message = "test"
-  var commandNotExecuted = true
+  private val dim = Toolkit.getDefaultToolkit.getScreenSize
+  private val screenX = dim.width
+  private val screenY = dim.height
+  private var message = "test"
+  private var commandNotExecuted = true
   controller.add(this)
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
     reactions += {
-      case MouseClicked(_, point, _, _, _) => {
+      case MouseClicked(_, point, _, _, _) =>
         val persx = size.width.toDouble / screenX.toDouble
         val persy = size.height.toDouble / screenY.toDouble
         val posX = point.x - size.width / 4
@@ -30,7 +30,7 @@ class GUI(controller: Controller) extends Frame with Observer {
         val rectY = (posY / (38 * persy)).round.toInt
         controller.state match {
           case SetPlayerCount =>
-          case ChosePlayerStone => {
+          case ChosePlayerStone =>
 
             if (controller.checkValidPlayerStone(rectX, rectY)) {
               commandNotExecuted = false
@@ -38,28 +38,23 @@ class GUI(controller: Controller) extends Frame with Observer {
               message = "You have to Chose one of your Stones"
             }
 
-          }
-          case SetTarget => {
-            if (controller.makeAmove(rectX, rectY)) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to chose a valid Target"
-            }
 
+          case SetTarget => if (controller.makeAmove(rectX, rectY)) {
+            commandNotExecuted = false
+          } else {
+            message = "You have to chose a valid Target"
           }
-          case SetBlockStone => {
-            if (controller.isChosenBlockStone(rectX, rectY)) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to chose a valid Field to set BlockStone"
-            }
+          case SetBlockStone => if (controller.isChosenBlockStone(rectX, rectY)) {
+            commandNotExecuted = false
+          } else {
+            message = "You have to chose a valid Field to set BlockStone"
           }
+
           case Print =>
           case _ =>
         }
 
 
-      }
 
     }
 
@@ -100,7 +95,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       var count = 0
       for (c <- currentGB) {
         c match {
-          case '|' => {
+          case '|' =>
             check += 1
             if (check == 3) {
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (22 * persx).toInt, (26 * persy).toInt)
@@ -116,13 +111,13 @@ class GUI(controller: Controller) extends Frame with Observer {
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
             }
 
-          }
-          case '\n' => {
+
+          case '\n' =>
             y += 1
             x = 0
             check = 0
-          }
-          case ' ' => {
+
+          case ' ' =>
             check += 1
             if (check == 3) {
               if (count < 272) {
@@ -133,8 +128,9 @@ class GUI(controller: Controller) extends Frame with Observer {
               check = 0
               x += 1
             }
-          }
-          case '-' => {
+
+          case '-'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.WHITE)
@@ -142,155 +138,158 @@ class GUI(controller: Controller) extends Frame with Observer {
               check = 2
               g.setColor(Color.BLACK)
             }
-          }
-          case 'o' => {
+
+          case 'o'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.BLACK)
             }
-          }
-          case '1' => {
+
+          case '1'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.RED)
             }
-          }
-          case '2' => {
+
+          case '2'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.GREEN)
             }
-          }
-          case '3' => {
+
+          case '3'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.YELLOW)
             }
-          }
-          case '4' => {
+
+          case '4'
+          =>
             if (check == 1) {
               check += 1
               g.setColor(Color.BLUE)
             }
-          }
-          case 'x' => {
+
+          case 'x'
+          =>
             if (check == 1) {
               g.setColor(new Color(238, 118, 0))
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(new Color(238, 118, 0))
             }
-          }
-          case 'P' => {
+
+          case 'P'
+          =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(Color.MAGENTA)
             }
-          }
-          case 'B' => {
+
+          case 'B'
+          =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
               g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(Color.WHITE)
             }
-          }
+
           case _ =>
         }
+      }
+    }
+  }
 
+    menuBar = new MenuBar {
+      contents += new Menu("File") {
+        mnemonic = Key.F
+        contents += new MenuItem(Action("Empty") {})
+        contents += new MenuItem(Action("New") {})
+        contents += new MenuItem(Action("Save") {})
+        contents += new MenuItem(Action("Load") {})
+        contents += new MenuItem(Action("Quit") {
+          sys.exit(0)
+        })
+      }
+      contents += new Menu("Edit") {
+        mnemonic = Key.E
+        contents += new MenuItem(Action("Undo") {})
+        contents += new MenuItem(Action("Redo") {})
       }
 
+      contents += new Menu("Options") {
+        mnemonic = Key.O
+        contents += new MenuItem(Action("Player 2") {
+          controller.setPlayerCount(2)
+        })
+        contents += new MenuItem(Action("Player 3") {
+          controller.setPlayerCount(3)
+        })
+        contents += new MenuItem(Action("Player 4") {
+          controller.setPlayerCount(4)
+        })
 
+      }
     }
 
-  }
 
+    visible = true
+    resizable = true
+    size = dim
+    title = "Malefitz"
 
-  menuBar = new MenuBar {
-    contents += new Menu("File") {
-      mnemonic = Key.F
-      contents += new MenuItem(Action("Empty") {})
-      contents += new MenuItem(Action("New") {})
-      contents += new MenuItem(Action("Save") {})
-      contents += new MenuItem(Action("Load") {})
-      contents += new MenuItem(Action("Quit") {
-        sys.exit(0)
-      })
-    }
-    contents += new Menu("Edit") {
-      mnemonic = Key.E
-      contents += new MenuItem(Action("Undo") {})
-      contents += new MenuItem(Action("Redo") {})
-    }
+    override def closeOperation(): Unit = sys.exit(0)
 
-    contents += new Menu("Options") {
-      mnemonic = Key.O
-      contents += new MenuItem(Action("Player 2") {
-        controller.setPlayerCount(2)
-      })
-      contents += new MenuItem(Action("Player 3") {
-        controller.setPlayerCount(3)
-      })
-      contents += new MenuItem(Action("Player 4") {
-        controller.setPlayerCount(4)
-      })
-
-    }
-  }
-
-
-  visible = true
-  resizable = true
-  size = dim
-  title = "Malefitz"
-
-  override def closeOperation(): Unit = sys.exit(0)
-
-  val sleepTime = 500
-  //repaint thread
-  val thread = new Thread {
-    override def run {
-      while (true) {
-        try {
-          Thread.sleep(sleepTime)
-          repaint
-        } catch {
-          case _: Throwable => print("Error painting\n")
+    val sleepTime = 500
+    //repaint thread
+    val thread = new Thread {
+      override def run {
+        while (true) {
+          try {
+            Thread.sleep(sleepTime)
+            repaint
+          } catch {
+            case _: Throwable => print("Error painting\n")
+          }
         }
       }
     }
-  }
-  thread.start
+    thread.start
 
-  override def update: Unit = {}
+    override def update: Unit = {}
 
-  override def setBlockstone: Unit = {
-    commandNotExecuted = true
-    message = "Set a BlockStone"
-    mwait
-  }
-
-  override def choseAPlayerstone: Unit = {
-    commandNotExecuted = true
-    message = "Chose one of your Stones"
-    mwait
-  }
-
-  override def setPlayerCountNew: Unit = {}
-
-  override def askTarget: Unit = {
-    commandNotExecuted = true
-    message = "Chose a Target Field"
-    mwait
-  }
-
-  private def mwait: Unit = {
-    while (commandNotExecuted) {
-      for (_ <- 0 to 100000) {} //short spin routine
+    override def setBlockstone: Unit = {
+      commandNotExecuted = true
+      message = "Set a BlockStone"
+      mwait
     }
-  }
+
+    override def choseAPlayerstone: Unit = {
+      commandNotExecuted = true
+      message = "Chose one of your Stones"
+      mwait
+    }
+
+    override def setPlayerCountNew: Unit = {}
+
+    override def askTarget: Unit = {
+      commandNotExecuted = true
+      message = "Chose a Target Field"
+      mwait
+    }
+
+    private def mwait: Unit = {
+      while (commandNotExecuted) {
+        for (_ <- 0 to 100000) {} //short spin routine
+      }
+    }
 
 
 }
