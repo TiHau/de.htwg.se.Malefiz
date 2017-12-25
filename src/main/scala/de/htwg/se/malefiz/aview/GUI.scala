@@ -248,12 +248,13 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   override def closeOperation(): Unit = sys.exit(0)
 
-
+  val sleepTime = 500
   //repaint thread
   val thread = new Thread {
     override def run {
       while (true) {
         try {
+          Thread.sleep(sleepTime)
           repaint
         } catch {
           case _: Throwable => print("Error painting\n")
