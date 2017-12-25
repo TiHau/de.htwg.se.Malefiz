@@ -7,6 +7,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   var diced = six
   var chosenPlayerStone = gameBoard.player1.stones(0)
   var state = Print
+  var currentReturnStone = 'f'
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
@@ -28,6 +29,10 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       state=SetTarget
       notifyObserversChoseTarget
       unmarkPossibleMoves
+      if(currentReturnStone=='b'){
+        state=SetBlockStone
+        notifyObserversSetBlock
+      }
       changePlayer
     }
     // do stuff if actuall player won the game
@@ -127,12 +132,12 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
       val hitStone = gameBoard.changeTwoStones(gameBoard.board(xStone)(yStone).asInstanceOf[Field], destField)
       hitStone.sort match {
-        case 'p' => gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-        case 'f' =>
-        case 'b' =>{
-          state=SetBlockStone
-          notifyObserversSetBlock
+        case 'p' => {
+          gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
+          currentReturnStone = 'p'
         }
+        case 'f' => currentReturnStone = 'f'
+        case 'b' => currentReturnStone = 'b'
       }
       true
     } else {
