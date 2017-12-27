@@ -3,7 +3,7 @@ import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
 case class Controller(var gameBoard: GameBoard) extends Observable {
   val six = 6
-  var activePlayer = gameBoard.player1
+  var activePlayer = gameBoard.player3
   var diced = six
   var chosenPlayerStone = gameBoard.player1.stones(0)
   var state = Print
@@ -14,11 +14,11 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   }
 
   def runGame: Unit = {
-    activePlayer = gameBoard.player1
     state=SetPlayerCount
     notifyObserversSetPlayerCount
     while(!checkWin) {
-      dice()
+      changePlayer
+      dice
       state=Print
       notifyObserversUpdate//print maked GameBoard
       state=ChosePlayerStone
@@ -33,10 +33,8 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
         state=SetBlockStone
         notifyObserversSetBlock
       }
-      changePlayer
     }
-    // do stuff if actuall player won the game
-    //publishe active player won
+    notifyObserversSayWon
   }
 
   def dice(): Unit = {

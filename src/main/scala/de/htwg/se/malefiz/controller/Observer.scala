@@ -6,6 +6,7 @@ trait Observer {
   def choseAPlayerstone
   def setPlayerCountNew
   def askTarget
+  def sayWon
 }
 
 class Observable {
@@ -17,4 +18,5 @@ class Observable {
   def notifyObserversChosePlayer = subscribers.foreach(o => o.choseAPlayerstone)
   def notifyObserversSetPlayerCount = subscribers.foreach(o => o.setPlayerCountNew)
   def notifyObserversChoseTarget = subscribers.foreach(o=>o.askTarget)
+  def notifyObserversSayWon = subscribers.foreach(o=>o.sayWon)
 }

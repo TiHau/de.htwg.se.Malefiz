@@ -158,4 +158,8 @@ class TUI(controller: Controller)extends Observer{
   override def askTarget: Unit = {
     askDestination
   }
+
+  override def sayWon: Unit = {
+    println("Player: "+ controller.activePlayer.color+" Won the Game")
+  }
 }

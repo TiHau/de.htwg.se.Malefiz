@@ -55,7 +55,6 @@ class GUI(controller: Controller) extends Frame with Observer {
         }
 
 
-
     }
 
 
@@ -207,89 +206,107 @@ class GUI(controller: Controller) extends Frame with Observer {
     }
   }
 
-    menuBar = new MenuBar {
-      contents += new Menu("File") {
-        mnemonic = Key.F
-        contents += new MenuItem(Action("Empty") {})
-        contents += new MenuItem(Action("New") {})
-        contents += new MenuItem(Action("Save") {})
-        contents += new MenuItem(Action("Load") {})
-        contents += new MenuItem(Action("Quit") {
-          sys.exit(0)
-        })
-      }
-      contents += new Menu("Edit") {
-        mnemonic = Key.E
-        contents += new MenuItem(Action("Undo") {})
-        contents += new MenuItem(Action("Redo") {})
-      }
-
-      contents += new Menu("Options") {
-        mnemonic = Key.O
-        contents += new MenuItem(Action("Player 2") {
-          controller.setPlayerCount(2)
-        })
-        contents += new MenuItem(Action("Player 3") {
-          controller.setPlayerCount(3)
-        })
-        contents += new MenuItem(Action("Player 4") {
-          controller.setPlayerCount(4)
-        })
-
-      }
+  menuBar = new MenuBar {
+    contents += new Menu("File") {
+      mnemonic = Key.F
+      contents += new MenuItem(Action("Empty") {})
+      contents += new MenuItem(Action("New") {})
+      contents += new MenuItem(Action("Save") {})
+      contents += new MenuItem(Action("Load") {})
+      contents += new MenuItem(Action("Quit") {
+        sys.exit(0)
+      })
+    }
+    contents += new Menu("Edit") {
+      mnemonic = Key.E
+      contents += new MenuItem(Action("Undo") {})
+      contents += new MenuItem(Action("Redo") {})
     }
 
+    contents += new Menu("Options") {
+      mnemonic = Key.O
+      contents += new MenuItem(Action("Player 2") {
+        controller.setPlayerCount(2)
+      })
+      contents += new MenuItem(Action("Player 3") {
+        controller.setPlayerCount(3)
+      })
+      contents += new MenuItem(Action("Player 4") {
+        controller.setPlayerCount(4)
+      })
 
-    visible = true
-    resizable = true
-    size = dim
-    title = "Malefitz"
+    }
+  }
 
-    override def closeOperation(): Unit = sys.exit(0)
 
-    val sleepTime = 500
-    //repaint thread
-    val thread = new Thread {
-      override def run {
-        while (true) {
-          try {
-            Thread.sleep(sleepTime)
-            repaint
-          } catch {
-            case _: Throwable => print("Error painting\n")
-          }
+  visible = true
+  resizable = true
+  size = dim
+  title = "Malefitz"
+
+  override def closeOperation(): Unit = sys.exit(0)
+
+  val sleepTime = 500
+  //repaint thread
+  val thread = new Thread {
+    override def run {
+      while (true) {
+        try {
+          Thread.sleep(sleepTime)
+          repaint
+        } catch {
+          case _: Throwable => print("Error painting\n")
         }
       }
     }
-    thread.start
+  }
+  thread.start
 
-    override def update: Unit = {}
+  override def update: Unit = {}
 
-    override def setBlockstone: Unit = {
-      commandNotExecuted = true
-      message = "Set a BlockStone"
-      mwait
+  override def setBlockstone: Unit = {
+    commandNotExecuted = true
+    message = "Set a BlockStone"
+    mwait
+  }
+
+  override def choseAPlayerstone: Unit = {
+    commandNotExecuted = true
+    message = "Chose one of your Stones"
+    mwait
+  }
+
+  override def setPlayerCountNew: Unit = {}
+
+  override def askTarget: Unit = {
+    commandNotExecuted = true
+    message = "Chose a Target Field"
+    mwait
+  }
+
+  override def sayWon: Unit = {
+    ifWon
+  }
+
+  private def mwait: Unit = {
+    while (commandNotExecuted) {
+      for (_ <- 0 to 100000) {} //short spin routine
     }
+  }
 
-    override def choseAPlayerstone: Unit = {
-      commandNotExecuted = true
-      message = "Chose one of your Stones"
-      mwait
+  private def ifWon: Unit = {
+    var activePlayerColorString = ""
+    var activePlayerColorasInt = controller.activePlayer.color
+    if (activePlayerColorasInt == 1) {
+      activePlayerColorString = "Red"
+    } else if (activePlayerColorasInt == 2) {
+      activePlayerColorString = "Green"
+    } else if (activePlayerColorasInt == 3) {
+      activePlayerColorString = "Yellow"
+    } else {
+      activePlayerColorString = "Blue"
     }
-
-    override def setPlayerCountNew: Unit = {}
-
-    override def askTarget: Unit = {
-      commandNotExecuted = true
-      message = "Chose a Target Field"
-      mwait
-    }
-
-    private def mwait: Unit = {
-      while (commandNotExecuted) {
-        for (_ <- 0 to 100000) {} //short spin routine
-      }
-    }
-
+    message = "Player "+activePlayerColorString+" Won the Game!"
+  }
 
 }
