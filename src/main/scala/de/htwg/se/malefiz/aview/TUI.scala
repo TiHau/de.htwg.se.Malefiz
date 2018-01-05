@@ -1,20 +1,155 @@
 package de.htwg.se.malefiz.aview
-import de.htwg.se.malefiz.model.GameBoard
-case class TUI (gameBoard: GameBoard){
-  private var runs:Boolean = true
-  private var input:String=""
+
+import de.htwg.se.malefiz.controller.{Controller, Observer, State}
+
+case class TUI(controller: Controller) extends Observer {
+  private val four = 4
+
   print("TUI Malefiz\n")
-  print("Wellcome!!!\n")
-  print("Pleas type in how many Players wan't to play:\n")
-  input=scala.io.StdIn.readLine()
-  print("Tanks, Malefitz is starting now :) \n")
-  print("C")
-  while(runs){
-    input=scala.io.StdIn.readLine()
-     input match {
-      case "print"=> print(gameBoard.toString())
-      case "exit"=> scala.sys.exit(0)
-      case _=>print("Not a Command\n")
+  print("Welcome!!!\n")
+  controller.add(this)
+
+  def printGameBoard: Unit = {
+    print(controller.gameBoard.toString() +
+      "\nPlayer: " + controller.activePlayer.color +
+      "\nDiced: " + controller.diced
+      + "\n")
+  }
+
+  private def askForNewPlayerCount: Unit = {
+    var input: Int = four
+    print("Pleas type in how many Players wan't to play:\n")
+    try {
+      input = scala.io.StdIn.readInt()
+    } catch {
+      case _ => print("wrong insert set to 4\n")
+    }
+    controller.setPlayerCount(input)
+    print("Tanks, Malefitz is starting now :) \n")
+
+  }
+
+  private def getBlockStoneDest: Unit = {
+    var checkNotFinished: Boolean = true
+    while (checkNotFinished) {
+      print("Set destination for hit Blockstone\n")
+      print("X: ")
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            x = xS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+      print("Y: ")
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            y = yS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+      if (controller.isChosenBlockStone(x, y)) {
+        checkNotFinished = false
+      }
+    }
+  }
+
+  private def getChosenPlayerStone: Unit = {
+    var checkNotFinished: Boolean = true
+    while (checkNotFinished) {
+      print("Type in Coordinates of your PlayerStone\n")
+      print("X: ")
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            x = xS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+      print("Y: ")
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            y = yS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+
+
+      if (controller.checkValidPlayerStone(x, y)) {
+        checkNotFinished = false
+      } else {
+        print("its not your stone\n")
+      }
+    }
+  }
+
+  private def askDestination: Unit = {
+    var checkNotFinished: Boolean = true
+    while (checkNotFinished) {
+      print("Set destination for your Stone\n")
+      print("X: ")
+      val xS = scala.io.StdIn.readLine()
+      var x = 0
+      xS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            x = xS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+      print("Y: ")
+      val yS = scala.io.StdIn.readLine()
+      var y = 0
+      yS match {
+        case "exit" => sys.exit(0)
+        case _ => {
+          try {
+            y = yS.toInt
+          } catch {
+            case _:Throwable => print("wrong argument\n")
+          }
+        }
+      }
+      if (controller.makeAmove(x, y)) {
+        checkNotFinished = false
+      }
+
+    }
+  }
+
+  override def update: Unit = {
+    controller.state match {
+      case State.Print => printGameBoard
+      case State.SetBlockStone => getBlockStoneDest
+      case State.ChosePlayerStone => getChosenPlayerStone
+      case State.SetPlayerCount => askForNewPlayerCount
+      case State.SetTarget => askDestination
+      case State.PlayerWon => println("Player: "+ controller.activePlayer.color+" Won the Game")
     }
   }
 }

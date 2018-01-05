@@ -1,19 +1,9 @@
 package de.htwg.se.malefiz.model
 
-abstract class Stone(field:AbstractField, isStoneType:Char){
-  def getStoneType(): Char ={
-    isStoneType
-  }
-}
+abstract class Stone(var sort:Char)
 
-case class BlockStone(field:AbstractField) extends Stone(field, isStoneType = 'b') {
+case class BlockStone() extends Stone(sort = 'b')
 
-}
+case class PlayerStone(startField:AbstractField, var actualField: AbstractField, playerColor:Int) extends Stone(sort = 'p')
 
-case class PlayerStone(field:AbstractField,player:Player) extends Stone(field,isStoneType = 'p') {
-
-}
-
-case class FreeStone(field:AbstractField) extends Stone(field,isStoneType = 'f') {
-
-}
+case class FreeStone() extends Stone(sort = 'f')

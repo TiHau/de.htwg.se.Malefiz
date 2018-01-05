@@ -6,7 +6,7 @@ import org.scalatest.junit.JUnitRunner
 class StoneFieldSpec extends WordSpec with Matchers {
   "A Field" when {
     "new" should {
-      val field:Field = Field(0, 0, FreeStone(null))
+      val field:Field = Field(0, 0, FreeStone())
 
       "have a x coordinate" in {
         field.x should be(0)
@@ -15,7 +15,7 @@ class StoneFieldSpec extends WordSpec with Matchers {
         field.y should be(0)
       }
       "have a stone" in {
-        field.stone should be(FreeStone(null))
+        field.stone should be(FreeStone())
       }
     }
   }
