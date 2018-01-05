@@ -257,7 +257,13 @@ class GUI(controller: Controller) extends Frame with Observer {
         ifWon
       }
       case State.SetPlayerCount => {
-
+        commandNotExecuted = true
+        val countUI = new CountUI
+        countUI.visible=true
+        this.visible=false
+        mwait
+        this.visible=true
+        this.repaint
       }
     }
   }
@@ -281,6 +287,32 @@ class GUI(controller: Controller) extends Frame with Observer {
       activePlayerColorString = "Blue"
     }
     message = "Player "+activePlayerColorString+" Won the Game!"
+    controller.unmarkPossibleMoves()
+    repaint
+    this.ignoreRepaint
+  }
+  private class CountUI extends MainFrame {
+    title = "Playercount"
+    preferredSize = new Dimension(320, 70)
+    location=(new Point(screenX/3,screenY/3))
+    contents = new FlowPanel() {
+      contents += Button("2 Player") {
+        controller.setPlayerCount(2)
+        commandNotExecuted=false
+        dispose
+      }
+      contents += Button("3 Player") {
+        controller.setPlayerCount(3)
+        commandNotExecuted=false
+        dispose
+      }
+      contents += Button("4 Player") {
+        controller.setPlayerCount(4)
+        commandNotExecuted=false
+        dispose
+      }
+    }
   }
 
 }
+
