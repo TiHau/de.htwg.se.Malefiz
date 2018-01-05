@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.aview
 
-import de.htwg.se.malefiz.controller.{Controller, Observer}
+import de.htwg.se.malefiz.controller.{Controller, Observer, State}
 
 case class TUI(controller: Controller) extends Observer {
   private val four = 4
@@ -143,26 +143,13 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   override def update: Unit = {
-    printGameBoard
-  }
-
-  override def setBlockstone: Unit = {
-    getBlockStoneDest
-  }
-
-  override def choseAPlayerstone: Unit = {
-    getChosenPlayerStone
-  }
-
-  override def setPlayerCountNew: Unit = {
-    askForNewPlayerCount
-  }
-
-  override def askTarget: Unit = {
-    askDestination
-  }
-
-  override def sayWon: Unit = {
-    println("Player: "+ controller.activePlayer.color+" Won the Game")
+    controller.state match {
+      case State.Print => printGameBoard
+      case State.SetBlockStone => getBlockStoneDest
+      case State.ChosePlayerStone => getChosenPlayerStone
+      case State.SetPlayerCount => askForNewPlayerCount
+      case State.SetTarget => askDestination
+      case State.PlayerWon => println("Player: "+ controller.activePlayer.color+" Won the Game")
+    }
   }
 }

@@ -15,26 +15,27 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
 
   def runGame: Unit = {
     state=SetPlayerCount
-    notifyObserversSetPlayerCount
+    notifyObservers
     while(!checkWin) {
       changePlayer
       dice
       state=Print
-      notifyObserversUpdate//print maked GameBoard
+      notifyObservers//print maked GameBoard
       state=ChosePlayerStone
-      notifyObserversChosePlayer
+      notifyObservers
       markPossibleMovesOfStone(chosenPlayerStone)
       state=Print
-      notifyObserversUpdate
+      notifyObservers
       state=SetTarget
-      notifyObserversChoseTarget
+      notifyObservers
       unmarkPossibleMoves
       if(currentReturnStone=='b'){
         state=SetBlockStone
-        notifyObserversSetBlock
+        notifyObservers
       }
     }
-    notifyObserversSayWon
+    state=PlayerWon
+    notifyObservers
   }
 
   def dice(): Unit = {

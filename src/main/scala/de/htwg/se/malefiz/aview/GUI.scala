@@ -3,7 +3,7 @@ package de.htwg.se.malefiz.aview
 
 import java.awt.{Color, Font, Toolkit}
 
-import de.htwg.se.malefiz.controller.{Controller, Observer}
+import de.htwg.se.malefiz.controller.{Controller, Observer, State}
 
 import scala.swing.event._
 import scala.swing._
@@ -234,30 +234,32 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   override def closeOperation(): Unit = sys.exit(0)
 
-  override def update: Unit = {repaint()}
+  override def update: Unit = {
+    controller.state match {
+      case State.Print => repaint()
+      case State.SetBlockStone => {
+        commandNotExecuted = true
+        message = "Set a BlockStone"
+        repaint()
+        mwait
+      }
+      case State.ChosePlayerStone => {
+        commandNotExecuted = true
+        message = "Chose one of your Stones"
+        mwait
+      }
+      case State.SetTarget => {
+        commandNotExecuted = true
+        message = "Chose a Target Field"
+        mwait
+      }
+      case State.PlayerWon => {
+        ifWon
+      }
+      case State.SetPlayerCount => {
 
-  override def setBlockstone: Unit = {
-    commandNotExecuted = true
-    message = "Set a BlockStone"
-    mwait
-  }
-
-  override def choseAPlayerstone: Unit = {
-    commandNotExecuted = true
-    message = "Chose one of your Stones"
-    mwait
-  }
-
-  override def setPlayerCountNew: Unit = {}
-
-  override def askTarget: Unit = {
-    commandNotExecuted = true
-    message = "Chose a Target Field"
-    mwait
-  }
-
-  override def sayWon: Unit = {
-    ifWon
+      }
+    }
   }
 
   private def mwait: Unit = {
