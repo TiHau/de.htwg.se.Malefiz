@@ -223,19 +223,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       contents += new MenuItem(Action("Redo") {})
     }
 
-    contents += new Menu("Options") {
-      mnemonic = Key.O
-      contents += new MenuItem(Action("Player 2") {
-        controller.setPlayerCount(2)
-      })
-      contents += new MenuItem(Action("Player 3") {
-        controller.setPlayerCount(3)
-      })
-      contents += new MenuItem(Action("Player 4") {
-        controller.setPlayerCount(4)
-      })
 
-    }
   }
 
 
@@ -246,23 +234,7 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   override def closeOperation(): Unit = sys.exit(0)
 
-  val sleepTime = 500
-  //repaint thread
-  val thread = new Thread {
-    override def run {
-      while (true) {
-        try {
-          Thread.sleep(sleepTime)
-          repaint
-        } catch {
-          case _: Throwable => print("Error painting\n")
-        }
-      }
-    }
-  }
-  thread.start
-
-  override def update: Unit = {}
+  override def update: Unit = {repaint()}
 
   override def setBlockstone: Unit = {
     commandNotExecuted = true
