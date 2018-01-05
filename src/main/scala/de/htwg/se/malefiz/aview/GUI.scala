@@ -239,6 +239,7 @@ class GUI(controller: Controller) extends Frame with Observer {
   override def setBlockstone: Unit = {
     commandNotExecuted = true
     message = "Set a BlockStone"
+    repaint
     mwait
   }
 
@@ -279,6 +280,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       activePlayerColorString = "Blue"
     }
     message = "Player "+activePlayerColorString+" Won the Game!"
+    this.ignoreRepaint
   }
 
 }
