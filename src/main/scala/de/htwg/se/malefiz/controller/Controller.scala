@@ -1,34 +1,40 @@
 package de.htwg.se.malefiz.controller
 import de.htwg.se.malefiz.model._
-
+import de.htwg.se.malefiz.controller.State._
 case class Controller(var gameBoard: GameBoard) extends Observable {
   val six = 6
-  var activePlayer = gameBoard.player1
+  var activePlayer = gameBoard.player3
   var diced = six
   var chosenPlayerStone = gameBoard.player1.stones(0)
-
-
+  var state = Print
+  var currentReturnStone = 'f'
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
 
   def runGame: Unit = {
-    activePlayer = gameBoard.player1
+    state=SetPlayerCount
     notifyObserversSetPlayerCount
     while(!checkWin) {
-      dice()
+      changePlayer
+      dice
+      state=Print
       notifyObserversUpdate//print maked GameBoard
+      state=ChosePlayerStone
       notifyObserversChosePlayer
-      unmarkPossibleMoves
       markPossibleMovesOfStone(chosenPlayerStone)
+      state=Print
       notifyObserversUpdate
+      state=SetTarget
       notifyObserversChoseTarget
       unmarkPossibleMoves
-      changePlayer
+      if(currentReturnStone=='b'){
+        state=SetBlockStone
+        notifyObserversSetBlock
+      }
     }
-    // do stuff if actuall player won the game
-    //publishe active player won
+    notifyObserversSayWon
   }
 
   def dice(): Unit = {
@@ -124,9 +130,12 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
       val hitStone = gameBoard.changeTwoStones(gameBoard.board(xStone)(yStone).asInstanceOf[Field], destField)
       hitStone.sort match {
-        case 'p' => gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-        case 'f' =>
-        case 'b' => notifyObserversSetBlock
+        case 'p' => {
+          gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
+          currentReturnStone = 'p'
+        }
+        case 'f' => currentReturnStone = 'f'
+        case 'b' => currentReturnStone = 'b'
       }
       true
     } else {
@@ -146,6 +155,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
       if(validField(x,y)){
         if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='f'){
           gameBoard.setBlockStoneOnField(gameBoard.board(x)(y).asInstanceOf[Field])
+
           true
         }else {
           false

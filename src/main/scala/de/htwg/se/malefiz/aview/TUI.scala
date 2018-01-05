@@ -42,7 +42,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -55,7 +55,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -78,7 +78,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -91,7 +91,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -118,7 +118,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             x = xS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -131,7 +131,7 @@ case class TUI(controller: Controller) extends Observer {
           try {
             y = yS.toInt
           } catch {
-            case _ => print("wrong argument\n")
+            case _:Throwable => print("wrong argument\n")
           }
         }
       }
@@ -160,5 +160,9 @@ case class TUI(controller: Controller) extends Observer {
 
   override def askTarget: Unit = {
     askDestination
+  }
+
+  override def sayWon: Unit = {
+    println("Player: "+ controller.activePlayer.color+" Won the Game")
   }
 }
