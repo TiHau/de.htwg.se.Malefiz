@@ -13,6 +13,12 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     gameBoard = GameBoard(countPlayer)
   }
 
+  def restart: Unit = {
+    activePlayer = gameBoard.player3
+    currentReturnStone = 'f'
+    runGame
+  }
+
   def runGame: Unit = {
     state=SetPlayerCount
     notifyObservers

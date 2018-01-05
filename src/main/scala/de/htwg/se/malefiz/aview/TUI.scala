@@ -17,15 +17,16 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def askForNewPlayerCount: Unit = {
-    var input: Int = four
     print("Pleas type in how many Players wan't to play:\n")
-    try {
-      input = scala.io.StdIn.readInt()
-    } catch {
-      case _ => print("wrong insert set to 4\n")
+    val input = readInput match {
+      case Some(x) => x
+      case None => {
+        print("Invalid number, number of players set to 4!\n")
+        four
+      }
     }
     controller.setPlayerCount(input)
-    print("Tanks, Malefitz is starting now :) \n")
+    print("Thanks, Malefitz is starting now :) \n")
 
   }
 
@@ -34,29 +35,19 @@ case class TUI(controller: Controller) extends Observer {
     while (checkNotFinished) {
       print("Set destination for hit Blockstone\n")
       print("X: ")
-      val xS = scala.io.StdIn.readLine()
-      var x = 0
-      xS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            x = xS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val x = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
       print("Y: ")
-      val yS = scala.io.StdIn.readLine()
-      var y = 0
-      yS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            y = yS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val y = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
       if (controller.isChosenBlockStone(x, y)) {
@@ -70,32 +61,21 @@ case class TUI(controller: Controller) extends Observer {
     while (checkNotFinished) {
       print("Type in Coordinates of your PlayerStone\n")
       print("X: ")
-      val xS = scala.io.StdIn.readLine()
-      var x = 0
-      xS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            x = xS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val x = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
       print("Y: ")
-      val yS = scala.io.StdIn.readLine()
-      var y = 0
-      yS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            y = yS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val y = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
-
 
       if (controller.checkValidPlayerStone(x, y)) {
         checkNotFinished = false
@@ -110,35 +90,45 @@ case class TUI(controller: Controller) extends Observer {
     while (checkNotFinished) {
       print("Set destination for your Stone\n")
       print("X: ")
-      val xS = scala.io.StdIn.readLine()
-      var x = 0
-      xS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            x = xS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val x = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
       print("Y: ")
-      val yS = scala.io.StdIn.readLine()
-      var y = 0
-      yS match {
-        case "exit" => sys.exit(0)
-        case _ => {
-          try {
-            y = yS.toInt
-          } catch {
-            case _:Throwable => print("wrong argument\n")
-          }
+      val y = readInput match {
+        case Some(x) => x
+        case None => {
+          print("wrong argument\n")
+          0
         }
       }
       if (controller.makeAmove(x, y)) {
         checkNotFinished = false
+      } else {
+        print("Invalid Destination! Please try again.")
       }
 
+    }
+  }
+
+  def readInput: Option[Int] = {
+    val line = scala.io.StdIn.readLine()
+    line match {
+      case "exit" => sys.exit(0)
+      case "restart" => {
+        controller.restart
+        None
+      }
+      case _ => {
+        try {
+          Some(line.toInt)
+        } catch {
+          case _:Throwable => None
+        }
+      }
     }
   }
 
