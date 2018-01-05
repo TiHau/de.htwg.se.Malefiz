@@ -256,7 +256,6 @@ class GUI(controller: Controller) extends Frame with Observer {
     this.visible=false
     mwait
     this.visible=true
-    this.repaint
   }
 
   override def askTarget: Unit = {
