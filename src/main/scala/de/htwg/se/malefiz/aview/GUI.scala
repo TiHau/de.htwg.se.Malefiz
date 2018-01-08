@@ -97,17 +97,17 @@ class GUI(controller: Controller) extends Frame with Observer {
           case '|' =>
             check += 1
             if (check == 3) {
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (22 * persx).toInt, (26 * persy).toInt)
+              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (28 * persx).toInt, (28 * persy).toInt)
               check = 0
               x += 1
             } else if (check == 1) {
               if (count < 272) {
                 g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (38 * persy).toInt)
+                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
                 count += 1
               }
               g.setColor(Color.BLACK)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
             }
 
 
@@ -121,7 +121,7 @@ class GUI(controller: Controller) extends Frame with Observer {
             if (check == 3) {
               if (count < 272) {
                 g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (38 * persy).toInt)
+                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
                 count += 1
               }
               check = 0
@@ -177,7 +177,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(new Color(238, 118, 0))
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(new Color(238, 118, 0))
             }
@@ -186,7 +186,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(Color.MAGENTA)
             }
@@ -195,7 +195,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
               check += 1
               g.setColor(Color.WHITE)
             }
@@ -226,10 +226,9 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   }
 
-
+  size=dim
   visible = true
   resizable = true
-  size = dim
   title = "Malefitz"
 
   override def closeOperation(): Unit = sys.exit(0)
