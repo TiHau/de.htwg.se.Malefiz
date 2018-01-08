@@ -22,12 +22,10 @@ class GUI(controller: Controller) extends Frame with Observer {
     listenTo(this.mouse.clicks)
     reactions += {
       case MouseClicked(_, point, _, _, _) =>
-        val persx = size.width.toDouble / screenX.toDouble
-        val persy = size.height.toDouble / screenY.toDouble
-        val posX = point.x - size.width / 4
+        val posX = point.x - 20
         val posY = point.y - 100
-        val rectX = (posX / (36 * persx)).round.toInt
-        val rectY = (posY / (38 * persy)).round.toInt
+        val rectX = (posX / ((size.width-50)/17))
+        val rectY = (posY / ((size.height-110)/16))
         controller.state match {
           case SetPlayerCount =>
           case ChosePlayerStone =>
@@ -73,20 +71,17 @@ class GUI(controller: Controller) extends Frame with Observer {
         activePlayerColorString = "Blue"
       }
 
-      g.setFont(new Font("TimesRoman", Font.BOLD, 18))
+      g.setFont(new Font("TimesRoman", Font.BOLD, size.width/60))
       g.drawString("Player: " + activePlayerColorString, 40, 40)
       g.drawString("" + message, size.width / 3, 40)
       g.drawString("Diced: " + controller.diced.toString, size.width - 120, 40)
       //Playground
       g.setColor(Color.LIGHT_GRAY)
-      g.fillRect(10, 80, size.width - 20, size.height - 100)
+      g.fillRect(10, 80, size.width - 20, size.height - 90)
       //Print Gameboard
       var x: Int = 0
       var y: Int = 0
 
-
-      var persx = size.width.toDouble / screenX.toDouble
-      var persy = size.height.toDouble / screenY.toDouble
 
       var currentGB = controller.gameBoard.toString().replace(" ", "#").replace("###", "   ").trim
 
@@ -97,17 +92,17 @@ class GUI(controller: Controller) extends Frame with Observer {
           case '|' =>
             check += 1
             if (check == 3) {
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (28 * persx).toInt, (28 * persy).toInt)
+              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-6,((size.height-110)/16)-6)
               check = 0
               x += 1
             } else if (check == 1) {
               if (count < 272) {
                 g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+                g.fillRect(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,(size.width-50)/17,(size.height-110)/16)
                 count += 1
               }
               g.setColor(Color.BLACK)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
             }
 
 
@@ -121,7 +116,7 @@ class GUI(controller: Controller) extends Frame with Observer {
             if (check == 3) {
               if (count < 272) {
                 g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+                g.fillRect(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,(size.width-50)/17,(size.height-110)/16)
                 count += 1
               }
               check = 0
@@ -177,7 +172,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(new Color(238, 118, 0))
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
               check += 1
               g.setColor(new Color(238, 118, 0))
             }
@@ -186,7 +181,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
               check += 1
               g.setColor(Color.MAGENTA)
             }
@@ -195,7 +190,7 @@ class GUI(controller: Controller) extends Frame with Observer {
           =>
             if (check == 1) {
               g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (36 * persy).toInt)
+              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
               check += 1
               g.setColor(Color.WHITE)
             }
