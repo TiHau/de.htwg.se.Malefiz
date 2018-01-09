@@ -24,8 +24,8 @@ class GUI(controller: Controller) extends Frame with Observer {
       case MouseClicked(_, point, _, _, _) =>
         val posX = point.x - 20
         val posY = point.y - 100
-        val rectX = (posX / ((size.width-50)/17))
-        val rectY = (posY / ((size.height-110)/16))
+        val rectX = (posX / ((size.width - 50) / 17))
+        val rectY = (posY / ((size.height - 110) / 16))
         controller.state match {
           case SetPlayerCount =>
           case ChosePlayerStone =>
@@ -60,7 +60,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       //Background
       background = Color.WHITE
       var activePlayerColorString = ""
-      var activePlayerColorasInt = controller.activePlayer.color
+      val activePlayerColorasInt = controller.activePlayer.color
       if (activePlayerColorasInt == 1) {
         activePlayerColorString = "Red"
       } else if (activePlayerColorasInt == 2) {
@@ -71,20 +71,20 @@ class GUI(controller: Controller) extends Frame with Observer {
         activePlayerColorString = "Blue"
       }
 
-      g.setFont(new Font("TimesRoman", Font.BOLD, size.width/60))
+      g.setFont(new Font("TimesRoman", Font.BOLD, size.width / 60))
       g.drawString("Player: " + activePlayerColorString, 40, 40)
       g.drawString("" + message, size.width / 3, 40)
-      g.drawString("Diced: " + controller.diced.toString, size.width - 120, 40)
+      g.drawString("Diced: " + controller.diced.toString, size.width - size.width / 6, 40)
       //Playground
       g.setColor(Color.LIGHT_GRAY)
       g.fillRect(10, 80, size.width - 20, size.height - 90)
-      //Print Gameboard
+      printingGameboard(g)
+    }
+
+    private def printingGameboard(g: Graphics2D): Unit = {
       var x: Int = 0
       var y: Int = 0
-
-
       var currentGB = controller.gameBoard.toString().replace(" ", "#").replace("###", "   ").trim
-
       var check = 0
       var count = 0
       for (c <- currentGB) {
@@ -92,110 +92,80 @@ class GUI(controller: Controller) extends Frame with Observer {
           case '|' =>
             check += 1
             if (check == 3) {
-              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-6,((size.height-110)/16)-6)
+              drawOvalSmall()
               check = 0
               x += 1
             } else if (check == 1) {
-              if (count < 272) {
-                g.setColor(new Color(244, 164, 96))
-                g.fillRect(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,(size.width-50)/17,(size.height-110)/16)
-                count += 1
-              }
-              g.setColor(Color.BLACK)
-              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
+              drawRect(new Color(244, 164, 96))
+              drawOvalNormal(Color.BLACK)
             }
-
-
           case '\n' =>
             y += 1
             x = 0
             check = 0
-
           case ' ' =>
             check += 1
             if (check == 3) {
-              if (count < 272) {
-                g.setColor(new Color(244, 164, 96))
-                g.fillRect(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,(size.width-50)/17,(size.height-110)/16)
-                count += 1
-              }
+              drawRect(new Color(244, 164, 96))
               check = 0
               x += 1
             }
-
           case '-'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.WHITE)
-            } else {
-              check = 2
-              g.setColor(Color.BLACK)
-            }
-
+          => setStoneColorWithoutBackground(Color.WHITE)
           case 'o'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.BLACK)
-            }
-
+          => setStoneColorWithoutBackground(Color.BLACK)
           case '1'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.RED)
-            }
-
+          => setStoneColorWithoutBackground(Color.RED)
           case '2'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.GREEN)
-            }
-
+          => setStoneColorWithoutBackground(Color.GREEN)
           case '3'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.YELLOW)
-            }
-
+          => setStoneColorWithoutBackground(Color.YELLOW)
           case '4'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.BLUE)
-            }
-
+          => setStoneColorWithoutBackground(Color.BLUE)
           case 'x'
-          =>
-            if (check == 1) {
-              g.setColor(new Color(238, 118, 0))
-              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
-              check += 1
-              g.setColor(new Color(238, 118, 0))
-            }
-
+          => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
           case 'P'
-          =>
-            if (check == 1) {
-              g.setColor(Color.ORANGE)
-              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
-              check += 1
-              g.setColor(Color.MAGENTA)
-            }
-
+          => setStoneColorWithBackgroundPainting(Color.MAGENTA)
           case 'B'
-          =>
-            if (check == 1) {
-              g.setColor(Color.ORANGE)
-              g.fillOval(20+((size.width-50)/17)*x,100+((size.height-110)/16)*y,((size.width-50)/17)-2,((size.height-110)/16)-2)
-              check += 1
-              g.setColor(Color.WHITE)
-            }
-
+          => setStoneColorWithBackgroundPainting(Color.WHITE)
           case _ =>
+        }
+      }
+
+      def setStoneColorWithoutBackground(color: Color): Unit = {
+        if (check == 1) {
+          check += 1
+          g.setColor(color)
+        }
+      }
+
+      def setStoneColorWithBackgroundPainting(color: Color): Unit = {
+        if (check == 1) {
+          g.setColor(new Color(238, 118, 0))
+          g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+            ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
+          check += 1
+          g.setColor(color)
+        }
+      }
+
+      def drawOvalSmall(): Unit = {
+        g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+          ((size.width - 50) / 17) - 6, ((size.height - 110) / 16) - 6)
+      }
+
+      def drawOvalNormal(color: Color): Unit = {
+        g.setColor(color)
+        g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+          ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
+      }
+
+      def drawRect(color: Color): Unit = {
+        if (count < 272) {
+          g.setColor(color)
+          g.fillRect(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+            (size.width - 50) / 17, (size.height - 110) / 16)
+          count += 1
         }
       }
     }
@@ -205,9 +175,7 @@ class GUI(controller: Controller) extends Frame with Observer {
     contents += new Menu("File") {
       mnemonic = Key.F
       contents += new MenuItem(Action("Empty") {})
-      contents += new MenuItem(Action("New") {
-        dispose()
-        controller.restart})
+      contents += new MenuItem(Action("New") {})
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
       contents += new MenuItem(Action("Quit") {
@@ -223,13 +191,15 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   }
 
-  size=dim
+  size = dim
   visible = true
   resizable = true
   title = "Malefitz"
 
   override def closeOperation(): Unit = sys.exit(0)
+
   controller.runGame
+
   override def update: Unit = {
     controller.state match {
       case State.Print => repaint()
@@ -255,10 +225,10 @@ class GUI(controller: Controller) extends Frame with Observer {
       case State.SetPlayerCount => {
         commandNotExecuted = true
         val countUI = new CountUI
-        countUI.visible=true
-        this.visible=false
+        countUI.visible = true
+        this.visible = false
         mwait
-        this.visible=true
+        this.visible = true
       }
     }
   }
@@ -281,29 +251,30 @@ class GUI(controller: Controller) extends Frame with Observer {
     } else {
       activePlayerColorString = "Blue"
     }
-    message = "Player "+activePlayerColorString+" Won the Game!"
+    message = "Player " + activePlayerColorString + " Won the Game!"
     controller.unmarkPossibleMoves()
     repaint
     this.ignoreRepaint
   }
+
   private class CountUI extends MainFrame {
     title = "Playercount"
     preferredSize = new Dimension(320, 70)
-    location=(new Point(screenX/3,screenY/3))
+    location = (new Point(screenX / 3, screenY / 3))
     contents = new FlowPanel() {
       contents += Button("2 Player") {
         controller.setPlayerCount(2)
-        commandNotExecuted=false
+        commandNotExecuted = false
         dispose
       }
       contents += Button("3 Player") {
         controller.setPlayerCount(3)
-        commandNotExecuted=false
+        commandNotExecuted = false
         dispose
       }
       contents += Button("4 Player") {
         controller.setPlayerCount(4)
-        commandNotExecuted=false
+        commandNotExecuted = false
         dispose
       }
     }
