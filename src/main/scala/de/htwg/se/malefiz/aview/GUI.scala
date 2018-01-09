@@ -205,7 +205,9 @@ class GUI(controller: Controller) extends Frame with Observer {
     contents += new Menu("File") {
       mnemonic = Key.F
       contents += new MenuItem(Action("Empty") {})
-      contents += new MenuItem(Action("New") {})
+      contents += new MenuItem(Action("New") {
+        dispose()
+        controller.restart})
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
       contents += new MenuItem(Action("Quit") {
@@ -227,7 +229,7 @@ class GUI(controller: Controller) extends Frame with Observer {
   title = "Malefitz"
 
   override def closeOperation(): Unit = sys.exit(0)
-
+  controller.runGame
   override def update: Unit = {
     controller.state match {
       case State.Print => repaint()
@@ -263,7 +265,7 @@ class GUI(controller: Controller) extends Frame with Observer {
 
   private def mwait: Unit = {
     while (commandNotExecuted) {
-      for (_ <- 0 to 100000) {} //short spin routine
+      Thread.sleep(400)
     }
   }
 

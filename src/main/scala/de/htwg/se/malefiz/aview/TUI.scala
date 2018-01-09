@@ -8,7 +8,7 @@ case class TUI(controller: Controller) extends Observer {
   print("TUI Malefiz\n")
   print("Welcome!!!\n")
   controller.add(this)
-
+  controller.runGame
   def printGameBoard(): Unit = {
     print(controller.gameBoard.toString() +
       "\nPlayer: " + controller.activePlayer.color +
