@@ -8,41 +8,60 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
   var chosenPlayerStone = gameBoard.player1.stones(0)
   var state = Print
   var currentReturnStone = 'f'
-
+ var reset = true
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
 
-  def restart: Unit = {
-    activePlayer = gameBoard.player3
-    currentReturnStone = 'f'
-    runGame
+  def runGame: Unit = {
+    while(reset){
+      activePlayer = gameBoard.player3
+      currentReturnStone = 'f'
+      executePreOrders()
+      executeGameRoutine()
+    }
+
   }
 
-  def runGame: Unit = {
-    state=SetPlayerCount
-    notifyObservers
+  private def executeGameRoutine():Unit ={
+    reset =false
     while(!checkWin) {
       changePlayer
       dice
       state=Print
       notifyObservers//print maked GameBoard
-      state=ChosePlayerStone
-      notifyObservers
-      markPossibleMovesOfStone(chosenPlayerStone)
-      state=Print
-      notifyObservers
-      state=SetTarget
-      notifyObservers
-      unmarkPossibleMoves
-      if(currentReturnStone=='b'){
-        state=SetBlockStone
-        notifyObservers
+      if(!takeUserChange()) {
+        return
       }
     }
     state=PlayerWon
     notifyObservers
   }
+
+  private def takeUserChange(): Boolean ={
+
+    state=ChosePlayerStone
+    notifyObservers
+    markPossibleMovesOfStone(chosenPlayerStone)
+    state=Print
+    notifyObservers
+    state=SetTarget
+    notifyObservers
+    unmarkPossibleMoves
+    if(currentReturnStone=='b'){
+      state=SetBlockStone
+      notifyObservers
+    }
+    if(reset){
+      false
+    }else{
+      true
+    }
+  }
+ private def executePreOrders(): Unit ={
+   state=SetPlayerCount
+   notifyObservers
+ }
 
   def dice(): Unit = {
     diced = scala.util.Random.nextInt(six) + 1

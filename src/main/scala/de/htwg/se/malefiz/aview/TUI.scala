@@ -4,7 +4,7 @@ import de.htwg.se.malefiz.controller.{Controller, Observer, State}
 
 case class TUI(controller: Controller) extends Observer {
   private val four: Int = 4
-
+  var checkNotFinished: Boolean = true
   print("TUI Malefiz\n")
   print("Welcome!!!\n")
   controller.add(this)
@@ -30,7 +30,9 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def getBlockStoneDest(): Unit = {
-    var checkNotFinished: Boolean = true
+    if(!controller.reset) {
+      checkNotFinished = true
+    }
     while (checkNotFinished) {
       print("Set destination for hit Blockstone\n")
       print("X: ")
@@ -40,7 +42,11 @@ case class TUI(controller: Controller) extends Observer {
           print("wrong argument\n")
           0
       }
-      print("Y: ")
+      if(controller.reset){
+        print("Pleas press Enter to restart Game!!!")
+      } else {
+        print("Y: ")
+      }
       val y = readInput match {
         case Some(i) => i
         case None =>
@@ -54,7 +60,9 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def getChosenPlayerStone(): Unit = {
-    var checkNotFinished: Boolean = true
+    if(!controller.reset) {
+      checkNotFinished = true
+    }
     while (checkNotFinished) {
       print("Type in Coordinates of your PlayerStone\n")
       print("X: ")
@@ -64,7 +72,11 @@ case class TUI(controller: Controller) extends Observer {
           print("wrong argument\n")
           0
       }
-      print("Y: ")
+      if(controller.reset){
+        print("Pleas press Enter to restart Game!!!")
+      }else {
+        print("Y: ")
+      }
       val y = readInput match {
         case Some(i) => i
         case None =>
@@ -81,7 +93,9 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def askDestination(): Unit = {
-    var checkNotFinished: Boolean = true
+    if(!controller.reset) {
+      checkNotFinished = true
+    }
     while (checkNotFinished) {
       print("Set destination for your Stone\n")
       print("X: ")
@@ -91,11 +105,17 @@ case class TUI(controller: Controller) extends Observer {
           print("wrong argument\n")
           0
       }
-      print("Y: ")
+      if(controller.reset){
+        print("Pleas press Enter to restart Game!!!")
+      } else {
+        print("Y: ")
+      }
       val y = readInput match {
         case Some(i) => i
         case None =>
-          print("wrong argument\n")
+          if(!controller.reset) {
+            print("wrong argument\n")
+          }
           0
       }
       if (controller.makeAmove(x, y)) {
@@ -112,7 +132,8 @@ case class TUI(controller: Controller) extends Observer {
     line match {
       case "exit" => sys.exit(0)
       case "restart" =>
-        controller.restart
+        controller.reset=true
+        checkNotFinished=false
         None
       case _ =>
         try {

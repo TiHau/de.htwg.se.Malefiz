@@ -175,7 +175,10 @@ class GUI(controller: Controller) extends Frame with Observer {
     contents += new Menu("File") {
       mnemonic = Key.F
       contents += new MenuItem(Action("Empty") {})
-      contents += new MenuItem(Action("New") {})
+      contents += new MenuItem(Action("New") {
+        controller.reset=true
+        commandNotExecuted = false
+      })
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
       contents += new MenuItem(Action("Quit") {
@@ -204,18 +207,24 @@ class GUI(controller: Controller) extends Frame with Observer {
     controller.state match {
       case State.Print => repaint()
       case State.SetBlockStone => {
-        commandNotExecuted = true
+        if(!controller.reset) {
+          commandNotExecuted = true
+        }
         message = "Set a BlockStone"
         repaint()
         mwait
       }
       case State.ChosePlayerStone => {
-        commandNotExecuted = true
+        if(!controller.reset) {
+          commandNotExecuted = true
+        }
         message = "Chose one of your Stones"
         mwait
       }
       case State.SetTarget => {
-        commandNotExecuted = true
+        if(!controller.reset) {
+          commandNotExecuted = true
+        }
         message = "Chose a Target Field"
         mwait
       }

@@ -6,8 +6,8 @@ import de.htwg.se.malefiz.aview.GUI
 object Malefiz {
   def main(args: Array[String]): Unit ={
     val controller = Controller(GameBoard(4))
-    //val tui = new TUI(controller)
-    val gui = new GUI(controller)
+    val tui = new TUI(controller)
+   // val gui = new GUI(controller)
 
   }
 }
