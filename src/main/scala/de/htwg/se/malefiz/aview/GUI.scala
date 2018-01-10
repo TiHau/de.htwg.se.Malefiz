@@ -249,21 +249,13 @@ class GUI(controller: Controller) extends Frame with Observer {
   }
 
   private def ifWon: Unit = {
-    var activePlayerColorString = ""
-    var activePlayerColorasInt = controller.activePlayer.color
-    if (activePlayerColorasInt == 1) {
-      activePlayerColorString = "Red"
-    } else if (activePlayerColorasInt == 2) {
-      activePlayerColorString = "Green"
-    } else if (activePlayerColorasInt == 3) {
-      activePlayerColorString = "Yellow"
-    } else {
-      activePlayerColorString = "Blue"
-    }
-    message = "Player " + activePlayerColorString + " Won the Game!"
-    controller.unmarkPossibleMoves()
-    repaint
-    this.ignoreRepaint
+
+    commandNotExecuted = true
+    val wonUI = new WinUI
+    wonUI.visible = true
+    this.visible = false
+    mwait
+    this.visible = true
   }
 
   private class CountUI extends MainFrame {
@@ -285,6 +277,34 @@ class GUI(controller: Controller) extends Frame with Observer {
         controller.setPlayerCount(4)
         commandNotExecuted = false
         dispose
+      }
+    }
+  }
+
+  private class WinUI extends MainFrame {
+    var activePlayerColorString = ""
+    var activePlayerColorasInt = controller.activePlayer.color
+    if (activePlayerColorasInt == 1) {
+      activePlayerColorString = "Red"
+    } else if (activePlayerColorasInt == 2) {
+      activePlayerColorString = "Green"
+    } else if (activePlayerColorasInt == 3) {
+      activePlayerColorString = "Yellow"
+    } else {
+      activePlayerColorString = "Blue"
+    }
+    title = "Victory"
+    preferredSize = new Dimension(400, 120)
+    location = (new Point(screenX / 3, screenY / 3))
+    contents = new FlowPanel() {
+      contents += new Label("Player " +activePlayerColorString+ " Won the Game!")
+      contents += Button("Exit") {
+        sys.exit(0)
+      }
+      contents += Button("New Game") {
+        controller.reset=true
+        commandNotExecuted=false
+        dispose()
       }
     }
   }
