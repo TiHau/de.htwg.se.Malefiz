@@ -1,9 +1,8 @@
 package de.htwg.se.malefiz.model
 
-case class GameBoard(var playerCount: Int) {
-  private val x = 17
-  private val y = 16
-  val board = Array.ofDim[AbstractField](x, y)
+import scala.swing.Publisher
+
+case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publisher {
   private val nu0 = 0
   private val nu1 = 1
   private val nu2 = 2
@@ -30,25 +29,25 @@ case class GameBoard(var playerCount: Int) {
   buildMalefitzGameBoard(board)
   setBlockStones(board)
 
-  val player1 = Player(nu1)
+
   player1.stones(nu2) = PlayerStone(board(nu1)(nu14), board(nu1)(nu14), player1.color)
   player1.stones(nu1) = PlayerStone(board(nu1)(nu15), board(nu1)(nu15), player1.color)
   player1.stones(nu0) = PlayerStone(board(nu2)(nu14), board(nu2)(nu14), player1.color)
   player1.stones(nu3) = PlayerStone(board(nu3)(nu14), board(nu3)(nu14), player1.color)
   player1.stones(nu4) = PlayerStone(board(nu3)(nu15), board(nu3)(nu15), player1.color)
-  val player2 = Player(nu2)
+
   player2.stones(nu2) = PlayerStone(board(nu5)(nu14), board(nu5)(nu14), player2.color)
   player2.stones(nu1) = PlayerStone(board(nu5)(nu15), board(nu5)(nu15), player2.color)
   player2.stones(nu0) = PlayerStone(board(nu6)(nu14), board(nu6)(nu14), player2.color)
   player2.stones(nu3) = PlayerStone(board(nu7)(nu14), board(nu7)(nu14), player2.color)
   player2.stones(nu4) = PlayerStone(board(nu7)(nu15), board(nu7)(nu15), player2.color)
-  val player3 = Player(nu3)
+
   player3.stones(nu2) = PlayerStone(board(nu9)(nu14), board(nu9)(nu14), player3.color)
   player3.stones(nu1) = PlayerStone(board(nu9)(nu15), board(nu9)(nu15), player3.color)
   player3.stones(nu0) = PlayerStone(board(nu10)(nu14), board(nu10)(nu14), player3.color)
   player3.stones(nu3) = PlayerStone(board(nu11)(nu14), board(nu11)(nu14), player3.color)
   player3.stones(nu4) = PlayerStone(board(nu11)(nu15), board(nu11)(nu15), player3.color)
-  val player4 = Player(nu4)
+
   player4.stones(nu2) = PlayerStone(board(nu13)(nu14), board(nu13)(nu14), player4.color)
   player4.stones(nu1) = PlayerStone(board(nu13)(nu15), board(nu13)(nu15), player4.color)
   player4.stones(nu0) = PlayerStone(board(nu14)(nu14), board(nu14)(nu14), player4.color)

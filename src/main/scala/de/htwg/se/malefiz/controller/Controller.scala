@@ -3,7 +3,7 @@ import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
 
 import scala.swing.Publisher
-case class Controller(var gameBoard: GameBoard)  extends ControllerInterface with Publisher {
+case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInterface with Publisher {
   private val six = 6
   var activePlayer = gameBoard.player3
   var diced = six
