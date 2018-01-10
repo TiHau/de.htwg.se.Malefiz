@@ -1,14 +1,15 @@
 package de.htwg.se.malefiz.controller
 import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
-case class Controller(var gameBoard: GameBoard) extends Observable {
+
+import scala.swing.Publisher
+case class Controller(var gameBoard: GameBoard)  extends ControllerInterface with Publisher {
   private val six = 6
   var activePlayer = gameBoard.player3
   var diced = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
-  var state = Print
-  var currentReturnStone = 'f'
-  var reset = true
+  private var currentReturnStone = 'f'
+
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
