@@ -2,13 +2,13 @@ package de.htwg.se.malefiz.controller
 import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
 case class Controller(var gameBoard: GameBoard) extends Observable {
-  val six = 6
+  private val six = 6
   var activePlayer = gameBoard.player3
   var diced = six
-  var chosenPlayerStone = gameBoard.player1.stones(0)
+  private var chosenPlayerStone = gameBoard.player1.stones(0)
   var state = Print
   var currentReturnStone = 'f'
- var reset = true
+  var reset = true
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
@@ -63,11 +63,11 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
    notifyObservers
  }
 
-  def dice(): Unit = {
+  private def dice(): Unit = {
     diced = scala.util.Random.nextInt(six) + 1
   }
 
-  def changePlayer: Unit ={
+  private def changePlayer: Unit ={
     if(activePlayer.color==1){
       activePlayer = gameBoard.player4
     } else if(activePlayer.color==4&&gameBoard.playerCount>=3){
@@ -81,7 +81,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     }
   }
 
-  def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
+  private def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
     if (stone.actualField == stone.startField) {
         val x = activePlayer.stones(0).startField.asInstanceOf[Field].x
         val y = activePlayer.stones(0).startField.asInstanceOf[Field].y
@@ -125,7 +125,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     }
   }
 
-  def validField(x: Int, y: Int): Boolean = {
+  private def validField(x: Int, y: Int): Boolean = {
     // check for a vailid field
     if (y > 13 || y < 0) {
       false
@@ -138,7 +138,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     }
   }
 
-  def unmarkPossibleMoves(): Unit = {
+  private def unmarkPossibleMoves(): Unit = {
     for (y <- 0 to 15) {
       for (x <- 0 to 16) {
         if (!gameBoard.board(x)(y).isFreeSpace()) {
@@ -148,7 +148,7 @@ case class Controller(var gameBoard: GameBoard) extends Observable {
     }
   }
 
-  def makeMove(stone: PlayerStone, destField: Field): Boolean = {
+  private def makeMove(stone: PlayerStone, destField: Field): Boolean = {
     val xStone = stone.actualField.asInstanceOf[Field].x
     val yStone = stone.actualField.asInstanceOf[Field].y
     val xDest = destField.x

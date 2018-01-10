@@ -176,7 +176,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       mnemonic = Key.F
       contents += new MenuItem(Action("Empty") {})
       contents += new MenuItem(Action("New") {
-        controller.reset=true
+        controller.reset = true
         commandNotExecuted = false
       })
       contents += new MenuItem(Action("Save") {})
@@ -206,39 +206,39 @@ class GUI(controller: Controller) extends Frame with Observer {
   override def update: Unit = {
     controller.state match {
       case State.Print => repaint()
-      case State.SetBlockStone => {
-        if(!controller.reset) {
+      case State.SetBlockStone =>
+        if (!controller.reset) {
           commandNotExecuted = true
         }
         message = "Set a BlockStone"
         repaint()
         mwait
-      }
-      case State.ChosePlayerStone => {
-        if(!controller.reset) {
+
+      case State.ChosePlayerStone =>
+        if (!controller.reset) {
           commandNotExecuted = true
         }
         message = "Chose one of your Stones"
         mwait
-      }
-      case State.SetTarget => {
-        if(!controller.reset) {
+
+      case State.SetTarget =>
+        if (!controller.reset) {
           commandNotExecuted = true
         }
         message = "Chose a Target Field"
         mwait
-      }
-      case State.PlayerWon => {
+
+      case State.PlayerWon =>
         ifWon
-      }
-      case State.SetPlayerCount => {
+
+      case State.SetPlayerCount =>
         commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
         this.visible = false
         mwait
         this.visible = true
-      }
+
     }
   }
 
@@ -297,13 +297,13 @@ class GUI(controller: Controller) extends Frame with Observer {
     preferredSize = new Dimension(400, 120)
     location = (new Point(screenX / 3, screenY / 3))
     contents = new FlowPanel() {
-      contents += new Label("Player " +activePlayerColorString+ " Won the Game!")
+      contents += new Label("Player " + activePlayerColorString + " Won the Game!")
       contents += Button("Exit") {
         sys.exit(0)
       }
       contents += Button("New Game") {
-        controller.reset=true
-        commandNotExecuted=false
+        controller.reset = true
+        commandNotExecuted = false
         dispose()
       }
     }
