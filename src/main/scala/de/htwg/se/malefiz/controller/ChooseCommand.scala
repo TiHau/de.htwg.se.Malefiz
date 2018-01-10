@@ -1,8 +1,9 @@
 package de.htwg.se.malefiz.controller
 
+import de.htwg.se.malefiz.Util.Command
 import de.htwg.se.malefiz.model.{Field, PlayerStone}
 
-class ChooseCommand(stone: PlayerStone, controller: Controller) {
+class ChooseCommand(stone: PlayerStone, controller: Controller) extends Command {
 
   val oldGameBord = controller.gameBoard
 
@@ -20,7 +21,7 @@ class ChooseCommand(stone: PlayerStone, controller: Controller) {
 
   override def undoStep: Unit = controller.gameBoard = oldGameBord
 
-  override def redoStep: Unit = controller.gameBoard.changeTwoStones(currentField, destField)
+  override def redoStep: Unit = {}
 
   private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
     if (depth == 0) {
