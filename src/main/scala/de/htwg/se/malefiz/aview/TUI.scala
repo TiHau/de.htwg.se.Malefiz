@@ -1,6 +1,7 @@
 package de.htwg.se.malefiz.aview
 
-import de.htwg.se.malefiz.controller.{Controller, Observer, State}
+import de.htwg.se.malefiz.Util.Observer
+import de.htwg.se.malefiz.controller.{Controller, State}
 
 case class TUI(controller: Controller) extends Observer {
   private val four: Int = 4

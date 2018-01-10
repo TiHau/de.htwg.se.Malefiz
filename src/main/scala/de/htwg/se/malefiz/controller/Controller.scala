@@ -1,4 +1,5 @@
 package de.htwg.se.malefiz.controller
+import de.htwg.se.malefiz.Util.Observable
 import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
 

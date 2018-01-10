@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.controller
+package de.htwg.se.malefiz.Util
 
 trait Observer {
   def update
