@@ -8,11 +8,12 @@ import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
 
-  private val undoManager = new UndoManager()
+  private var undoManager = new UndoManager()
   private val six = 6
   var activePlayer: Player = gameBoard.player3
   var diced: Int = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
+  private var undoBool = true
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
@@ -20,6 +21,8 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
 
   def undo(): Unit = {
     undoManager.undoStep()
+    state = Print
+    notifyObservers()
   }
 
   def runGame(): Unit = {
@@ -33,39 +36,34 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   private def executeGameRoutine(): Unit = {
     reset = false
     while (!gameBoard.checkWin) {
+      undoManager.clear()
       changePlayer()
       dice()
       state = Print
       notifyObservers() //print maked GameBoard
-      if (!takeUserChange()) {
+
+      //---One Turn
+      state = ChosePlayerStone
+      notifyObservers()
+      undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
+      state = Print
+      notifyObservers()
+      state = ChooseTarget
+      notifyObservers()
+      state = Print
+      notifyObservers()
+
+      if (needToSetBlockStone) {
+        state = SetBlockStone
+        notifyObservers()
+      }
+      //----------
+      if (reset) {
         return
       }
     }
     state = PlayerWon
     notifyObservers()
-  }
-
-  private def takeUserChange(): Boolean = {
-
-    state = ChosePlayerStone
-    notifyObservers()
-    undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
-    state = Print
-    notifyObservers()
-    state = ChooseTarget
-    notifyObservers()
-    state = Print
-    notifyObservers()
-
-    if (needToSetBlockStone) {
-      state = SetBlockStone
-      notifyObservers()
-    }
-    if (reset) {
-      false
-    } else {
-      true
-    }
   }
 
   private def executePreOrders(): Unit = {
@@ -91,8 +89,11 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     }
   }
 
-  def makeAMove(x: Int, y: Int): Unit =
-    undoManager.doStep(new MoveCommand(chosenPlayerStone, gameBoard.board(x)(y).asInstanceOf[Field], this))
+  def makeAMove(x: Int, y: Int): Unit = {
+    if (!gameBoard.board(x)(y).isFreeSpace()) {
+      undoManager.doStep(new MoveCommand(chosenPlayerStone, gameBoard.board(x)(y).asInstanceOf[Field], this))
+    }
+  }
 
   def setBlockStone(x: Int, y: Int): Unit = {
     undoManager.doStep(new BlockStoneCommand(gameBoard.board(x)(y).asInstanceOf[Field], this))

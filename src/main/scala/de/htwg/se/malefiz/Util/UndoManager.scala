@@ -15,4 +15,8 @@ class UndoManager {
         undoStack=stack
     }
   }
+
+  def clear(): Unit = {
+    undoStack = Nil
+  }
 }
