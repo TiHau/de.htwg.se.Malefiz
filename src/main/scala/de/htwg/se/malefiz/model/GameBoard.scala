@@ -1,5 +1,6 @@
 package de.htwg.se.malefiz.model
 
+import scala.collection.mutable
 import scala.swing.Publisher
 
 case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publisher {
@@ -72,19 +73,16 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
         case 1 => for (i <- nu0 to nu16) {
           board(i)(y) = Field(i, y, FreeStone())
         }
-        case 2 => {
+        case 2 =>
           board(nu0)(y) = Field(nu0, y, FreeStone())
           board(nu16)(y) = Field(nu16, y, FreeStone())
-        }
-        case 3 => for (i <- nu0 to nu16) {
+        case 3 => for (i <- nu0 to nu16)
           board(i)(y) = Field(i, y, FreeStone())
-        }
         case 4 => board(nu8)(y) = Field(nu8, y, FreeStone())
-        case 5 => for (i <- nu0 to nu16) {
+        case 5 => for (i <- nu0 to nu16)
           if (i >= nu6 && i <= nu10) {
             board(i)(y) = Field(i, y, FreeStone())
           }
-        }
         case 6 =>
           board(nu6)(y) = Field(nu6, y, FreeStone())
           board(nu10)(y) = Field(nu10, y, FreeStone())
@@ -138,9 +136,8 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board
   }
 
-  override def toString(): String = {
-    import scala.collection.mutable.StringBuilder
-    val jsb = new StringBuilder()
+  override def toString: String = {
+    val jsb = new mutable.StringBuilder()
     for (y <- nu0 to nu15) {
       if (y < 10) {
         jsb.append(y + "  ")
@@ -154,18 +151,18 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
         } else {
           val s: Field = board(i)(y).asInstanceOf[Field]
           s.stone.sort match {
-            case 'f' => if (s.avariable == false) {
+            case 'f' => if (!s.avariable) {
               jsb.append("|o|")
             } else {
               jsb.append("|x|")
             }
-            case 'p' => if (s.avariable == false) {
+            case 'p' => if (!s.avariable) {
               jsb.append("|" + s.stone.asInstanceOf[PlayerStone].playerColor + "|")
             } else {
               jsb.append("|P|")
             }
             case 'b'
-            => if (s.avariable == false) {
+            => if (!s.avariable) {
               jsb.append("|-|")
             } else {
               jsb.append("|B|")
@@ -278,7 +275,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
         return
       }
       board(x)(y).asInstanceOf[Field].avariable = true
-      return
     } else {
       // If there is a blocking stone on the way dont go on
       if (board(x)(y).asInstanceOf[Field].stone.sort == 'b') {

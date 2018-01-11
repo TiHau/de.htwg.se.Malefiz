@@ -23,8 +23,8 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       case MouseClicked(_, point, _, _, _) =>
         val posX = point.x - 20
         val posY = point.y - 100
-        val rectX = (posX / ((size.width - 50) / 17))
-        val rectY = (posY / ((size.height - 110) / 16))
+        val rectX = posX / ((size.width - 50) / 17)
+        val rectY = posY / ((size.height - 110) / 16)
         controller.state match {
           case SetPlayerCount =>
           case ChosePlayerStone =>
@@ -87,7 +87,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     private def printingGameboard(g: Graphics2D): Unit = {
       var x: Int = 0
       var y: Int = 0
-      var currentGB = controller.gameBoard.toString().replace(" ", "#").replace("###", "   ").trim
+      val currentGB = controller.gameBoard.toString.replace(" ", "#").replace("###", "   ").trim
       var check = 0
       var count = 0
       for (c <- currentGB) {
@@ -191,7 +191,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     contents += new Menu("Edit") {
       mnemonic = Key.E
       contents += new MenuItem(Action("Undo") {
-        controller.undo
+        controller.undo()
         repaint()
       })
       contents += new MenuItem(Action("Redo") {})
@@ -207,9 +207,9 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
   override def closeOperation(): Unit = sys.exit(0)
 
-  controller.runGame
+  controller.runGame()
 
-  override def update: Unit = {
+  override def update(): Unit = {
     controller.state match {
       case State.Print => repaint()
       case State.SetBlockStone =>
@@ -218,52 +218,52 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         }
         message = "Set a BlockStone"
         repaint()
-        mwait
+        mWait()
 
       case State.ChosePlayerStone =>
         if (!controller.reset) {
           commandNotExecuted = true
         }
         message = "Chose one of your Stones"
-        mwait
+        mWait()
 
       case State.ChooseTarget =>
         if (!controller.reset) {
           commandNotExecuted = true
         }
         message = "Chose a Target Field"
-        mwait
+        mWait()
 
       case State.PlayerWon =>
-        ifWon
+        ifWon()
 
       case State.SetPlayerCount =>
         commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
-        mwait
+        mWait()
 
     }
   }
 
-  private def mwait: Unit = {
+  private def mWait(): Unit = {
     while (commandNotExecuted) {
       Thread.sleep(400)
     }
   }
 
-  private def ifWon: Unit = {
+  private def ifWon(): Unit = {
 
     commandNotExecuted = true
     val wonUI = new WinUI
     wonUI.visible = true
-    mwait
+    mWait()
   }
 
   private class CountUI extends MainFrame {
     title = "Playercount"
     preferredSize = new Dimension(320, 70)
-    location = (new Point(screenX / 3, screenY / 3))
+    location = new Point(screenX / 3, screenY / 3)
     contents = new FlowPanel() {
       contents += Button("2 Player") {
         controller.setPlayerCount(2)
@@ -285,7 +285,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
   private class WinUI extends MainFrame {
     var activePlayerColorString = ""
-    var activePlayerColorasInt = controller.activePlayer.color
+    var activePlayerColorasInt: Int = controller.activePlayer.color
     if (activePlayerColorasInt == 1) {
       activePlayerColorString = "Red"
     } else if (activePlayerColorasInt == 2) {
@@ -297,7 +297,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     }
     title = "Victory"
     preferredSize = new Dimension(400, 120)
-    location = (new Point(screenX / 3, screenY / 3))
+    location = new Point(screenX / 3, screenY / 3)
     contents = new FlowPanel() {
       contents += new Label("Player " + activePlayerColorString + " Won the Game!")
       contents += Button("Exit") {

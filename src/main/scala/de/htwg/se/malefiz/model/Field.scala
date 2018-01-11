@@ -10,7 +10,7 @@ case class EmptySpace () extends AbstractField() {
 
 case class Field (var x:Int,var y:Int, var stone:Stone) extends AbstractField(){
   var avariable = false
-  def isEmpty(): Boolean = {
+  def isEmpty: Boolean = {
     stone.sort == 'f'
   }
 }

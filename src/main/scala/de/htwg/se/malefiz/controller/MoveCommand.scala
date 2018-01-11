@@ -10,7 +10,7 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
   private val currentField = controller.gameBoard.board(xStone)(yStone).asInstanceOf[Field]
   private var hitStone = new Stone('f')
 
-  override def doStep: Unit =   {
+  override def doStep(): Unit =   {
     val hitStoneOption = controller.gameBoard.moveStone(currentField, destField)
       if (hitStoneOption.isDefined) {
         hitStone = hitStoneOption.get
@@ -26,7 +26,7 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
       }
   }
 
-  override def undoStep: Unit = {
+  override def undoStep(): Unit = {
     controller.gameBoard.moveStone(destField, currentField)
     if (hitStone.sort == 'p') {
       destField.stone = hitStone
