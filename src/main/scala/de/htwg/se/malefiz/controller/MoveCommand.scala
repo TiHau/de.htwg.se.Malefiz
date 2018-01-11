@@ -27,7 +27,7 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
   }
 
   override def undoStep(): Unit = {
-    controller.gameBoard.moveStone(destField, currentField)
+    controller.gameBoard.forceMoveStone(destField, currentField)
     if (hitStone.sort == 'p') {
       destField.stone = hitStone
       hitStone.asInstanceOf[PlayerStone].actualField = destField

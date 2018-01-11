@@ -248,6 +248,17 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
 
+  def forceMoveStone(current: Field, dest: Field): Unit = {
+    if (dest.y > 15 || dest.y < 0) {
+    } else if (dest.x > 16 || dest.x < 0) {
+    } else if (dest.isFreeSpace()) {
+    } else {
+      dest.stone = current.stone
+      dest.stone.asInstanceOf[PlayerStone].actualField = dest
+      current.stone = FreeStone()
+    }
+  }
+
   def resetPlayerStone(stone: PlayerStone): Unit = {
     stone.actualField = stone.startField
     val x = stone.startField.asInstanceOf[Field].x

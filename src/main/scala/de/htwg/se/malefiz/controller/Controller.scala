@@ -8,13 +8,12 @@ import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
 
-  private var undoManager = new UndoManager()
+  private val undoManager = new UndoManager()
   private val six = 6
   var activePlayer: Player = gameBoard.player3
   var diced: Int = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
-  private var undoBool = true
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
@@ -22,9 +21,23 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
 
   def undo(): Unit = {
     undoManager.undoStep()
+    val oldState = state
     state = Print
     notifyObservers()
-    undoBool = true
+    oldState match {
+      case ChooseTarget => state = ChoosePlayerStone
+      case BeforeEndOfTurn => {
+        if (needToSetBlockStone) {
+          state = SetBlockStone
+        } else {
+          state = ChooseTarget
+        }
+      }
+    }
+  }
+
+  def endTurn(): Unit = {
+    state = EndTurn
   }
 
   def runGame(): Unit = {
@@ -39,15 +52,16 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     reset = false
     while (!gameBoard.checkWin) {
       undoManager.clear()
-      if (!undoBool) {
-        changePlayer()
-        dice()
-      }
+      changePlayer()
+      dice()
       state = Print
       notifyObservers() //print GameBoard
-      state=ChoosePlayerStone
-      
-      oneMove()
+      state = ChoosePlayerStone
+      needToSetBlockStone = false
+
+      while (state != EndTurn) {
+        oneMove()
+      }
 
       if (reset) {
         return
@@ -57,13 +71,17 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     notifyObservers()
   }
 
-  private  def oneMove(): Unit = {
+  private def oneMove(): Unit = {
     state match {
       case ChoosePlayerStone => chooseStone()
       case ChooseTarget => chooseTarget()
       case SetBlockStone => {
         notifyObservers()
         undoManager.doStep(new BlockStoneCommand(destField, this))
+        state = BeforeEndOfTurn
+      }
+      case BeforeEndOfTurn => {
+        notifyObservers()
       }
     }
   }
@@ -84,7 +102,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     if (needToSetBlockStone) {
       state = SetBlockStone
     } else {
-      state = ChoosePlayerStone
+      state = BeforeEndOfTurn
     }
   }
 
@@ -112,7 +130,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   }
 
   def setTarget(x: Int, y: Int): Boolean = {
-    if (gameBoard.validDest(x,y)) {
+    if (gameBoard.validDest(x, y)) {
       destField = gameBoard.board(x)(y).asInstanceOf[Field]
       true
     } else {

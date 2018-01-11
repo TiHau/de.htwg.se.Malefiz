@@ -39,23 +39,35 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
           case ChooseTarget =>
             if (controller.setTarget(rectX, rectY)) {
-            commandNotExecuted = false
-          } else {
-            message = "You have to chose a valid Target"
-          }
+              commandNotExecuted = false
+            } else {
+              message = "You have to chose a valid Target"
+            }
           case SetBlockStone =>
-            controller.setBlockStone(rectX,rectY)
+            controller.setBlockStone(rectX, rectY)
             if (controller.blockStoneSet) {
-            commandNotExecuted = false
-          } else {
-            message = "You have to chose a valid Field to set BlockStone"
-          }
+              commandNotExecuted = false
+            } else {
+              message = "You have to chose a valid Field to set BlockStone"
+            }
 
           case Print =>
+          case BeforeEndOfTurn =>
           case _ =>
         }
-      case KeyPressed(_, Key.Enter, _, _) =>{/*DO STUFF */}
-      case KeyPressed(_, Key.BackSpace, _, _) =>{/*DO STUFF*/}
+      case KeyPressed(_, Key.Enter, _, _) => {
+        if (controller.state == BeforeEndOfTurn) {
+          controller.endTurn()
+          commandNotExecuted = false
+        }
+      }
+      case KeyPressed(_, Key.BackSpace, _, _) => {
+        if (controller.state == BeforeEndOfTurn) {
+          controller.undo()
+          repaint()
+          commandNotExecuted = false
+        }
+      }
     }
 
 
@@ -242,6 +254,12 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         countUI.visible = true
         mWait()
 
+      case State.BeforeEndOfTurn =>
+        message = "Press Enter to end your turn or Backspace to undo"
+        if (!controller.reset) {
+          commandNotExecuted = true
+        }
+        mWait()
     }
   }
 

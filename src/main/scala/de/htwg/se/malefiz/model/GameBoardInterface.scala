@@ -11,6 +11,7 @@ trait GameBoardInterface extends Publisher {
   def removeBlockStoneOnField(field: Field): Unit
   def resetPlayerStone(stone: PlayerStone): Unit
   def moveStone(f1: Field, f2: Field): Option[Stone]
+  def forceMoveStone(current: Field, dest: Field): Unit
   def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit
   def unmarkPossibleMoves(): Unit
   def checkWin: Boolean

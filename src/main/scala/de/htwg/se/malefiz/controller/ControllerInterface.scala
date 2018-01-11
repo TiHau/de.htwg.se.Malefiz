@@ -16,6 +16,7 @@ trait ControllerInterface extends Observable with Publisher{
   def setTarget(x:Int, y:Int): Boolean
   def setPlayerCount(countPlayer: Int): Unit
   def gameBoard:GameBoardInterface
+  def endTurn(): Unit
   var state: State.Value = Print
   var reset = true
   var needToSetBlockStone = false
