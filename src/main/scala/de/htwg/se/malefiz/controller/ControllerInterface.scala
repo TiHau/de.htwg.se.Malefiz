@@ -13,7 +13,7 @@ trait ControllerInterface extends Observable with Publisher{
   def runGame():Unit
   def setBlockStone(x: Int, y: Int): Unit
   def checkValidPlayerStone(x: Int,y: Int): Boolean
-  def makeAMove(x:Int, y:Int): Unit
+  def setTarget(x:Int, y:Int): Boolean
   def setPlayerCount(countPlayer: Int): Unit
   def gameBoard:GameBoardInterface
   var state: State.Value = Print

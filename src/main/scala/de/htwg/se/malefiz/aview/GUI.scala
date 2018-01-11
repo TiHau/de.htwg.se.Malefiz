@@ -27,7 +27,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         val rectY = posY / ((size.height - 110) / 16)
         controller.state match {
           case SetPlayerCount =>
-          case ChosePlayerStone =>
+          case ChoosePlayerStone =>
 
             if (controller.checkValidPlayerStone(rectX, rectY)) {
               commandNotExecuted = false
@@ -37,8 +37,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
 
           case ChooseTarget =>
-            controller.makeAMove(rectX, rectY)
-            if (controller.moveDone) {
+            if (controller.setTarget(rectX, rectY)) {
             commandNotExecuted = false
           } else {
             message = "You have to chose a valid Target"
@@ -220,7 +219,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
         mWait()
 
-      case State.ChosePlayerStone =>
+      case State.ChoosePlayerStone =>
         if (!controller.reset) {
           commandNotExecuted = true
         }

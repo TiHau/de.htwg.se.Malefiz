@@ -322,6 +322,20 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
 
+  def validDest(x: Int, y: Int): Boolean = {
+    if (y > 13 || y < 0) {
+      false
+    } else if (x > 16 || x < 0) {
+      false
+    } else if (board(x)(y).isFreeSpace()) {
+      false
+    } else if (!board(x)(y).asInstanceOf[Field].avariable) {
+      false
+    } else {
+      true
+    }
+  }
+
   def checkWin: Boolean = {
     val xWin = 8
     val yWin = 0

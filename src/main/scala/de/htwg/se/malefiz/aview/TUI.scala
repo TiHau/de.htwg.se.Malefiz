@@ -149,7 +149,7 @@ case class TUI(controller: Controller) extends Observer {
     controller.state match {
       case State.Print => printGameBoard()
       case State.SetBlockStone => getBlockStoneDest()
-      case State.ChosePlayerStone => getChosenPlayerStone()
+      case State.ChoosePlayerStone => getChosenPlayerStone()
       case State.SetPlayerCount => askForNewPlayerCount()
       case State.ChooseTarget => askDestination()
       case State.PlayerWon => println("Player: "+ controller.activePlayer.color+" Won the Game")
