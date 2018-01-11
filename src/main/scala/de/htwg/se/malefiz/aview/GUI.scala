@@ -19,6 +19,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
+    listenTo(this.keys)
     reactions += {
       case MouseClicked(_, point, _, _, _) =>
         val posX = point.x - 20
@@ -53,8 +54,8 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
           case Print =>
           case _ =>
         }
-
-
+      case KeyPressed(_, Key.Enter, _, _) =>{/*DO STUFF */}
+      case KeyPressed(_, Key.BackSpace, _, _) =>{/*DO STUFF*/}
     }
 
 
@@ -176,7 +177,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   menuBar = new MenuBar {
     contents += new Menu("File") {
       mnemonic = Key.F
-      contents += new MenuItem(Action("Empty") {})
       contents += new MenuItem(Action("New") {
         controller.reset = true
         commandNotExecuted = false
