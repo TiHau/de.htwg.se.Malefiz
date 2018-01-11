@@ -241,9 +241,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
-        this.visible = false
         mwait
-        this.visible = true
 
     }
   }
@@ -259,9 +257,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     commandNotExecuted = true
     val wonUI = new WinUI
     wonUI.visible = true
-    this.visible = false
     mwait
-    this.visible = true
   }
 
   private class CountUI extends MainFrame {
