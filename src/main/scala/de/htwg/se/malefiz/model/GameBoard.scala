@@ -256,7 +256,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
   }
 
   def setBlockStoneOnField(field: Field): Boolean = {
-    if (field.stone.sort == 'f') {
+    if (field.stone.sort == 'f' && field.y < 12) {
       board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
       true
     } else {
