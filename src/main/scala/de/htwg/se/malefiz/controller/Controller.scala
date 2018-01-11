@@ -1,23 +1,29 @@
 package de.htwg.se.malefiz.controller
+import de.htwg.se.malefiz.Util.UndoManager
 import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
+
 import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInterface with Publisher {
+
+  private val undoManager = new UndoManager()
   private val six = 6
-  var activePlayer = gameBoard.player3
-  var diced = six
+  var activePlayer : Player = gameBoard.player3
+  var diced : Int = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
-  private var currentReturnStone = 'f'
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
   }
 
+  def undo: Unit = {
+    undoManager.undoStep
+  }
+
   def runGame: Unit = {
     while(reset){
       activePlayer = gameBoard.player3
-      currentReturnStone = 'f'
       executePreOrders()
       executeGameRoutine()
     }
@@ -25,9 +31,9 @@ case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInte
 
   private def executeGameRoutine():Unit ={
     reset =false
-    while(!checkWin) {
-      changePlayer
-      dice
+    while(!gameBoard.checkWin) {
+      changePlayer()
+      dice()
       state=Print
       notifyObservers//print maked GameBoard
       if(!takeUserChange()) {
@@ -42,13 +48,15 @@ case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInte
 
     state=ChosePlayerStone
     notifyObservers
-    markPossibleMovesOfStone(chosenPlayerStone)
+    undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
     state=Print
     notifyObservers
-    state=SetTarget
+    state=ChooseTarget
     notifyObservers
-    unmarkPossibleMoves
-    if(currentReturnStone=='b'){
+    state=Print
+    notifyObservers
+
+    if (needToSetBlockStone) {
       state=SetBlockStone
       notifyObservers
     }
@@ -67,7 +75,7 @@ case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInte
     diced = scala.util.Random.nextInt(six) + 1
   }
 
-  private def changePlayer: Unit ={
+  private def changePlayer(): Unit ={
     if(activePlayer.color==1){
       activePlayer = gameBoard.player4
     } else if(activePlayer.color==4&&gameBoard.playerCount>=3){
@@ -81,121 +89,11 @@ case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInte
     }
   }
 
-  private def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
-    if (stone.actualField == stone.startField) {
-        val x = activePlayer.stones(0).startField.asInstanceOf[Field].x
-        val y = activePlayer.stones(0).startField.asInstanceOf[Field].y
-        markPossibleMovesR(x, y, diced, ' ')
-    } else {
-      val x = stone.actualField.asInstanceOf[Field].x
-      val y = stone.actualField.asInstanceOf[Field].y
-      markPossibleMovesR(x, y, diced, ' ')
-    }
-  }
+  def makeAMove(x:Int, y:Int): Unit =
+      undoManager.doStep(new MoveCommand(chosenPlayerStone, gameBoard.board(x)(y).asInstanceOf[Field],  this))
 
-  private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
-    if (depth == 0) {
-      //Dont hit your own kind
-      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'p'&&gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor==activePlayer.color){
-        return
-      }
-      gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
-      return
-    } else {
-      // If there is a blocking stone on the way dont go on
-      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'b') {
-        return
-      }
-      // up
-      if (validField(x, y - 1) && cameFrom != 'u') {
-        markPossibleMovesR(x, y - 1, depth - 1, 'd')
-      }
-      // down
-      if (validField(x, y + 1) && cameFrom != 'd') {
-        markPossibleMovesR(x, y + 1, depth - 1, 'u')
-      }
-      // left
-      if (validField(x - 1, y) && cameFrom != 'r') {
-        markPossibleMovesR(x - 1, y, depth - 1, 'l')
-      }
-      // right
-      if (validField(x + 1, y) && cameFrom != 'l') {
-        markPossibleMovesR(x + 1, y, depth - 1, 'r')
-      }
-    }
-  }
-
-  private def validField(x: Int, y: Int): Boolean = {
-    // check for a vailid field
-    if (y > 13 || y < 0) {
-      false
-    } else if (x > 16 || x < 0) {
-      false
-    } else if (gameBoard.board(x)(y).isFreeSpace()) {
-      false
-    } else {
-      true
-    }
-  }
-
-  private def unmarkPossibleMoves(): Unit = {
-    for (y <- 0 to 15) {
-      for (x <- 0 to 16) {
-        if (!gameBoard.board(x)(y).isFreeSpace()) {
-          gameBoard.board(x)(y).asInstanceOf[Field].avariable = false
-        }
-      }
-    }
-  }
-
-  def makeAmove(x:Int,y:Int): Boolean ={
-    if(validDestForMove(x,y) && makeMove(chosenPlayerStone,gameBoard.board(x)(y).asInstanceOf[Field])){
-      true
-    }else{
-      false
-    }
-  }
-
-  private def makeMove(stone: PlayerStone, destField: Field): Boolean = {
-    val xStone = stone.actualField.asInstanceOf[Field].x
-    val yStone = stone.actualField.asInstanceOf[Field].y
-    val xDest = destField.x
-    val yDest = destField.y
-    if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
-      val hitStone = gameBoard.changeTwoStones(gameBoard.board(xStone)(yStone).asInstanceOf[Field], destField)
-      hitStone.sort match {
-        case 'p' => {
-          gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-          currentReturnStone = 'p'
-        }
-        case 'f' => currentReturnStone = 'f'
-        case 'b' => currentReturnStone = 'b'
-      }
-      true
-    } else {
-      false
-    }
-  }
-
-  private def validDestForMove(x: Int, y: Int): Boolean = {
-    if (validField(x,y) && gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
-      true
-    } else {
-      false
-    }
-  }
-
-  def isChosenBlockStone(x: Int,y: Int): Boolean = {
-      if(validField(x,y)){
-        if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='f'){
-          gameBoard.setBlockStoneOnField(gameBoard.board(x)(y).asInstanceOf[Field])
-          true
-        } else {
-          false
-        }
-      }else{
-        false
-      }
+  def setBlockStone(x: Int, y: Int): Unit = {
+      undoManager.doStep(new BlockStoneCommand(gameBoard.board(x)(y).asInstanceOf[Field], this))
   }
 
   def checkValidPlayerStone(x: Int,y: Int): Boolean ={
@@ -213,15 +111,4 @@ case class Controller(var gameBoard: GameBoardInterface)  extends ControllerInte
       false
     }
   }
-
-  private def checkWin: Boolean = {
-    val xWin = 8
-    val yWin = 0
-    if (gameBoard.board(xWin)(yWin).asInstanceOf[Field].stone.sort == 'p') {
-      true
-    } else {
-      false
-    }
-  }
-
 }

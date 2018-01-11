@@ -36,12 +36,16 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
             }
 
 
-          case SetTarget => if (controller.makeAmove(rectX, rectY)) {
+          case ChooseTarget =>
+            controller.makeAMove(rectX, rectY)
+            if (controller.moveDone) {
             commandNotExecuted = false
           } else {
             message = "You have to chose a valid Target"
           }
-          case SetBlockStone => if (controller.isChosenBlockStone(rectX, rectY)) {
+          case SetBlockStone =>
+            controller.setBlockStone(rectX,rectY)
+            if (controller.blockStoneSet) {
             commandNotExecuted = false
           } else {
             message = "You have to chose a valid Field to set BlockStone"
@@ -186,7 +190,10 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     }
     contents += new Menu("Edit") {
       mnemonic = Key.E
-      contents += new MenuItem(Action("Undo") {})
+      contents += new MenuItem(Action("Undo") {
+        controller.undo
+        repaint()
+      })
       contents += new MenuItem(Action("Redo") {})
     }
 
@@ -220,7 +227,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         message = "Chose one of your Stones"
         mwait
 
-      case State.SetTarget =>
+      case State.ChooseTarget =>
         if (!controller.reset) {
           commandNotExecuted = true
         }

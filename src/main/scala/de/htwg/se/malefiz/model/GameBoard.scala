@@ -164,101 +164,176 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
             } else {
               jsb.append("|P|")
             }
-              case 'b'
-              => if (s.avariable == false) {
-                jsb.append("|-|")
-              } else {
-                jsb.append("|B|")
-              }
-              case _ => jsb.append("|e|")
+            case 'b'
+            => if (s.avariable == false) {
+              jsb.append("|-|")
+            } else {
+              jsb.append("|B|")
             }
+            case _ => jsb.append("|e|")
           }
         }
-        jsb.append("\n")
       }
-      jsb.append("    ")
-      (0 to 9).addString(jsb, "  ")
-      jsb.append(" ")
-      (10 to 16).addString(jsb, " ")
-      jsb.toString()
+      jsb.append("\n")
+    }
+    jsb.append("    ")
+    (0 to 9).addString(jsb, "  ")
+    jsb.append(" ")
+    (10 to 16).addString(jsb, " ")
+    jsb.toString()
+  }
+
+  private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]]
+
+  = {
+    board(nu8)(nu1) = Field(nu8, nu1, BlockStone())
+    board(nu8)(nu3) = Field(nu8, nu3, BlockStone())
+    board(nu8)(nu4) = Field(nu8, nu4, BlockStone())
+    board(nu8)(nu5) = Field(nu8, nu5, BlockStone())
+    board(nu6)(nu7) = Field(nu6, nu7, BlockStone())
+    board(nu10)(nu7) = Field(nu10, nu7, BlockStone())
+    board(nu0)(nu11) = Field(nu0, nu11, BlockStone())
+    board(nu4)(nu11) = Field(nu4, nu11, BlockStone())
+    board(nu8)(nu11) = Field(nu8, nu11, BlockStone())
+    board(nu12)(nu11) = Field(nu12, nu11, BlockStone())
+    board(nu16)(nu11) = Field(nu16, nu11, BlockStone())
+    board
+  }
+
+  private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]]
+
+  = {
+
+    board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
+    board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
+    board(nu2)(nu14) = Field(nu2, nu14, player1.stones(nu0))
+    board(nu3)(nu14) = Field(nu3, nu14, player1.stones(nu3))
+    board(nu3)(nu15) = Field(nu3, nu15, player1.stones(nu4))
+
+    board(nu13)(nu14) = Field(nu13, nu14, player4.stones(nu2))
+    board(nu13)(nu15) = Field(nu13, nu15, player4.stones(nu1))
+    board(nu14)(nu14) = Field(nu14, nu14, player4.stones(nu0))
+    board(nu15)(nu14) = Field(nu15, nu14, player4.stones(nu3))
+    board(nu15)(nu15) = Field(nu15, nu15, player4.stones(nu4))
+
+    if (playerCount >= 3) {
+
+
+      board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
+      board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
+      board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
+      board(nu7)(nu14) = Field(nu7, nu14, player2.stones(nu3))
+      board(nu7)(nu15) = Field(nu7, nu15, player2.stones(nu4))
+
+      if (playerCount == 4) {
+
+        board(nu10)(nu14) = Field(nu10, nu14, player3.stones(nu0))
+        board(nu9)(nu15) = Field(nu9, nu15, player3.stones(nu1))
+        board(nu9)(nu14) = Field(nu9, nu14, player3.stones(nu2))
+        board(nu11)(nu14) = Field(nu11, nu14, player3.stones(nu3))
+        board(nu11)(nu15) = Field(nu11, nu15, player3.stones(nu4))
+      }
     }
 
-    private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]]
+    board
+  }
 
-    =
-    {
-      board(nu8)(nu1) = Field(nu8, nu1, BlockStone())
-      board(nu8)(nu3) = Field(nu8, nu3, BlockStone())
-      board(nu8)(nu4) = Field(nu8, nu4, BlockStone())
-      board(nu8)(nu5) = Field(nu8, nu5, BlockStone())
-      board(nu6)(nu7) = Field(nu6, nu7, BlockStone())
-      board(nu10)(nu7) = Field(nu10, nu7, BlockStone())
-      board(nu0)(nu11) = Field(nu0, nu11, BlockStone())
-      board(nu4)(nu11) = Field(nu4, nu11, BlockStone())
-      board(nu8)(nu11) = Field(nu8, nu11, BlockStone())
-      board(nu12)(nu11) = Field(nu12, nu11, BlockStone())
-      board(nu16)(nu11) = Field(nu16, nu11, BlockStone())
-      board
+
+  def moveStone(current: Field, dest: Field): Option[Stone] = {
+    if (validField(dest.x, dest.y) && board(dest.x)(dest.y).asInstanceOf[Field].avariable) {
+      val save = dest.stone
+      dest.stone = current.stone
+      dest.stone.asInstanceOf[PlayerStone].actualField = dest
+      current.stone = FreeStone()
+      Some(save)
+    } else {
+      None
     }
+  }
 
-    private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]]
+  def resetPlayerStone(stone: PlayerStone): Unit = {
+    stone.actualField = stone.startField
+    val x = stone.startField.asInstanceOf[Field].x
+    val y = stone.startField.asInstanceOf[Field].y
+    board(x)(y).asInstanceOf[Field].stone = stone
+  }
 
-    =
-    {
+  def setBlockStoneOnField(field: Field): Boolean = {
+    if (field.stone.sort == 'f') {
+      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
+      true
+    } else {
+      false
+    }
+  }
 
-      board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
-      board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
-      board(nu2)(nu14) = Field(nu2, nu14, player1.stones(nu0))
-      board(nu3)(nu14) = Field(nu3, nu14, player1.stones(nu3))
-      board(nu3)(nu15) = Field(nu3, nu15, player1.stones(nu4))
+  def removeBlockStoneOnField(field: Field): Unit = {
+    board(field.x)(field.y).asInstanceOf[Field].stone = new FreeStone
+  }
 
-      board(nu13)(nu14) = Field(nu13, nu14, player4.stones(nu2))
-      board(nu13)(nu15) = Field(nu13, nu15, player4.stones(nu1))
-      board(nu14)(nu14) = Field(nu14, nu14, player4.stones(nu0))
-      board(nu15)(nu14) = Field(nu15, nu14, player4.stones(nu3))
-      board(nu15)(nu15) = Field(nu15, nu15, player4.stones(nu4))
+  def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit = {
+    if (depth == 0) {
+      //Dont hit your own kind
+      if (board(x)(y).asInstanceOf[Field].stone.sort == 'p' && board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor == playerColor) {
+        return
+      }
+      board(x)(y).asInstanceOf[Field].avariable = true
+      return
+    } else {
+      // If there is a blocking stone on the way dont go on
+      if (board(x)(y).asInstanceOf[Field].stone.sort == 'b') {
+        return
+      }
+      // up
+      if (validField(x, y - 1) && cameFrom != 'u') {
+        markPossibleMovesR(x, y - 1, depth - 1, 'd', playerColor)
+      }
+      // down
+      if (validField(x, y + 1) && cameFrom != 'd') {
+        markPossibleMovesR(x, y + 1, depth - 1, 'u', playerColor)
+      }
+      // left
+      if (validField(x - 1, y) && cameFrom != 'r') {
+        markPossibleMovesR(x - 1, y, depth - 1, 'l', playerColor)
+      }
+      // right
+      if (validField(x + 1, y) && cameFrom != 'l') {
+        markPossibleMovesR(x + 1, y, depth - 1, 'r', playerColor)
+      }
+    }
+  }
 
-      if (playerCount >= 3) {
-
-
-        board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
-        board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
-        board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
-        board(nu7)(nu14) = Field(nu7, nu14, player2.stones(nu3))
-        board(nu7)(nu15) = Field(nu7, nu15, player2.stones(nu4))
-
-        if (playerCount == 4) {
-
-          board(nu10)(nu14) = Field(nu10, nu14, player3.stones(nu0))
-          board(nu9)(nu15) = Field(nu9, nu15, player3.stones(nu1))
-          board(nu9)(nu14) = Field(nu9, nu14, player3.stones(nu2))
-          board(nu11)(nu14) = Field(nu11, nu14, player3.stones(nu3))
-          board(nu11)(nu15) = Field(nu11, nu15, player3.stones(nu4))
+  def unmarkPossibleMoves(): Unit = {
+    for (y <- 0 to 15) {
+      for (x <- 0 to 16) {
+        if (!board(x)(y).isFreeSpace()) {
+          board(x)(y).asInstanceOf[Field].avariable = false
         }
       }
-
-      board
     }
-
-
-    def changeTwoStones(f1: Field, f2: Field): Stone = {
-      val save = f2.stone
-      f2.stone = f1.stone
-      f2.stone.asInstanceOf[PlayerStone].actualField = f2
-      f1.stone = FreeStone()
-      save
-    }
-
-    def resetPlayerStone(stone: PlayerStone): Unit = {
-      stone.actualField = stone.startField
-      val x = stone.startField.asInstanceOf[Field].x
-      val y = stone.startField.asInstanceOf[Field].y
-      board(x)(y).asInstanceOf[Field].stone = stone
-    }
-
-    def setBlockStoneOnField(field: Field): Unit = {
-      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
-    }
-
-
   }
+
+  private def validField(x: Int, y: Int): Boolean = {
+    // check for a vailid field
+    if (y > 13 || y < 0) {
+      false
+    } else if (x > 16 || x < 0) {
+      false
+    } else if (board(x)(y).isFreeSpace()) {
+      false
+    } else {
+      true
+    }
+  }
+
+  def checkWin: Boolean = {
+    val xWin = 8
+    val yWin = 0
+    if (board(xWin)(yWin).asInstanceOf[Field].stone.sort == 'p') {
+      true
+    } else {
+      false
+    }
+  }
+
+}

@@ -54,7 +54,7 @@ case class TUI(controller: Controller) extends Observer {
           print("wrong argument\n")
           0
       }
-      if (controller.isChosenBlockStone(x, y)) {
+      if (controller.needToSetBlockStone) {
         checkNotFinished = false
       }
     }
@@ -119,7 +119,7 @@ case class TUI(controller: Controller) extends Observer {
           }
           0
       }
-      if (controller.makeAmove(x, y)) {
+      if (controller.moveDone) {
         checkNotFinished = false
       } else {
         print("Invalid Destination! Please try again.")
@@ -151,7 +151,7 @@ case class TUI(controller: Controller) extends Observer {
       case State.SetBlockStone => getBlockStoneDest()
       case State.ChosePlayerStone => getChosenPlayerStone()
       case State.SetPlayerCount => askForNewPlayerCount()
-      case State.SetTarget => askDestination()
+      case State.ChooseTarget => askDestination()
       case State.PlayerWon => println("Player: "+ controller.activePlayer.color+" Won the Game")
     }
   }

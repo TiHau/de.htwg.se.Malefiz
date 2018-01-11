@@ -7,9 +7,13 @@ trait GameBoardInterface extends Publisher {
   private val two = 2
   private val three = 3
   private val four = 3
-  def setBlockStoneOnField(field: Field): Unit
+  def setBlockStoneOnField(field: Field): Boolean
+  def removeBlockStoneOnField(field: Field): Unit
   def resetPlayerStone(stone: PlayerStone): Unit
-  def changeTwoStones(f1: Field, f2: Field): Stone
+  def moveStone(f1: Field, f2: Field): Option[Stone]
+  def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit
+  def unmarkPossibleMoves(): Unit
+  def checkWin: Boolean
   val player1 = Player(one)
   val player2 = Player(two)
   val player3 = Player(three)
@@ -17,6 +21,6 @@ trait GameBoardInterface extends Publisher {
   def playerCount: Int
   private val x = 17
   private val y = 16
-  val board = Array.ofDim[AbstractField](x, y)
+  val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
 
 }
