@@ -15,7 +15,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val screenY = dim.height
   private var message = "Ask Count First"
   controller.add(this)
-
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
@@ -26,7 +25,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         val posY = point.y - 100
         val rectX = posX / ((size.width - 50) / 17)
         val rectY = posY / ((size.height - 110) / 16)
-        controller.takeInput(rectX,rectY)
+        controller.takeInput(rectX, rectY)
 
       case KeyPressed(_, Key.Enter, _, _) => {
         if (controller.state == BeforeEndOfTurn) {
@@ -34,8 +33,8 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         }
       }
       case KeyPressed(_, Key.BackSpace, _, _) => {
-          controller.undo()
-          repaint()
+        controller.undo()
+        repaint()
       }
     }
 
@@ -173,7 +172,10 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         controller.undo()
         repaint()
       })
-      contents += new MenuItem(Action("Redo") {})
+      contents += new MenuItem(Action("Redo") {
+        controller.redo()
+        repaint()
+      })
     }
 
 
@@ -184,6 +186,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   resizable = true
   title = "Malefitz"
   controller.reset()
+
   override def closeOperation(): Unit = sys.exit(0)
 
   override def update(): Unit = {
@@ -210,7 +213,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       case State.BeforeEndOfTurn =>
         message = "Press Enter to end your turn or Backspace to undo"
 
-      case EndTurn=>
+      case EndTurn =>
     }
   }
 

@@ -9,6 +9,7 @@ import scala.swing.Publisher
 trait ControllerInterface extends Observable with Publisher{
   def activePlayer:Player
   def undo() : Unit
+  def redo(): Unit
   def diced:Int
   def setPlayerCount(countPlayer: Int): Unit
   def gameBoard:GameBoardInterface
@@ -17,8 +18,6 @@ trait ControllerInterface extends Observable with Publisher{
   def reset():Unit
   var state: State.Value = Print
   var needToSetBlockStone = false
-  var moveDone = false
-  var blockStoneSet = false
   var commandNotExecuted = true
 
 }
