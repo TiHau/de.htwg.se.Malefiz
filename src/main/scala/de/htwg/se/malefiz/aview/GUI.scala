@@ -15,7 +15,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val screenY = dim.height
   private var message = "Ask Count First"
   controller.add(this)
-  controller.reset()
+
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
@@ -34,10 +34,8 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         }
       }
       case KeyPressed(_, Key.BackSpace, _, _) => {
-        if (controller.state == BeforeEndOfTurn) {
           controller.undo()
           repaint()
-        }
       }
     }
 
@@ -185,7 +183,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   visible = true
   resizable = true
   title = "Malefitz"
-
+  controller.reset()
   override def closeOperation(): Unit = sys.exit(0)
 
   override def update(): Unit = {
