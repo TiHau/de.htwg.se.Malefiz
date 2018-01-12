@@ -266,13 +266,15 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board(x)(y).asInstanceOf[Field].stone = stone
   }
 
-  def setBlockStoneOnField(field: Field): Boolean = {
-    if (field.stone.sort == 'f' && field.y < 12) {
-      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
+  def checkDestForBlockStone(field: Field): Boolean = {
+    if (field.stone.sort == 'f' && field.y < 12 && field.y > 0 && field.x < 17 && field.x >= 0) {
       true
     } else {
       false
     }
+  }
+  def setBlockStoneOnField(field: Field): Unit = {
+      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
 
   def removeBlockStoneOnField(field: Field): Unit = {
@@ -333,7 +335,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
 
-  def validDest(x: Int, y: Int): Boolean = {
+  def checkDestForPlayerStone(x: Int, y: Int): Boolean = {
     if (y > 13 || y < 0) {
       false
     } else if (x > 16 || x < 0) {

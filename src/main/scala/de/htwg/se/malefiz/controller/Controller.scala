@@ -36,7 +36,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
         }
       }
       case SetBlockStone => state = ChooseTarget
-      case ChoosePlayerStone => 
+      case ChoosePlayerStone => state = ChoosePlayerStone
     }
   }
 
@@ -75,7 +75,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
               }
           }
           case SetBlockStone=>{
-             // undoManager.doStep(new BlockStoneCommand(destField, this))
+              undoManager.doStep(new BlockStoneCommand(destField, this))
               state = Print
               notifyObservers()
               state = BeforeEndOfTurn
@@ -131,7 +131,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   }
 
   def setTarget(x: Int, y: Int): Boolean = {
-    if (gameBoard.validDest(x, y)) {
+    if (gameBoard.checkDestForPlayerStone(x, y)) {
       destField = gameBoard.board(x)(y).asInstanceOf[Field]
       true
     } else {
