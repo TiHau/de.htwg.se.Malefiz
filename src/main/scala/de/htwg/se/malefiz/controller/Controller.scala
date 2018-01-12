@@ -33,6 +33,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
           state = ChooseTarget
         }
       }
+        // HIER FEHLEN NOCH CHOOSEPLAYERSTONE UND SETBLOCKSTONE
     }
   }
 
@@ -69,8 +70,17 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     }
     state = PlayerWon
     notifyObservers()
+    mWait()
+  }
+  private def mWait(): Unit = {
+    while (commandNotExecuted) {
+      Thread.sleep(400)
+    }
   }
 
+  def takeInput(X:Int,Y:Int): Unit ={
+
+  }
   private def oneMove(): Unit = {
     state match {
       case ChoosePlayerStone => chooseStone()
@@ -78,16 +88,20 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
       case SetBlockStone => {
         notifyObservers()
         undoManager.doStep(new BlockStoneCommand(destField, this))
+        state = Print
+        notifyObservers()
         state = BeforeEndOfTurn
       }
       case BeforeEndOfTurn => {
         notifyObservers()
       }
+      case EndTurn=>
     }
   }
 
   private def chooseStone(): Unit = {
     notifyObservers()
+    mWait()
     undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
     state = Print
     notifyObservers()
@@ -96,6 +110,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
 
   private def chooseTarget(): Unit = {
     notifyObservers() // get destination field
+    mWait()
     undoManager.doStep(new MoveCommand(chosenPlayerStone, destField, this))
     state = Print
     notifyObservers()
@@ -109,6 +124,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   private def executePreOrders(): Unit = {
     state = SetPlayerCount
     notifyObservers()
+    mWait()
   }
 
   private def dice(): Unit = {

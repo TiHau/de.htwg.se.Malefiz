@@ -1,15 +1,15 @@
 package de.htwg.se.malefiz.aview
 
 import de.htwg.se.malefiz.Util.Observer
-import de.htwg.se.malefiz.controller.{Controller, State}
+import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 
-case class TUI(controller: Controller) extends Observer {
+case class TUI(controller: ControllerInterface) extends Observer {
   private val four: Int = 4
   var checkNotFinished: Boolean = true
   print("TUI Malefiz\n")
   print("Welcome!!!\n")
   controller.add(this)
-  controller.runGame
+
   def printGameBoard(): Unit = {
     print(controller.gameBoard.toString() +
       "\nPlayer: " + controller.activePlayer.color +
@@ -31,11 +31,9 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def getBlockStoneDest(): Unit = {
-    if(!controller.reset) {
-      checkNotFinished = true
-    }
+
     while (checkNotFinished) {
-      print("Set destination for hit Blockstone\n")
+
       print("X: ")
       val x = readInput match {
         case Some(i) => i
@@ -61,11 +59,8 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def getChosenPlayerStone(): Unit = {
-    if(!controller.reset) {
-      checkNotFinished = true
-    }
     while (checkNotFinished) {
-      print("Type in Coordinates of your PlayerStone\n")
+
       print("X: ")
       val x = readInput match {
         case Some(i) => i
@@ -94,11 +89,8 @@ case class TUI(controller: Controller) extends Observer {
   }
 
   private def askDestination(): Unit = {
-    if(!controller.reset) {
-      checkNotFinished = true
-    }
     while (checkNotFinished) {
-      print("Set destination for your Stone\n")
+
       print("X: ")
       val x = readInput match {
         case Some(i) => i
@@ -147,12 +139,26 @@ case class TUI(controller: Controller) extends Observer {
 
   override def update: Unit = {
     controller.state match {
-      case State.Print => printGameBoard()
-      case State.SetBlockStone => getBlockStoneDest()
-      case State.ChoosePlayerStone => getChosenPlayerStone()
-      case State.SetPlayerCount => askForNewPlayerCount()
-      case State.ChooseTarget => askDestination()
-      case State.PlayerWon => println("Player: "+ controller.activePlayer.color+" Won the Game")
+      case State.Print =>  printGameBoard()
+      case State.SetBlockStone =>
+        if(!controller.reset) {
+          controller.commandNotExecuted= true
+        }
+        print("Set destination for hit Blockstone\n")
+      case State.ChoosePlayerStone =>
+        if(!controller.reset) {
+          controller.commandNotExecuted= true
+        }
+        print("Type in Coordinates of your PlayerStone\n")
+      case State.SetPlayerCount =>
+        controller.commandNotExecuted= true
+        askForNewPlayerCount()
+      case State.ChooseTarget =>
+        if(!controller.reset) {
+          controller.commandNotExecuted= true
+        }
+        print("Set destination for your Stone\n")
+      case State.PlayerWon => print("Player: " + controller.activePlayer.color + " Won the Game\n")
     }
   }
 }

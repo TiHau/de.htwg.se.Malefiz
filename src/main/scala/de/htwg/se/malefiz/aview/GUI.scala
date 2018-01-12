@@ -13,8 +13,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val dim = Toolkit.getDefaultToolkit.getScreenSize
   private val screenX = dim.width
   private val screenY = dim.height
-  private var message = "test"
-  private var commandNotExecuted = true
+  private var message = "Ask Count First"
   controller.add(this)
   contents = new FlowPanel() {
     focusable = true
@@ -29,43 +28,34 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         controller.state match {
           case SetPlayerCount =>
           case ChoosePlayerStone =>
-
             if (controller.checkValidPlayerStone(rectX, rectY)) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to Chose one of your Stones"
+              controller.commandNotExecuted = false
             }
-
 
           case ChooseTarget =>
             if (controller.setTarget(rectX, rectY)) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to chose a valid Target"
+              controller.commandNotExecuted = false
             }
           case SetBlockStone =>
             controller.setBlockStone(rectX, rectY)
             if (controller.blockStoneSet) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to chose a valid Field to set BlockStone"
+              controller.commandNotExecuted = false
             }
-
-          case Print =>
+          case Print => repaint()
           case BeforeEndOfTurn =>
           case _ =>
         }
       case KeyPressed(_, Key.Enter, _, _) => {
         if (controller.state == BeforeEndOfTurn) {
           controller.endTurn()
-          commandNotExecuted = false
+          controller.commandNotExecuted = false
         }
       }
       case KeyPressed(_, Key.BackSpace, _, _) => {
         if (controller.state == BeforeEndOfTurn) {
           controller.undo()
           repaint()
-          commandNotExecuted = false
+          controller.commandNotExecuted = false
         }
       }
     }
@@ -191,7 +181,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       mnemonic = Key.F
       contents += new MenuItem(Action("New") {
         controller.reset = true
-        commandNotExecuted = false
+        controller.commandNotExecuted = false
       })
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
@@ -218,63 +208,47 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
   override def closeOperation(): Unit = sys.exit(0)
 
-  controller.runGame()
-
   override def update(): Unit = {
     controller.state match {
       case State.Print => repaint()
       case State.SetBlockStone =>
         if (!controller.reset) {
-          commandNotExecuted = true
+          controller.commandNotExecuted = true
         }
         message = "Set a BlockStone"
         repaint()
-        mWait()
 
       case State.ChoosePlayerStone =>
         if (!controller.reset) {
-          commandNotExecuted = true
+          controller.commandNotExecuted = true
         }
         message = "Chose one of your Stones"
-        mWait()
 
       case State.ChooseTarget =>
         if (!controller.reset) {
-          commandNotExecuted = true
+          controller.commandNotExecuted = true
         }
         message = "Chose a Target Field"
-        mWait()
 
       case State.PlayerWon =>
-        ifWon()
+        if(!controller.reset) {
+          controller.commandNotExecuted = true
+        }
+        val wonUI = new WinUI
+        wonUI.visible = true
 
       case State.SetPlayerCount =>
-        commandNotExecuted = true
+        controller.commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
-        mWait()
 
       case State.BeforeEndOfTurn =>
         message = "Press Enter to end your turn or Backspace to undo"
         if (!controller.reset) {
-          commandNotExecuted = true
+          controller.commandNotExecuted = true
         }
-        mWait()
+      case EndTurn=>
     }
-  }
-
-  private def mWait(): Unit = {
-    while (commandNotExecuted) {
-      Thread.sleep(400)
-    }
-  }
-
-  private def ifWon(): Unit = {
-
-    commandNotExecuted = true
-    val wonUI = new WinUI
-    wonUI.visible = true
-    mWait()
   }
 
   private class CountUI extends MainFrame {
@@ -284,17 +258,17 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     contents = new FlowPanel() {
       contents += Button("2 Player") {
         controller.setPlayerCount(2)
-        commandNotExecuted = false
+        controller.commandNotExecuted = false
         dispose
       }
       contents += Button("3 Player") {
         controller.setPlayerCount(3)
-        commandNotExecuted = false
+        controller.commandNotExecuted = false
         dispose
       }
       contents += Button("4 Player") {
         controller.setPlayerCount(4)
-        commandNotExecuted = false
+        controller.commandNotExecuted = false
         dispose
       }
     }
@@ -322,7 +296,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       }
       contents += Button("New Game") {
         controller.reset = true
-        commandNotExecuted = false
+        controller.commandNotExecuted = false
         dispose()
       }
     }

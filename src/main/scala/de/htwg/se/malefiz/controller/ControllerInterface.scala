@@ -22,5 +22,6 @@ trait ControllerInterface extends Observable with Publisher{
   var needToSetBlockStone = false
   var moveDone = false
   var blockStoneSet = false
+  var commandNotExecuted = true
 
 }
