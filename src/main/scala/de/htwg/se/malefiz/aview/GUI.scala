@@ -15,6 +15,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val screenY = dim.height
   private var message = "Ask Count First"
   controller.add(this)
+  controller.reset()
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
@@ -25,37 +26,17 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         val posY = point.y - 100
         val rectX = posX / ((size.width - 50) / 17)
         val rectY = posY / ((size.height - 110) / 16)
-        controller.state match {
-          case SetPlayerCount =>
-          case ChoosePlayerStone =>
-            if (controller.checkValidPlayerStone(rectX, rectY)) {
-              controller.commandNotExecuted = false
-            }
+        controller.takeInput(rectX,rectY)
 
-          case ChooseTarget =>
-            if (controller.setTarget(rectX, rectY)) {
-              controller.commandNotExecuted = false
-            }
-          case SetBlockStone =>
-            controller.setBlockStone(rectX, rectY)
-            if (controller.blockStoneSet) {
-              controller.commandNotExecuted = false
-            }
-          case Print => repaint()
-          case BeforeEndOfTurn =>
-          case _ =>
-        }
       case KeyPressed(_, Key.Enter, _, _) => {
         if (controller.state == BeforeEndOfTurn) {
           controller.endTurn()
-          controller.commandNotExecuted = false
         }
       }
       case KeyPressed(_, Key.BackSpace, _, _) => {
         if (controller.state == BeforeEndOfTurn) {
           controller.undo()
           repaint()
-          controller.commandNotExecuted = false
         }
       }
     }
@@ -180,8 +161,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     contents += new Menu("File") {
       mnemonic = Key.F
       contents += new MenuItem(Action("New") {
-        controller.reset = true
-        controller.commandNotExecuted = false
+        controller.reset()
       })
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
@@ -212,28 +192,16 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     controller.state match {
       case State.Print => repaint()
       case State.SetBlockStone =>
-        if (!controller.reset) {
-          controller.commandNotExecuted = true
-        }
         message = "Set a BlockStone"
         repaint()
 
       case State.ChoosePlayerStone =>
-        if (!controller.reset) {
-          controller.commandNotExecuted = true
-        }
         message = "Chose one of your Stones"
 
       case State.ChooseTarget =>
-        if (!controller.reset) {
-          controller.commandNotExecuted = true
-        }
         message = "Chose a Target Field"
 
       case State.PlayerWon =>
-        if(!controller.reset) {
-          controller.commandNotExecuted = true
-        }
         val wonUI = new WinUI
         wonUI.visible = true
 
@@ -241,12 +209,9 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         controller.commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
-
       case State.BeforeEndOfTurn =>
         message = "Press Enter to end your turn or Backspace to undo"
-        if (!controller.reset) {
-          controller.commandNotExecuted = true
-        }
+
       case EndTurn=>
     }
   }
@@ -258,17 +223,14 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     contents = new FlowPanel() {
       contents += Button("2 Player") {
         controller.setPlayerCount(2)
-        controller.commandNotExecuted = false
         dispose
       }
       contents += Button("3 Player") {
         controller.setPlayerCount(3)
-        controller.commandNotExecuted = false
         dispose
       }
       contents += Button("4 Player") {
         controller.setPlayerCount(4)
-        controller.commandNotExecuted = false
         dispose
       }
     }
@@ -295,8 +257,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         sys.exit(0)
       }
       contents += Button("New Game") {
-        controller.reset = true
-        controller.commandNotExecuted = false
+        controller.reset()
         dispose()
       }
     }

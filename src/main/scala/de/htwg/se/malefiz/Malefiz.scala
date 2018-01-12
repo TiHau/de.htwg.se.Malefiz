@@ -10,6 +10,5 @@ object Malefiz {
     val controller = Controller(GameBoard(4))
     val gui = new GUI(controller)
    // val tui = new TUI(controller)
-    controller.runGame()
   }
 }

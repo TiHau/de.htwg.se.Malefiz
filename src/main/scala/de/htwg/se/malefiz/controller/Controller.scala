@@ -15,8 +15,10 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
+
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
+    nextTurn()
   }
 
   def undo(): Unit = {
@@ -39,19 +41,10 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
 
   def endTurn(): Unit = {
     state = EndTurn
+    nextTurn()
   }
-
-  def runGame(): Unit = {
-    while (reset) {
-      activePlayer = gameBoard.player3
-      executePreOrders()
-      executeGameRoutine()
-    }
-  }
-
-  private def executeGameRoutine(): Unit = {
-    reset = false
-    while (!gameBoard.checkWin) {
+  private def nextTurn(): Unit = {
+    if (!gameBoard.checkWin) {
       undoManager.clear()
       changePlayer()
       dice()
@@ -59,74 +52,65 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
       notifyObservers() //print GameBoard
       state = ChoosePlayerStone
       needToSetBlockStone = false
-
-      while (state != EndTurn) {
-        oneMove()
-      }
-
-      if (reset) {
-        return
-      }
+      notifyObservers()
+    } else{
+      state = PlayerWon
+      notifyObservers()
     }
-    state = PlayerWon
+  }
+
+  def takeInput(x:Int,y:Int): Unit ={
+        state match {
+          case Print=>
+          case SetPlayerCount=>
+          case ChoosePlayerStone=>{
+              if(checkValidPlayerStone(x,y)){
+                chooseStone()
+              }
+          }
+          case ChooseTarget=>{
+              if(setTarget(x,y)){
+                chooseTarget()
+              }
+          }
+          case SetBlockStone=>{
+             // undoManager.doStep(new BlockStoneCommand(destField, this))
+              state = Print
+              notifyObservers()
+              state = BeforeEndOfTurn
+              notifyObservers()
+          }
+          case PlayerWon=>
+          case BeforeEndOfTurn=>
+          case EndTurn=>
+        }
+  }
+  def reset(): Unit ={
+    activePlayer = gameBoard.player3
+    state = SetPlayerCount
     notifyObservers()
-    mWait()
-  }
-  private def mWait(): Unit = {
-    while (commandNotExecuted) {
-      Thread.sleep(400)
-    }
-  }
-
-  def takeInput(X:Int,Y:Int): Unit ={
-
-  }
-  private def oneMove(): Unit = {
-    state match {
-      case ChoosePlayerStone => chooseStone()
-      case ChooseTarget => chooseTarget()
-      case SetBlockStone => {
-        notifyObservers()
-        undoManager.doStep(new BlockStoneCommand(destField, this))
-        state = Print
-        notifyObservers()
-        state = BeforeEndOfTurn
-      }
-      case BeforeEndOfTurn => {
-        notifyObservers()
-      }
-      case EndTurn=>
-    }
   }
 
   private def chooseStone(): Unit = {
-    notifyObservers()
-    mWait()
     undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
     state = Print
     notifyObservers()
     state = ChooseTarget
+    notifyObservers()
   }
 
   private def chooseTarget(): Unit = {
-    notifyObservers() // get destination field
-    mWait()
     undoManager.doStep(new MoveCommand(chosenPlayerStone, destField, this))
     state = Print
     notifyObservers()
     if (needToSetBlockStone) {
       state = SetBlockStone
+      notifyObservers()
     } else {
       state = BeforeEndOfTurn
+      notifyObservers()
     }
   }
-
-  private def executePreOrders(): Unit = {
-    state = SetPlayerCount
-    notifyObservers()
-    mWait()
-  }
-
   private def dice(): Unit = {
     diced = scala.util.Random.nextInt(six) + 1
   }

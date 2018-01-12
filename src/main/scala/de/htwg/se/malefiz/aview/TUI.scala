@@ -41,11 +41,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
           print("wrong argument\n")
           0
       }
-      if(controller.reset){
-        print("Pleas press Enter to restart Game!!!")
-      } else {
-        print("Y: ")
-      }
+
       val y = readInput match {
         case Some(i) => i
         case None =>
@@ -68,12 +64,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
           print("wrong argument\n")
           0
       }
-      if(controller.reset){
-        print("Pleas press Enter to restart Game!!!")
-      }else {
-        print("Y: ")
-      }
-      val y = readInput match {
+       val y = readInput match {
         case Some(i) => i
         case None =>
           print("wrong argument\n")
@@ -98,17 +89,11 @@ case class TUI(controller: ControllerInterface) extends Observer {
           print("wrong argument\n")
           0
       }
-      if(controller.reset){
-        print("Pleas press Enter to restart Game!!!")
-      } else {
-        print("Y: ")
-      }
+
       val y = readInput match {
         case Some(i) => i
         case None =>
-          if(!controller.reset) {
-            print("wrong argument\n")
-          }
+
           0
       }
       if (controller.moveDone) {
@@ -125,7 +110,6 @@ case class TUI(controller: ControllerInterface) extends Observer {
     line match {
       case "exit" => sys.exit(0)
       case "restart" =>
-        controller.reset=true
         checkNotFinished=false
         None
       case _ =>
@@ -141,22 +125,16 @@ case class TUI(controller: ControllerInterface) extends Observer {
     controller.state match {
       case State.Print =>  printGameBoard()
       case State.SetBlockStone =>
-        if(!controller.reset) {
-          controller.commandNotExecuted= true
-        }
+
         print("Set destination for hit Blockstone\n")
       case State.ChoosePlayerStone =>
-        if(!controller.reset) {
-          controller.commandNotExecuted= true
-        }
+
         print("Type in Coordinates of your PlayerStone\n")
       case State.SetPlayerCount =>
         controller.commandNotExecuted= true
         askForNewPlayerCount()
       case State.ChooseTarget =>
-        if(!controller.reset) {
-          controller.commandNotExecuted= true
-        }
+
         print("Set destination for your Stone\n")
       case State.PlayerWon => print("Player: " + controller.activePlayer.color + " Won the Game\n")
     }

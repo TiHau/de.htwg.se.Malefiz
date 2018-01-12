@@ -10,15 +10,15 @@ trait ControllerInterface extends Observable with Publisher{
   def activePlayer:Player
   def undo() : Unit
   def diced:Int
-  def runGame():Unit
   def setBlockStone(x: Int, y: Int): Unit
   def checkValidPlayerStone(x: Int,y: Int): Boolean
   def setTarget(x:Int, y:Int): Boolean
   def setPlayerCount(countPlayer: Int): Unit
   def gameBoard:GameBoardInterface
   def endTurn(): Unit
+  def takeInput(X:Int,Y:Int): Unit
+  def reset():Unit
   var state: State.Value = Print
-  var reset = true
   var needToSetBlockStone = false
   var moveDone = false
   var blockStoneSet = false
