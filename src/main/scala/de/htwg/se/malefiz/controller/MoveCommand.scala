@@ -10,20 +10,14 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
   private val currentField = controller.gameBoard.board(xStone)(yStone).asInstanceOf[Field]
   private var hitStone = new Stone('f')
 
-  override def doStep(): Unit =   {
-    val hitStoneOption = controller.gameBoard.moveStone(currentField, destField)
-      if (hitStoneOption.isDefined) {
-        hitStone = hitStoneOption.get
-        hitStone.sort match {
-          case 'p' => controller.gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-          case 'f' =>
-          case 'b' => controller.needToSetBlockStone = true
-        }
-        controller.gameBoard.unmarkPossibleMoves()
-        controller.moveDone = true
-      } else {
-        controller.moveDone = false
-      }
+  override def doStep(): Unit = {
+    hitStone = controller.gameBoard.moveStone(currentField, destField).get
+    hitStone.sort match {
+      case 'p' => controller.gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
+      case 'f' =>
+      case 'b' => controller.needToSetBlockStone = true
+    }
+    controller.gameBoard.unmarkPossibleMoves()
   }
 
   override def undoStep(): Unit = {
@@ -42,8 +36,9 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
       val y = stone.actualField.asInstanceOf[Field].y
       controller.gameBoard.markPossibleMovesR(x, y, controller.diced, ' ', controller.activePlayer.color)
     }
-    controller.moveDone = false
     controller.needToSetBlockStone = false
   }
+
+  override def redoStep(): Unit = doStep()
 
 }

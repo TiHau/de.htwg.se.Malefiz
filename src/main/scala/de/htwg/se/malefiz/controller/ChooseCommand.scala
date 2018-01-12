@@ -21,5 +21,6 @@ class ChooseCommand(stone: PlayerStone, controller: ControllerInterface) extends
 
   override def undoStep(): Unit = controller.gameBoard.unmarkPossibleMoves()
 
+  override def redoStep(): Unit = doStep()
 
 }

@@ -93,7 +93,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
 
           0
       }
-      if (controller.moveDone) {
+      if (true) {
         checkNotFinished = false
       } else {
         print("Invalid Destination! Please try again.")

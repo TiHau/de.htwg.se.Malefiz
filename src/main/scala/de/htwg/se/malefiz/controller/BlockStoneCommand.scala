@@ -4,13 +4,16 @@ import de.htwg.se.malefiz.Util.Command
 import de.htwg.se.malefiz.model.Field
 
 class BlockStoneCommand(field: Field, controller: ControllerInterface) extends Command {
+
   override def doStep(): Unit = {
     controller.gameBoard.setBlockStoneOnField(field)
-    controller.blockStoneSet = true
   }
 
   override def undoStep(): Unit = {
     controller.gameBoard.removeBlockStoneOnField(field)
-    controller.blockStoneSet = false
+    controller.needToSetBlockStone = true
   }
+
+  override def redoStep(): Unit = doStep()
+
 }

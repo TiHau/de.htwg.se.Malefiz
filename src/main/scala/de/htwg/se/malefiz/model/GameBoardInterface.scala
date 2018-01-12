@@ -7,7 +7,7 @@ trait GameBoardInterface extends Publisher {
   private val two = 2
   private val three = 3
   private val four = 3
-  def checkDestForBlockStone(field: Field): Boolean
+  def checkDestForBlockStone(x: Int, y: Int): Boolean
   def setBlockStoneOnField(field: Field): Unit
   def removeBlockStoneOnField(field: Field): Unit
   def resetPlayerStone(stone: PlayerStone): Unit

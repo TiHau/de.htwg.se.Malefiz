@@ -253,8 +253,14 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     } else if (dest.x > 16 || dest.x < 0) {
     } else if (dest.isFreeSpace()) {
     } else {
+
+      if (dest == current.stone.asInstanceOf[PlayerStone].startField) {
+        current.stone.asInstanceOf[PlayerStone].actualField = current.stone.asInstanceOf[PlayerStone].startField
+      } else {
+        current.stone.asInstanceOf[PlayerStone].actualField = dest
+      }
+
       dest.stone = current.stone
-      dest.stone.asInstanceOf[PlayerStone].actualField = dest
       current.stone = FreeStone()
     }
   }
@@ -266,9 +272,14 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board(x)(y).asInstanceOf[Field].stone = stone
   }
 
-  def checkDestForBlockStone(field: Field): Boolean = {
-    if (field.stone.sort == 'f' && field.y < 12 && field.y > 0 && field.x < 17 && field.x >= 0) {
-      true
+  def checkDestForBlockStone(x: Int, y: Int): Boolean = {
+    if (y < 12 && y > 0 && x < 17 && x >= 0) {
+      val field = board(x)(y)
+      if (!field.isFreeSpace() && field.asInstanceOf[Field].stone.sort == 'f') {
+        true
+      } else {
+        false
+      }
     } else {
       false
     }
