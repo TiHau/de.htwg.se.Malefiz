@@ -80,6 +80,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
               notifyObservers()
               state = BeforeEndOfTurn
               notifyObservers()
+
           }
           case PlayerWon=>
           case BeforeEndOfTurn=>
@@ -139,11 +140,11 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
     }
   }
 
-  def setBlockStone(x: Int, y: Int): Unit = {
+  private def setBlockStone(x: Int, y: Int): Unit = {
     destField = gameBoard.board(x)(y).asInstanceOf[Field]
   }
 
-  def checkValidPlayerStone(x: Int, y: Int): Boolean = {
+  private def checkValidPlayerStone(x: Int, y: Int): Boolean = {
     if (x >= 0 && x < 17 && y >= 0 && y < 16 && (!gameBoard.board(x)(y).isFreeSpace() && gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'p')) {
       var retBool: Boolean = false
       for (s <- activePlayer.stones) {
