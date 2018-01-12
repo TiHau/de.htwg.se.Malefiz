@@ -71,11 +71,8 @@ case class TUI(controller: ControllerInterface) extends Observer {
           0
       }
 
-      if (controller.checkValidPlayerStone(x, y)) {
-        checkNotFinished = false
-      } else {
-        print("its not your stone\n")
-      }
+
+
     }
   }
 
