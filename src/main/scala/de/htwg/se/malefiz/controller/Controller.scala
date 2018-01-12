@@ -35,7 +35,8 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
           state = ChooseTarget
         }
       }
-        // HIER FEHLEN NOCH CHOOSEPLAYERSTONE UND SETBLOCKSTONE
+      case SetBlockStone => state = ChooseTarget
+      case ChoosePlayerStone => 
     }
   }
 
