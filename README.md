@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se-Tim)](https://travis-ci.org/HuntedHunter/SE_Rep) - [![Coverage Status](https://coveralls.io/repos/github/HuntedHunter/SE_Rep/badge.svg?branch=se-Tim)](https://coveralls.io/github/HuntedHunter/SE_Rep?branch=se-Tim) - Tim
 
-[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se-Fabi)](https://travis-ci.org/HuntedHunter/SE_Rep) - Fabian
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se-Fabi)](https://travis-ci.org/HuntedHunter/SE_Rep) -   [![Coverage Status](https://coveralls.io/repos/github/HuntedHunter/SE_Rep/badge.svg?branch=se-Fabi)](https://coveralls.io/github/HuntedHunter/SE_Rep?branch=se-Fabi) - Fabian
 
 
 
