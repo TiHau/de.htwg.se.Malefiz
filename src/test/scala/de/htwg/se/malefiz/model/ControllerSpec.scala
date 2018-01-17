@@ -130,6 +130,11 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.endTurn()
       controller.state shouldBe(PlayerWon)
     }
+    "invalid PlayerStone" in{
+      controller.state = ChoosePlayerStone
+      controller.takeInput(0,0)
+      controller.state shouldBe(ChoosePlayerStone)
+    }
   }}
 
 
