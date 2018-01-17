@@ -43,13 +43,17 @@ class ControllerSpec extends WordSpec with Matchers {
 
     "chose Player" in{
       controller.state = ChoosePlayerStone
-      controller.takeInput(3,14)
-      controller.state shouldBe(ChoosePlayerStone)
+      controller.diced=1
+      controller.takeInput(10,14)
+      controller.undo()
+      controller.redo()
+      controller.state shouldBe(ChooseTarget)
     }
     "choose Target" in{
-      controller.state = ChooseTarget
-      controller.takeInput(3,14)
-      controller.state shouldBe(ChooseTarget)
+      controller.takeInput(10,13)
+      controller.undo()
+      controller.redo()
+      controller.state shouldBe(BeforeEndOfTurn)
     }
     "before end of turn" in{
       controller.state = BeforeEndOfTurn
