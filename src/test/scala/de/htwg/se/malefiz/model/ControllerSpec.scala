@@ -46,12 +46,14 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.diced=1
       controller.takeInput(10,14)
       controller.undo()
+      controller.state shouldBe(ChoosePlayerStone)
       controller.redo()
       controller.state shouldBe(ChooseTarget)
     }
     "choose Target" in{
       controller.takeInput(10,13)
       controller.undo()
+      controller.state shouldBe(ChooseTarget)
       controller.redo()
       controller.state shouldBe(BeforeEndOfTurn)
     }
@@ -60,12 +62,14 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.diced=1
       controller.takeInput(10,13)
       controller.undo()
+      controller.state shouldBe(ChoosePlayerStone)
       controller.redo()
       controller.state shouldBe(ChooseTarget)
     }
     "choose Target not start" in{
       controller.takeInput(11,13)
       controller.undo()
+      controller.state shouldBe(ChooseTarget)
       controller.redo()
       controller.state shouldBe(BeforeEndOfTurn)
     }
@@ -87,6 +91,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.state = SetBlockStone
       controller.takeInput(4,1)
       controller.undo()
+      controller.state shouldBe(SetBlockStone)
       controller.redo()
       controller.state shouldBe(BeforeEndOfTurn)
     }
@@ -117,7 +122,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.activePlayer = controller.gameBoard.player4
       controller.endTurn()
       controller.activePlayer shouldBe(controller.gameBoard.player1)
-      
+
     }
     "check win" in{
       controller.gameBoard.board(8)(0).asInstanceOf[Field].stone =
