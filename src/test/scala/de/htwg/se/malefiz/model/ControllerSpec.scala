@@ -135,6 +135,16 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.takeInput(0,0)
       controller.state shouldBe(ChoosePlayerStone)
     }
+    "undo with empty undoStack" in{
+      controller.state = ChoosePlayerStone
+      controller.undo()
+      controller.state shouldBe(ChoosePlayerStone)
+    }
+    "redo with empty redoStack" in{
+      controller.state = ChoosePlayerStone
+      controller.redo()
+      controller.state shouldBe(ChoosePlayerStone)
+    }
   }}
 
 
