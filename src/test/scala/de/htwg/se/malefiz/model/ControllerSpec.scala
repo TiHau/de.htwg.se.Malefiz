@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.model
 
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print}
+import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print,SetBlockStone}
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -10,7 +10,7 @@ class ControllerSpec extends WordSpec with Matchers {
   "A Controller" when { "new set" should {
     val controller = new Controller(new GameBoard(4))
     val player = Player(1)
-    "can change player count"  in {
+    "can change player count specific"  in {
       controller.setPlayerCount(2) equals(controller.gameBoard.playerCount)
     }
 
@@ -39,6 +39,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.redo()
       controller.state shouldBe(Print)
     }
+
 
   }}
 
