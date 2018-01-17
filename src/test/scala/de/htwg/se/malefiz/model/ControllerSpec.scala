@@ -96,6 +96,22 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.state shouldBe(BeforeEndOfTurn)
     }
 
+    "change player from 3 to 4" in{
+      controller.endTurn()
+      controller.activePlayer shouldBe(Player(4))
+    }
+    "change player from 4 to 2" in{
+      controller.endTurn()
+      controller.activePlayer shouldBe(Player(2))
+    }
+    "change player from 1 to 3" in{
+      controller.endTurn()
+      controller.activePlayer shouldBe(Player(3))
+    }
+    "change player from 2 to 1" in{
+      controller.endTurn()
+      controller.activePlayer shouldBe(Player(1))
+    }
   }}
 
 
