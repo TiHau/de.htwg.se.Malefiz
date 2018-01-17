@@ -197,9 +197,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board
   }
 
-  private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]]
-
-  = {
+  private def setPlayerStones(board: Array[Array[AbstractField]], playerCount: Int): Array[Array[AbstractField]] = {
 
     board(nu1)(nu14) = Field(nu1, nu14, player1.stones(nu2))
     board(nu1)(nu15) = Field(nu1, nu15, player1.stones(nu1))
