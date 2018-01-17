@@ -11,9 +11,7 @@ class PlayerSpec extends WordSpec with Matchers {
     "have a name"  in {
       player.color should be(1)
     }
-    "have a Field" in{
-      player.stones.isEmpty shouldBe(Unit)
-    }
+  
 
   }}
 }
