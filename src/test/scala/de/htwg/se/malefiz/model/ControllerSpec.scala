@@ -55,6 +55,20 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.redo()
       controller.state shouldBe(BeforeEndOfTurn)
     }
+    "chose Player not start" in{
+      controller.state = ChoosePlayerStone
+      controller.diced=1
+      controller.takeInput(10,13)
+      controller.undo()
+      controller.redo()
+      controller.state shouldBe(ChooseTarget)
+    }
+    "choose Target not start" in{
+      controller.takeInput(11,13)
+      controller.undo()
+      controller.redo()
+      controller.state shouldBe(BeforeEndOfTurn)
+    }
     "before end of turn" in{
       controller.state = BeforeEndOfTurn
       controller.takeInput(3,14)
