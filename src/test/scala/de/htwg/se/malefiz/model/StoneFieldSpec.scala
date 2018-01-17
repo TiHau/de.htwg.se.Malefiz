@@ -20,6 +20,10 @@ class StoneFieldSpec extends WordSpec with Matchers {
       "avariable false" in{
         field.avariable shouldBe(false)
       }
+      "is empty false" in {
+        field.isEmpty shouldBe(false)
+
+      }
 
     }
   }
