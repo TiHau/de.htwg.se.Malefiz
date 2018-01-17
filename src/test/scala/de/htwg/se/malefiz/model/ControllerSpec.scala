@@ -98,19 +98,26 @@ class ControllerSpec extends WordSpec with Matchers {
 
     "change player from 3 to 4" in{
       controller.endTurn()
-      controller.activePlayer shouldBe(Player(4))
+      controller.activePlayer shouldBe(controller.gameBoard.player4)
     }
     "change player from 4 to 2" in{
       controller.endTurn()
-      controller.activePlayer shouldBe(Player(2))
+      controller.activePlayer shouldBe(controller.gameBoard.player2)
     }
     "change player from 1 to 3" in{
       controller.endTurn()
-      controller.activePlayer shouldBe(Player(3))
+      controller.activePlayer shouldBe(controller.gameBoard.player3)
     }
     "change player from 2 to 1" in{
       controller.endTurn()
-      controller.activePlayer shouldBe(Player(1))
+      controller.activePlayer shouldBe(controller.gameBoard.player1)
+    }
+    "change player from 4 to 1 with Playercount = 2" in{
+      controller.setPlayerCount(2)
+      controller.activePlayer = controller.gameBoard.player4
+      controller.endTurn()
+      controller.activePlayer shouldBe(controller.gameBoard.player1)
+      
     }
     "check win" in{
       controller.gameBoard.board(8)(0).asInstanceOf[Field].stone =
