@@ -1,205 +1,207 @@
 package de.htwg.se.malefiz.controller
+
+import de.htwg.se.malefiz.Util.UndoManager
 import de.htwg.se.malefiz.model._
 import de.htwg.se.malefiz.controller.State._
-case class Controller(var gameBoard: GameBoard) extends Observable {
-  val six = 6
-  var activePlayer = gameBoard.player3
-  var diced = six
-  var chosenPlayerStone = gameBoard.player1.stones(0)
-  var state = Print
-  var currentReturnStone = 'f'
+
+import scala.swing.Publisher
+
+case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
+
+  private val undoManager = new UndoManager()
+  private val six = 6
+  var activePlayer: Player = gameBoard.player3
+  var diced: Int = six
+  private var chosenPlayerStone = gameBoard.player1.stones(0)
+  private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
+
 
   def setPlayerCount(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
+    nextTurn()
   }
 
-  def runGame: Unit = {
-    state=SetPlayerCount
-    notifyObservers
-    while(!checkWin) {
-      changePlayer
-      dice
-      state=Print
-      notifyObservers//print maked GameBoard
-      state=ChosePlayerStone
-      notifyObservers
-      markPossibleMovesOfStone(chosenPlayerStone)
-      state=Print
-      notifyObservers
-      state=SetTarget
-      notifyObservers
-      unmarkPossibleMoves
-      if(currentReturnStone=='b'){
-        state=SetBlockStone
-        notifyObservers
+  def undo(): Unit = {
+    undoManager.undoStep()
+    val oldState = state
+    state = Print
+    notifyObservers()
+    oldState match {
+      case ChooseTarget =>
+        state = ChoosePlayerStone
+        notifyObservers()
+      case BeforeEndOfTurn => {
+        if (needToSetBlockStone) {
+          state = SetBlockStone
+        } else {
+          state = ChooseTarget
+        }
+        notifyObservers()
+      }
+      case SetBlockStone =>
+        state = ChooseTarget
+        notifyObservers()
+      case ChoosePlayerStone =>
+        state = ChoosePlayerStone
+        notifyObservers()
+    }
+  }
+
+  def redo(): Unit = {
+    if (!undoManager.isRedoStackEmpty()) {
+      undoManager.redoStep()
+      val oldState = state
+      state = Print
+      notifyObservers()
+      oldState match {
+        case ChoosePlayerStone =>
+          state = ChooseTarget
+          notifyObservers()
+        case ChooseTarget => {
+          if (needToSetBlockStone) {
+            state = SetBlockStone
+          } else {
+            state = BeforeEndOfTurn
+          }
+          notifyObservers()
+        }
+        case SetBlockStone =>
+          state = BeforeEndOfTurn
+          notifyObservers()
+        case BeforeEndOfTurn =>
+          state = BeforeEndOfTurn
+          notifyObservers()
       }
     }
-    state=PlayerWon
-    notifyObservers
   }
 
-  def dice(): Unit = {
+  def endTurn(): Unit = {
+    state = EndTurn
+    nextTurn()
+  }
+
+  private def nextTurn(): Unit = {
+    if (!gameBoard.checkWin) {
+      undoManager.clear()
+      changePlayer()
+      dice()
+      state = Print
+      notifyObservers() //print GameBoard
+      state = ChoosePlayerStone
+      needToSetBlockStone = false
+      notifyObservers()
+    } else {
+      state = PlayerWon
+      notifyObservers()
+    }
+  }
+
+  def takeInput(x: Int, y: Int): Unit = {
+    state match {
+      case Print =>
+      case SetPlayerCount =>
+      case ChoosePlayerStone => {
+        if (checkValidPlayerStone(x, y)) {
+          chooseStone()
+        }
+      }
+      case ChooseTarget => {
+        if (setTarget(x, y)) {
+          chooseTarget()
+        }
+      }
+      case SetBlockStone => {
+        if (setTargetForBlockStone(x, y)) {
+          undoManager.doStep(new BlockStoneCommand(destField, this))
+          state = Print
+          notifyObservers()
+          state = BeforeEndOfTurn
+          notifyObservers()
+        }
+      }
+      case PlayerWon =>
+      case BeforeEndOfTurn =>
+      case EndTurn =>
+    }
+  }
+
+  def reset(): Unit = {
+    activePlayer = gameBoard.player3
+    state = SetPlayerCount
+    notifyObservers()
+  }
+
+  private def chooseStone(): Unit = {
+    undoManager.doStep(new ChooseCommand(chosenPlayerStone, this))
+    state = Print
+    notifyObservers()
+    state = ChooseTarget
+    notifyObservers()
+  }
+
+  private def chooseTarget(): Unit = {
+    undoManager.doStep(new MoveCommand(chosenPlayerStone, destField, this))
+    state = Print
+    notifyObservers()
+    if (needToSetBlockStone) {
+      state = SetBlockStone
+      notifyObservers()
+    } else {
+      state = BeforeEndOfTurn
+      notifyObservers()
+    }
+  }
+
+  private def dice(): Unit = {
     diced = scala.util.Random.nextInt(six) + 1
   }
 
-  def changePlayer: Unit ={
-    if(activePlayer.color==1){
+  private def changePlayer(): Unit = {
+    if (activePlayer.color == 1) {
       activePlayer = gameBoard.player4
-    } else if(activePlayer.color==4&&gameBoard.playerCount>=3){
+    } else if (activePlayer.color == 4 && gameBoard.playerCount >= 3) {
       activePlayer = gameBoard.player2
-    } else if(activePlayer.color==2&&gameBoard.playerCount==4){
+    } else if (activePlayer.color == 2 && gameBoard.playerCount == 4) {
       activePlayer = gameBoard.player3
-    }else if(activePlayer.color==3){
+    } else if (activePlayer.color == 3) {
       activePlayer = gameBoard.player1
-    } else{
+    } else {
       activePlayer = gameBoard.player1
     }
   }
 
-  def markPossibleMovesOfStone(stone: PlayerStone): Unit = {
-    if (stone.actualField == stone.startField) {
-        val x = activePlayer.stones(0).startField.asInstanceOf[Field].x
-        val y = activePlayer.stones(0).startField.asInstanceOf[Field].y
-        markPossibleMovesR(x, y, diced, ' ')
-    } else {
-      val x = stone.actualField.asInstanceOf[Field].x
-      val y = stone.actualField.asInstanceOf[Field].y
-      markPossibleMovesR(x, y, diced, ' ')
-    }
-  }
-
-  private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char): Unit = {
-    if (depth == 0) {
-      //Dont hit your own kind
-      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'p'&&gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor==activePlayer.color){
-        return
-      }
-      gameBoard.board(x)(y).asInstanceOf[Field].avariable = true
-      return
-    } else {
-      // If there is a blocking stone on the way dont go on
-      if (gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'b') {
-        return
-      }
-      // up
-      if (validField(x, y - 1) && cameFrom != 'u') {
-        markPossibleMovesR(x, y - 1, depth - 1, 'd')
-      }
-      // down
-      if (validField(x, y + 1) && cameFrom != 'd') {
-        markPossibleMovesR(x, y + 1, depth - 1, 'u')
-      }
-      // left
-      if (validField(x - 1, y) && cameFrom != 'r') {
-        markPossibleMovesR(x - 1, y, depth - 1, 'l')
-      }
-      // right
-      if (validField(x + 1, y) && cameFrom != 'l') {
-        markPossibleMovesR(x + 1, y, depth - 1, 'r')
-      }
-    }
-  }
-
-  def validField(x: Int, y: Int): Boolean = {
-    // check for a vailid field
-    if (y > 13 || y < 0) {
-      false
-    } else if (x > 16 || x < 0) {
-      false
-    } else if (gameBoard.board(x)(y).isFreeSpace()) {
-      false
-    } else {
-      true
-    }
-  }
-
-  def unmarkPossibleMoves(): Unit = {
-    for (y <- 0 to 15) {
-      for (x <- 0 to 16) {
-        if (!gameBoard.board(x)(y).isFreeSpace()) {
-          gameBoard.board(x)(y).asInstanceOf[Field].avariable = false
-        }
-      }
-    }
-  }
-
-  def makeMove(stone: PlayerStone, destField: Field): Boolean = {
-    val xStone = stone.actualField.asInstanceOf[Field].x
-    val yStone = stone.actualField.asInstanceOf[Field].y
-    val xDest = destField.x
-    val yDest = destField.y
-    if (validField(xDest, yDest) && validDestForMove(xDest, yDest)) {
-      val hitStone = gameBoard.changeTwoStones(gameBoard.board(xStone)(yStone).asInstanceOf[Field], destField)
-      hitStone.sort match {
-        case 'p' => {
-          gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
-          currentReturnStone = 'p'
-        }
-        case 'f' => currentReturnStone = 'f'
-        case 'b' => currentReturnStone = 'b'
-      }
+  def setTarget(x: Int, y: Int): Boolean = {
+    if (gameBoard.checkDestForPlayerStone(x, y)) {
+      destField = gameBoard.board(x)(y).asInstanceOf[Field]
       true
     } else {
       false
     }
   }
 
-  private def validDestForMove(x: Int, y: Int): Boolean = {
-    if (validField(x,y) && gameBoard.board(x)(y).asInstanceOf[Field].avariable) {
+  private def setTargetForBlockStone(x: Int, y: Int): Boolean = {
+    if (gameBoard.checkDestForBlockStone(x, y)) {
+      destField = gameBoard.board(x)(y).asInstanceOf[Field]
       true
     } else {
       false
     }
+
   }
 
-  def isChosenBlockStone(x: Int,y: Int): Boolean = {
-      if(validField(x,y)){
-        if(gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='f'){
-          gameBoard.setBlockStoneOnField(gameBoard.board(x)(y).asInstanceOf[Field])
-
-          true
-        }else {
-          false
-        }
-      }else{
-        false
-      }
-  }
-
-  def checkValidPlayerStone(x: Int,y: Int): Boolean ={
-    if(x>=0&&x<17&&y>=0&&y<16&&(!gameBoard.board(x)(y).isFreeSpace())&&gameBoard.board(x)(y).asInstanceOf[Field].stone.sort=='p'){
-      var retBool:Boolean = false
-      for(s <- activePlayer.stones){
-        if((s.actualField.asInstanceOf[Field].x==gameBoard.board(x)(y).asInstanceOf[Field].x)
-          &&(s.actualField.asInstanceOf[Field].y==gameBoard.board(x)(y).asInstanceOf[Field].y)){
-          chosenPlayerStone=gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone]
-          retBool=true
+  private def checkValidPlayerStone(x: Int, y: Int): Boolean = {
+    if (x >= 0 && x < 17 && y >= 0 && y < 16 && (!gameBoard.board(x)(y).isFreeSpace() && gameBoard.board(x)(y).asInstanceOf[Field].stone.sort == 'p')) {
+      var retBool: Boolean = false
+      for (s <- activePlayer.stones) {
+        if ((s.actualField.asInstanceOf[Field].x == gameBoard.board(x)(y).asInstanceOf[Field].x)
+          && (s.actualField.asInstanceOf[Field].y == gameBoard.board(x)(y).asInstanceOf[Field].y)) {
+          chosenPlayerStone = gameBoard.board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone]
+          retBool = true
         }
       }
       retBool
-    }else{
-      false
-    }
-  }
-
-  def makeAmove(x:Int,y:Int): Boolean ={
-    if(validDestForMove(x,y) && makeMove(chosenPlayerStone,gameBoard.board(x)(y).asInstanceOf[Field])){
-      true
-    }else{
-      false
-    }
-
-  }
-
-
-  private def checkWin: Boolean = {
-    val xWin = 8
-    val yWin = 0
-    if (gameBoard.board(xWin)(yWin).asInstanceOf[Field].stone.sort == 'p') {
-      true
     } else {
       false
     }
   }
-
 }

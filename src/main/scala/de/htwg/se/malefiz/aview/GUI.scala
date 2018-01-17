@@ -2,59 +2,40 @@ package de.htwg.se.malefiz.aview
 
 
 import java.awt.{Color, Font, Toolkit}
-
-import de.htwg.se.malefiz.controller.{Controller, Observer, State}
-
+import de.htwg.se.malefiz.Util.Observer
+import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
 
 
-class GUI(controller: Controller) extends Frame with Observer {
+class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val dim = Toolkit.getDefaultToolkit.getScreenSize
   private val screenX = dim.width
   private val screenY = dim.height
-  private var message = "test"
-  private var commandNotExecuted = true
+  private var message = "Ask Count First"
   controller.add(this)
   contents = new FlowPanel() {
     focusable = true
     listenTo(this.mouse.clicks)
+    listenTo(this.keys)
     reactions += {
       case MouseClicked(_, point, _, _, _) =>
-        val persx = size.width.toDouble / screenX.toDouble
-        val persy = size.height.toDouble / screenY.toDouble
-        val posX = point.x - size.width / 4
+        val posX = point.x - 20
         val posY = point.y - 100
-        val rectX = (posX / (36 * persx)).round.toInt
-        val rectY = (posY / (38 * persy)).round.toInt
-        controller.state match {
-          case SetPlayerCount =>
-          case ChosePlayerStone =>
+        val rectX = posX / ((size.width - 50) / 17)
+        val rectY = posY / ((size.height - 110) / 16)
+        controller.takeInput(rectX, rectY)
 
-            if (controller.checkValidPlayerStone(rectX, rectY)) {
-              commandNotExecuted = false
-            } else {
-              message = "You have to Chose one of your Stones"
-            }
-
-
-          case SetTarget => if (controller.makeAmove(rectX, rectY)) {
-            commandNotExecuted = false
-          } else {
-            message = "You have to chose a valid Target"
-          }
-          case SetBlockStone => if (controller.isChosenBlockStone(rectX, rectY)) {
-            commandNotExecuted = false
-          } else {
-            message = "You have to chose a valid Field to set BlockStone"
-          }
-
-          case Print =>
-          case _ =>
+      case KeyPressed(_, Key.Enter, _, _) => {
+        if (controller.state == BeforeEndOfTurn) {
+          controller.endTurn()
         }
-
-
+      }
+      case KeyPressed(_, Key.BackSpace, _, _) => {
+        controller.undo()
+        repaint()
+      }
     }
 
 
@@ -62,7 +43,7 @@ class GUI(controller: Controller) extends Frame with Observer {
       //Background
       background = Color.WHITE
       var activePlayerColorString = ""
-      var activePlayerColorasInt = controller.activePlayer.color
+      val activePlayerColorasInt = controller.activePlayer.color
       if (activePlayerColorasInt == 1) {
         activePlayerColorString = "Red"
       } else if (activePlayerColorasInt == 2) {
@@ -73,23 +54,20 @@ class GUI(controller: Controller) extends Frame with Observer {
         activePlayerColorString = "Blue"
       }
 
-      g.setFont(new Font("TimesRoman", Font.BOLD, 18))
+      g.setFont(new Font("TimesRoman", Font.BOLD, size.width / 60))
       g.drawString("Player: " + activePlayerColorString, 40, 40)
       g.drawString("" + message, size.width / 3, 40)
-      g.drawString("Diced: " + controller.diced.toString, size.width - 120, 40)
+      g.drawString("Diced: " + controller.diced.toString, size.width - size.width / 6, 40)
       //Playground
       g.setColor(Color.LIGHT_GRAY)
-      g.fillRect(10, 80, size.width - 20, size.height - 100)
-      //Print Gameboard
+      g.fillRect(10, 80, size.width - 20, size.height - 90)
+      printingGameboard(g)
+    }
+
+    private def printingGameboard(g: Graphics2D): Unit = {
       var x: Int = 0
       var y: Int = 0
-
-
-      var persx = size.width.toDouble / screenX.toDouble
-      var persy = size.height.toDouble / screenY.toDouble
-
-      var currentGB = controller.gameBoard.toString().replace(" ", "#").replace("###", "   ").trim
-
+      val currentGB = controller.gameBoard.toString.replace(" ", "#").replace("###", "   ").trim
       var check = 0
       var count = 0
       for (c <- currentGB) {
@@ -97,110 +75,80 @@ class GUI(controller: Controller) extends Frame with Observer {
           case '|' =>
             check += 1
             if (check == 3) {
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (22 * persx).toInt, (26 * persy).toInt)
+              drawOvalSmall()
               check = 0
               x += 1
             } else if (check == 1) {
-              if (count < 272) {
-                g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (38 * persy).toInt)
-                count += 1
-              }
-              g.setColor(Color.BLACK)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
+              drawRect(new Color(244, 164, 96))
+              drawOvalNormal(Color.BLACK)
             }
-
-
           case '\n' =>
             y += 1
             x = 0
             check = 0
-
           case ' ' =>
             check += 1
             if (check == 3) {
-              if (count < 272) {
-                g.setColor(new Color(244, 164, 96))
-                g.fillRect(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (36 * persx).toInt, (38 * persy).toInt)
-                count += 1
-              }
+              drawRect(new Color(244, 164, 96))
               check = 0
               x += 1
             }
-
           case '-'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.WHITE)
-            } else {
-              check = 2
-              g.setColor(Color.BLACK)
-            }
-
+          => setStoneColorWithoutBackground(Color.WHITE)
           case 'o'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.BLACK)
-            }
-
+          => setStoneColorWithoutBackground(Color.BLACK)
           case '1'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.RED)
-            }
-
+          => setStoneColorWithoutBackground(Color.RED)
           case '2'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.GREEN)
-            }
-
+          => setStoneColorWithoutBackground(Color.GREEN)
           case '3'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.YELLOW)
-            }
-
+          => setStoneColorWithoutBackground(Color.YELLOW)
           case '4'
-          =>
-            if (check == 1) {
-              check += 1
-              g.setColor(Color.BLUE)
-            }
-
+          => setStoneColorWithoutBackground(Color.BLUE)
           case 'x'
-          =>
-            if (check == 1) {
-              g.setColor(new Color(238, 118, 0))
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
-              check += 1
-              g.setColor(new Color(238, 118, 0))
-            }
-
+          => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
           case 'P'
-          =>
-            if (check == 1) {
-              g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
-              check += 1
-              g.setColor(Color.MAGENTA)
-            }
-
+          => setStoneColorWithBackgroundPainting(Color.MAGENTA)
           case 'B'
-          =>
-            if (check == 1) {
-              g.setColor(Color.ORANGE)
-              g.fillOval(x * (size.width / 40) + size.width / 4, y * (size.height / 20) + 100, (32 * persx).toInt, (36 * persy).toInt)
-              check += 1
-              g.setColor(Color.WHITE)
-            }
-
+          => setStoneColorWithBackgroundPainting(Color.WHITE)
           case _ =>
+        }
+      }
+
+      def setStoneColorWithoutBackground(color: Color): Unit = {
+        if (check == 1) {
+          check += 1
+          g.setColor(color)
+        }
+      }
+
+      def setStoneColorWithBackgroundPainting(color: Color): Unit = {
+        if (check == 1) {
+          g.setColor(new Color(238, 118, 0))
+          g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+            ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
+          check += 1
+          g.setColor(color)
+        }
+      }
+
+      def drawOvalSmall(): Unit = {
+        g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+          ((size.width - 50) / 17) - 6, ((size.height - 110) / 16) - 6)
+      }
+
+      def drawOvalNormal(color: Color): Unit = {
+        g.setColor(color)
+        g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+          ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
+      }
+
+      def drawRect(color: Color): Unit = {
+        if (count < 272) {
+          g.setColor(color)
+          g.fillRect(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+            (size.width - 50) / 17, (size.height - 110) / 16)
+          count += 1
         }
       }
     }
@@ -209,8 +157,9 @@ class GUI(controller: Controller) extends Frame with Observer {
   menuBar = new MenuBar {
     contents += new Menu("File") {
       mnemonic = Key.F
-      contents += new MenuItem(Action("Empty") {})
-      contents += new MenuItem(Action("New") {})
+      contents += new MenuItem(Action("New") {
+        controller.reset()
+      })
       contents += new MenuItem(Action("Save") {})
       contents += new MenuItem(Action("Load") {})
       contents += new MenuItem(Action("Quit") {
@@ -219,64 +168,78 @@ class GUI(controller: Controller) extends Frame with Observer {
     }
     contents += new Menu("Edit") {
       mnemonic = Key.E
-      contents += new MenuItem(Action("Undo") {})
-      contents += new MenuItem(Action("Redo") {})
+      contents += new MenuItem(Action("Undo") {
+        controller.undo()
+        repaint()
+      })
+      contents += new MenuItem(Action("Redo") {
+        controller.redo()
+        repaint()
+      })
     }
 
 
   }
 
-
+  size = dim
   visible = true
   resizable = true
-  size = dim
   title = "Malefitz"
+  controller.reset()
 
   override def closeOperation(): Unit = sys.exit(0)
 
-  override def update: Unit = {
+  override def update(): Unit = {
     controller.state match {
       case State.Print => repaint()
-      case State.SetBlockStone => {
-        commandNotExecuted = true
+      case State.SetBlockStone =>
         message = "Set a BlockStone"
         repaint()
-        mwait
-      }
-      case State.ChosePlayerStone => {
-        commandNotExecuted = true
+
+      case State.ChoosePlayerStone =>
         message = "Chose one of your Stones"
-        mwait
-      }
-      case State.SetTarget => {
-        commandNotExecuted = true
+
+      case State.ChooseTarget =>
         message = "Chose a Target Field"
-        mwait
-      }
-      case State.PlayerWon => {
-        ifWon
-      }
-      case State.SetPlayerCount => {
-        commandNotExecuted = true
+
+      case State.PlayerWon =>
+        val wonUI = new WinUI
+        wonUI.visible = true
+
+      case State.SetPlayerCount =>
+        controller.commandNotExecuted = true
         val countUI = new CountUI
-        countUI.visible=true
-        this.visible=false
-        mwait
-        this.visible=true
-        this.repaint
+        countUI.visible = true
+      case State.BeforeEndOfTurn =>
+        message = "Press Enter to end your turn or Backspace to undo"
+
+      case EndTurn =>
+    }
+  }
+
+  private class CountUI extends MainFrame {
+    title = "Playercount"
+    preferredSize = new Dimension(320, 70)
+    location = new Point(screenX / 3, screenY / 3)
+    contents = new FlowPanel() {
+      contents += Button("2 Player") {
+        controller.setPlayerCount(2)
+        dispose
+      }
+      contents += Button("3 Player") {
+        controller.setPlayerCount(3)
+        dispose
+      }
+      contents += Button("4 Player") {
+        controller.setPlayerCount(4)
+        dispose
       }
     }
   }
 
-  private def mwait: Unit = {
-    while (commandNotExecuted) {
-      for (_ <- 0 to 100000) {} //short spin routine
-    }
-  }
-
-  private def ifWon: Unit = {
+  private class WinUI extends MainFrame {
     var activePlayerColorString = ""
-    var activePlayerColorasInt = controller.activePlayer.color
+    var activePlayerColorasInt: Int = controller.activePlayer.color
     if (activePlayerColorasInt == 1) {
       activePlayerColorString = "Red"
     } else if (activePlayerColorasInt == 2) {
@@ -286,30 +249,17 @@ class GUI(controller: Controller) extends Frame with Observer {
     } else {
       activePlayerColorString = "Blue"
     }
-    message = "Player "+activePlayerColorString+" Won the Game!"
-    controller.unmarkPossibleMoves()
-    repaint
-    this.ignoreRepaint
-  }
-  private class CountUI extends MainFrame {
-    title = "Playercount"
-    preferredSize = new Dimension(320, 70)
-    location=(new Point(screenX/3,screenY/3))
+    title = "Victory"
+    preferredSize = new Dimension(400, 120)
+    location = new Point(screenX / 3, screenY / 3)
     contents = new FlowPanel() {
-      contents += Button("2 Player") {
-        controller.setPlayerCount(2)
-        commandNotExecuted=false
-        dispose
+      contents += new Label("Player " + activePlayerColorString + " Won the Game!")
+      contents += Button("Exit") {
+        sys.exit(0)
       }
-      contents += Button("3 Player") {
-        controller.setPlayerCount(3)
-        commandNotExecuted=false
-        dispose
-      }
-      contents += Button("4 Player") {
-        controller.setPlayerCount(4)
-        commandNotExecuted=false
-        dispose
+      contents += Button("New Game") {
+        controller.reset()
+        dispose()
       }
     }
   }
