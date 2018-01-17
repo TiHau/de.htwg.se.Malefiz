@@ -2,7 +2,7 @@ package de.htwg.se.malefiz.model
 
 import de.htwg.se.malefiz.controller._
 import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print,SetBlockStone
-  ,ChoosePlayerStone,ChooseTarget,BeforeEndOfTurn}
+  ,ChoosePlayerStone,ChooseTarget,BeforeEndOfTurn, PlayerWon}
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -111,6 +111,12 @@ class ControllerSpec extends WordSpec with Matchers {
     "change player from 2 to 1" in{
       controller.endTurn()
       controller.activePlayer shouldBe(Player(1))
+    }
+    "check win" in{
+      controller.gameBoard.board(8)(0).asInstanceOf[Field].stone =
+        PlayerStone(controller.gameBoard.board(8)(0), controller.gameBoard.board(8)(0), 1)
+      controller.endTurn()
+      controller.state shouldBe(PlayerWon)
     }
   }}
 
