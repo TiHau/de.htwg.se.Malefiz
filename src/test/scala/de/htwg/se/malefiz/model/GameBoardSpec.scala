@@ -52,5 +52,15 @@ class GameBoardSpec extends WordSpec with Matchers {
       }
     }
 
+  "A GameBoard" when {
+    "not win" should {
+      val board = GameBoard(4)
+
+      "should return false" in {
+
+        board.checkWin.shouldBe(false)
+      }
+    }
+  }
 }
 
