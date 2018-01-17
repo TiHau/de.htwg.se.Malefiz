@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.model
 
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print,EndTurn
+import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print,SetBlockStone
   ,ChoosePlayerStone,ChooseTarget,BeforeEndOfTurn}
 import org.scalatest._
 import org.junit.runner.RunWith
@@ -59,6 +59,21 @@ class ControllerSpec extends WordSpec with Matchers {
     "end move" in{
       controller.endTurn()
       controller.state shouldBe(ChoosePlayerStone)
+    }
+    "print" in{
+      controller.state = Print
+      controller.takeInput(3,14)
+      controller.state shouldBe(Print)
+    }
+    "setBlockStone" in{
+      controller.state = SetBlockStone
+      controller.takeInput(4,1)
+      controller.state shouldBe(BeforeEndOfTurn)
+    }
+    "befor end of turn" in{
+      controller.state = BeforeEndOfTurn
+      controller.takeInput(4,1)
+      controller.state shouldBe(BeforeEndOfTurn)
     }
 
   }}
