@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.model
 
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.controller.State.SetPlayerCount
+import de.htwg.se.malefiz.controller.State.{SetPlayerCount,Print}
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -29,6 +29,15 @@ class ControllerSpec extends WordSpec with Matchers {
     "when set Target" in{
       val ret =controller.setTarget(3,14)
       ret shouldBe(false)
+    }
+    "take input" in{
+      controller.takeInput(3,14)
+      controller.state shouldBe(Print)
+    }
+    "redo does nothing" in{
+      controller.takeInput(3,14)
+      controller.redo()
+      controller.state shouldBe(Print)
     }
 
   }}
