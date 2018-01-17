@@ -68,6 +68,8 @@ class ControllerSpec extends WordSpec with Matchers {
     "setBlockStone" in{
       controller.state = SetBlockStone
       controller.takeInput(4,1)
+      controller.undo()
+      controller.redo()
       controller.state shouldBe(BeforeEndOfTurn)
     }
     "befor end of turn" in{
