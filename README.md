@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=master)](https://travis-ci.org/HuntedHunter/SE_Rep) - Coveralls - Master
+[![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=master)](https://travis-ci.org/HuntedHunter/SE_Rep) - [![Coverage Status](https://coveralls.io/repos/github/HuntedHunter/SE_Rep/badge.svg?branch=master)](https://coveralls.io/github/HuntedHunter/SE_Rep?branch=master) - Master
 
 [![Build Status](https://travis-ci.org/HuntedHunter/SE_Rep.svg?branch=se)](https://travis-ci.org/HuntedHunter/SE_Rep) - [![Coverage Status](https://coveralls.io/repos/github/HuntedHunter/SE_Rep/badge.svg?branch=se)](https://coveralls.io/github/HuntedHunter/SE_Rep?branch=se) - Main
   
