@@ -52,5 +52,36 @@ class GameBoardSpec extends WordSpec with Matchers {
       }
     }
 
+  "A GameBoard" when {
+    "not win" should {
+      val board = GameBoard(4)
+
+      "should return false" in {
+
+        board.checkWin.shouldBe(false)
+      }
+    }
+  }
+  "A GameBoard" when{
+    "wrong Parameter" should{
+      val board = GameBoard(10)
+      "should have playercount 4" in{
+        board.playerCount shouldBe(4)
+      }
+      val board2 = GameBoard(1)
+      "should have playercount 2" in{
+        board2.playerCount shouldBe(2)
+      }
+    }
+  }
+  "A GameBoard" when{
+    "move Stone" should{
+      val board = GameBoard(10)
+      "Returns Option None" in{
+        board.moveStone(board.board(3)(14).asInstanceOf[Field],board.board(8)(0).asInstanceOf[Field]) should be(None)
+      }
+    }
+  }
+
 }
 

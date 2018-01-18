@@ -5,7 +5,7 @@ import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 
 case class TUI(controller: ControllerInterface) extends Observer {
   private val four: Int = 4
-  var checkNotFinished: Boolean = true
+  var checkFirst: Boolean = true
   print("TUI Malefiz\n")
   print("Welcome!!!\n")
   controller.add(this)
@@ -16,98 +16,38 @@ case class TUI(controller: ControllerInterface) extends Observer {
       "\nDiced: " + controller.diced
       + "\n")
   }
-
-  private def askForNewPlayerCount(): Unit = {
-    print("Pleas type in how many Players wan't to play:\n")
-    val input = readInput match {
-      case Some(x) => x
-      case None =>
-        print("Invalid number, number of players set to 4!\n")
-        four
-    }
-    controller.setPlayerCount(input)
-    print("Thanks, Malefitz is starting now :) \n")
-
-  }
-
-  private def getBlockStoneDest(): Unit = {
-
-    while (checkNotFinished) {
-
-      print("X: ")
+   def readLine(): Unit = {
       val x = readInput match {
         case Some(i) => i
-        case None =>
-          print("wrong argument\n")
-          0
+        case None =>0
       }
-
       val y = readInput match {
         case Some(i) => i
-        case None =>
-          print("wrong argument\n")
-          0
+        case None =>0
       }
-      if (controller.needToSetBlockStone) {
-        checkNotFinished = false
-      }
-    }
+      controller.takeInput(x,y)
+
+
   }
 
-  private def getChosenPlayerStone(): Unit = {
-    while (checkNotFinished) {
-
-      print("X: ")
-      val x = readInput match {
-        case Some(i) => i
-        case None =>
-          print("wrong argument\n")
-          0
-      }
-       val y = readInput match {
-        case Some(i) => i
-        case None =>
-          print("wrong argument\n")
-          0
-      }
-
-
-
-    }
-  }
-
-  private def askDestination(): Unit = {
-    while (checkNotFinished) {
-
-      print("X: ")
-      val x = readInput match {
-        case Some(i) => i
-        case None =>
-          print("wrong argument\n")
-          0
-      }
-
-      val y = readInput match {
-        case Some(i) => i
-        case None =>
-
-          0
-      }
-      if (true) {
-        checkNotFinished = false
-      } else {
-        print("Invalid Destination! Please try again.")
-      }
-
-    }
-  }
-
-  def readInput: Option[Int] = {
+  private def readInput: Option[Int] = {
     val line = scala.io.StdIn.readLine()
     line match {
       case "exit" => sys.exit(0)
       case "restart" =>
-        checkNotFinished=false
+        checkFirst=true
+        controller.reset()
+        None
+      case "undo"=>
+        controller.undo()
+        printGameBoard()
+        None
+      case "redo"=>
+        controller.redo()
+        printGameBoard()
+        None
+      case "enter"=>
+        controller.endTurn()
         None
       case _ =>
         try {
@@ -123,17 +63,16 @@ case class TUI(controller: ControllerInterface) extends Observer {
       case State.Print =>  printGameBoard()
       case State.SetBlockStone =>
 
-        print("Set destination for hit Blockstone\n")
+        print("Set destination for hit Blockstone(First Input X then Y)\n")
       case State.ChoosePlayerStone =>
 
-        print("Type in Coordinates of your PlayerStone\n")
+        print("Type in Coordinates of your PlayerStone(First Input X then Y)\n")
       case State.SetPlayerCount =>
-        controller.commandNotExecuted= true
-        askForNewPlayerCount()
       case State.ChooseTarget =>
-
-        print("Set destination for your Stone\n")
+        print("Set destination for your Stone(First Input X then Y)\n")
       case State.PlayerWon => print("Player: " + controller.activePlayer.color + " Won the Game\n")
+      case State.BeforeEndOfTurn => print("please type enter to go to next move ore \"undo\" tu revert\n")
+      case State.EndTurn=>
     }
   }
 }

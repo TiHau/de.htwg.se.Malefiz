@@ -12,5 +12,6 @@ class PlayerSpec extends WordSpec with Matchers {
       player.color should be(1)
     }
 
+
   }}
 }

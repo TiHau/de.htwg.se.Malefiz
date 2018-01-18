@@ -1,2 +1,5 @@
+import de.htwg.se.malefiz.model.GameBoard
 
-(0 to 16)
+val game = GameBoard(2)
+print(game.toString)
+
