@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.Util.Command
-import de.htwg.se.malefiz.model.GameBoard.{AbstractField, Field, PlayerStone}
+import de.htwg.se.malefiz.model.gameboard.{AbstractField, Field, PlayerStone}
 
 class ChooseCommand(stone: PlayerStone, controller: ControllerInterface) extends Command {
 

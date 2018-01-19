@@ -1,8 +1,8 @@
-package de.htwg.se.malefitz.controller
+package de.htwg.se.malefiz.util
 
 import de.htwg.se.malefiz.aview.TUI
 import de.htwg.se.malefiz.controller.Controller
-import de.htwg.se.malefiz.model.GameBoard.GameBoard
+import de.htwg.se.malefiz.model.gameboard.GameBoard
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, WordSpec}

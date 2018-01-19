@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.model.GameBoard
+package de.htwg.se.malefiz.model.gameboard
 
 import scala.swing.Publisher
 

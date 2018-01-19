@@ -1,8 +1,8 @@
-package de.htwg.se.malefitz.controller
+package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.model.GameBoard.{Field, GameBoard, Player, PlayerStone}
+import de.htwg.se.malefiz.model.gameboard.{Field, GameBoard, Player, PlayerStone}
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
