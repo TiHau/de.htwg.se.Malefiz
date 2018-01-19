@@ -1,10 +1,11 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.util
 
 import de.htwg.se.malefiz.aview.TUI
 import de.htwg.se.malefiz.controller.Controller
+import de.htwg.se.malefiz.model.gameboard.GameBoard
 import org.junit.runner.RunWith
-import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.junit.JUnitRunner
+import org.scalatest.{Matchers, WordSpec}
 @RunWith(classOf[JUnitRunner])
 class ObserverSpec  extends WordSpec with Matchers{
   val controller = Controller(GameBoard(4))

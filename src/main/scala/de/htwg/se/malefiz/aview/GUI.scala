@@ -2,7 +2,7 @@ package de.htwg.se.malefiz.aview
 
 
 import java.awt.{Color, Font, Toolkit}
-import de.htwg.se.malefiz.Util.Observer
+import de.htwg.se.malefiz.util.Observer
 import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import scala.swing.event._
 import scala.swing._

@@ -1,12 +1,10 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.controller
 
+import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.controller.State.{
-  SetPlayerCount, Print, SetBlockStone
-  , ChoosePlayerStone, ChooseTarget, BeforeEndOfTurn, PlayerWon
-}
-import org.scalatest._
+import de.htwg.se.malefiz.model.gameboard.{Field, GameBoard, Player, PlayerStone}
 import org.junit.runner.RunWith
+import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])

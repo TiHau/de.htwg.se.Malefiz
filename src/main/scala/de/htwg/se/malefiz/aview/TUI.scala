@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.aview
 
-import de.htwg.se.malefiz.Util.Observer
+import de.htwg.se.malefiz.util.Observer
 import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 
 case class TUI(controller: ControllerInterface) extends Observer {
@@ -33,6 +33,8 @@ case class TUI(controller: ControllerInterface) extends Observer {
   private def readInput: Option[Int] = {
     val line = scala.io.StdIn.readLine()
     line match {
+      case "count"=> controller.setPlayerCount(4)
+        None
       case "exit" => sys.exit(0)
       case "restart" =>
         checkFirst=true
@@ -71,7 +73,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
       case State.ChooseTarget =>
         print("Set destination for your Stone(First Input X then Y)\n")
       case State.PlayerWon => print("Player: " + controller.activePlayer.color + " Won the Game\n")
-      case State.BeforeEndOfTurn => print("please type enter to go to next move ore \"undo\" tu revert\n")
+      case State.BeforeEndOfTurn => print("Please type \"enter\" to go to next Move ore \"undo\" to revert\n")
       case State.EndTurn=>
     }
   }
