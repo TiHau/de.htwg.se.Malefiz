@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.controller
 
-import de.htwg.se.malefiz.Util.UndoManager
+import de.htwg.se.malefiz.util.UndoManager
 import de.htwg.se.malefiz.model.gameboard._
 import de.htwg.se.malefiz.controller.State._
 

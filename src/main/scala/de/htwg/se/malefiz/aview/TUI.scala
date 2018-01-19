@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.aview
 
-import de.htwg.se.malefiz.Util.Observer
+import de.htwg.se.malefiz.util.Observer
 import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 
 case class TUI(controller: ControllerInterface) extends Observer {

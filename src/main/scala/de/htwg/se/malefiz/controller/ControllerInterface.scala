@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.controller
 
-import de.htwg.se.malefiz.Util.Observable
+import de.htwg.se.malefiz.util.Observable
 import de.htwg.se.malefiz.controller.State.Print
 import de.htwg.se.malefiz.model.gameboard._
 
