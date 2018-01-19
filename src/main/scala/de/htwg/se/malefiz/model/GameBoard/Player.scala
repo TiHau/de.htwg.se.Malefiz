@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.model.GameBoard
 
 case class Player(color: Int){
   private val numberOfStones = 5

@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz
 
 import de.htwg.se.malefiz.controller.Controller
-import de.htwg.se.malefiz.model.GameBoard
+import de.htwg.se.malefiz.model.GameBoard.GameBoard
 import de.htwg.se.malefiz.aview.TUI
 import de.htwg.se.malefiz.aview.GUI
 

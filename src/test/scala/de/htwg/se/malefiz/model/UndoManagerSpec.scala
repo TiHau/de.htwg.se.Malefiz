@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.model.GameBoard
 
 import de.htwg.se.malefiz.Util.UndoManager
 import org.junit.runner.RunWith

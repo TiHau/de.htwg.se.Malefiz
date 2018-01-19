@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.model.GameBoard
 
 import org.scalatest._
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package de.htwg.se.malefiz.model
+package de.htwg.se.malefiz.model.GameBoard
 
 abstract class AbstractField() {
   def isFreeSpace(): Boolean = false
