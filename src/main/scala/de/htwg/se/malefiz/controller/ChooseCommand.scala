@@ -5,8 +5,6 @@ import de.htwg.se.malefiz.model.gameboard.{AbstractField, Field, PlayerStone}
 
 class ChooseCommand(stone: PlayerStone, controller: ControllerInterface) extends Command {
 
-  val oldGameBord: Array[Array[AbstractField]] = controller.gameBoard.board
-
   override def doStep(): Unit =   {
     if (stone.actualField == stone.startField) {
       val x = controller.activePlayer.stones(0).startField.asInstanceOf[Field].x
