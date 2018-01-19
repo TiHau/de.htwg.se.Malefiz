@@ -18,3 +18,7 @@ libraryDependencies ++= {
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
 
 libraryDependencies += "org.scala-lang" % "scala-swing" % "2.11+"
+
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
+
+libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"

@@ -1,13 +1,15 @@
 package de.htwg.se.malefiz.controller
 
-import de.htwg.se.malefiz.Util.UndoManager
-import de.htwg.se.malefiz.model._
+import com.typesafe.scalalogging.Logger
+import de.htwg.se.malefiz.util.UndoManager
+import de.htwg.se.malefiz.model.gameboard._
 import de.htwg.se.malefiz.controller.State._
 
 import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
 
+  private val logger = Logger(classOf[Controller])
   private val undoManager = new UndoManager()
   private val six = 6
   var activePlayer: Player = gameBoard.player3
@@ -22,6 +24,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   }
 
   def undo(): Unit = {
+    logger.info("Active Player pressed undo")
     undoManager.undoStep()
     val oldState = state
     state = Print
@@ -49,6 +52,7 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
 
   def redo(): Unit = {
     if (!undoManager.isRedoStackEmpty()) {
+      logger.info("Active Player pressed redo")
       undoManager.redoStep()
       val oldState = state
       state = Print
