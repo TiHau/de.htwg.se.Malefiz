@@ -143,23 +143,47 @@ class ControllerSpec extends WordSpec with Matchers {
       }
       "beat a PlayerStone" in {
         controller.setPlayerCount(2)
+        var p4S = controller.activePlayer.stones(4)
         controller.diced = 1
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = controller.activePlayer.stones(0)
+        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
 
+        controller.state = ChoosePlayerStone
         controller.takeInput(2,14)
         controller.takeInput(2,13)
-        controller.activePlayer.stones(0).actualField shouldBe(controller.activePlayer.stones(0).startField)
+        p4S.actualField shouldBe(p4S.startField)
         controller.undo()
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe(controller.activePlayer.stones(0))
+        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe(p4S)
       }
 
       "beat a BlockStone" in {
         controller.setPlayerCount(2)
+        controller.activePlayer = controller.gameBoard.player1
         controller.diced = 5
         controller.takeInput(2,14)
         controller.takeInput(4,11)
         controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
+
+        controller.undo()
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('b')
+        controller.redo()
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
       }
+
+      "undo before end of turn" in {
+        controller.setPlayerCount(2)
+        controller.activePlayer = controller.gameBoard.player1
+        controller.diced = 1
+        controller.state = ChoosePlayerStone
+        controller.takeInput(3,14)
+        controller.state shouldBe(ChooseTarget)
+        controller.takeInput(2,13)
+        controller.state shouldBe(BeforeEndOfTurn)
+        controller.undo()
+        controller.state shouldBe(ChooseTarget)
+        controller.redo()
+        controller.state shouldBe(BeforeEndOfTurn)
+      }
+
     }
   }
 
