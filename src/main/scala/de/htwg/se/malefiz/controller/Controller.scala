@@ -73,8 +73,6 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
           state = BeforeEndOfTurn
           notifyObservers()
         case BeforeEndOfTurn =>
-          state = BeforeEndOfTurn
-          notifyObservers()
       }
     }
   }
