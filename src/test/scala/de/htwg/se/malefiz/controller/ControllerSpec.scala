@@ -178,6 +178,8 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe(ChooseTarget)
         controller.takeInput(2,13)
         controller.state shouldBe(BeforeEndOfTurn)
+        controller.redo()
+        controller.state shouldBe(BeforeEndOfTurn)
         controller.undo()
         controller.state shouldBe(ChooseTarget)
         controller.redo()
