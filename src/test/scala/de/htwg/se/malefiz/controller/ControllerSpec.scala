@@ -157,6 +157,7 @@ class ControllerSpec extends WordSpec with Matchers {
 
       "beat a BlockStone" in {
         controller.setPlayerCount(2)
+        controller.activePlayer = controller.gameBoard.player1
         controller.diced = 5
         controller.takeInput(2,14)
         controller.takeInput(4,11)
@@ -166,6 +167,21 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('b')
         controller.redo()
         controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
+      }
+
+      "undo before end of turn" in {
+        controller.setPlayerCount(2)
+        controller.activePlayer = controller.gameBoard.player1
+        controller.diced = 1
+        controller.state = ChoosePlayerStone
+        controller.takeInput(3,14)
+        controller.state shouldBe(ChooseTarget)
+        controller.takeInput(2,13)
+        controller.state shouldBe(BeforeEndOfTurn)
+        controller.undo()
+        controller.state shouldBe(ChooseTarget)
+        controller.redo()
+        controller.state shouldBe(BeforeEndOfTurn)
       }
 
     }
