@@ -147,9 +147,12 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.diced = 1
         controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
 
+        controller.state = ChoosePlayerStone
         controller.takeInput(2,14)
         controller.takeInput(2,13)
         p4S.actualField shouldBe(p4S.startField)
+        controller.undo()
+        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe(p4S)
       }
 
       "beat a BlockStone" in {
