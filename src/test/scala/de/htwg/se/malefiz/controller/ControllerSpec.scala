@@ -143,14 +143,13 @@ class ControllerSpec extends WordSpec with Matchers {
       }
       "beat a PlayerStone" in {
         controller.setPlayerCount(2)
+        var p4S = controller.activePlayer.stones(4)
         controller.diced = 1
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = controller.activePlayer.stones(0)
+        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
 
         controller.takeInput(2,14)
         controller.takeInput(2,13)
-        controller.activePlayer.stones(0).actualField shouldBe(controller.activePlayer.stones(0).startField)
-        controller.undo()
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe(controller.activePlayer.stones(0))
+        p4S.actualField shouldBe(p4S.startField)
       }
 
       "beat a BlockStone" in {
