@@ -161,7 +161,13 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.takeInput(2,14)
         controller.takeInput(4,11)
         controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
+
+        controller.undo()
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('b')
+        controller.redo()
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
       }
+
     }
   }
 
