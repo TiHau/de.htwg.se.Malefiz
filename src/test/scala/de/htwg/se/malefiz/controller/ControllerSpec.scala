@@ -186,6 +186,34 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe(BeforeEndOfTurn)
       }
 
+      "set invalid playerstone target" in {
+        controller.setPlayerCount(2)
+        controller.state = ChooseTarget
+        controller.takeInput(0,15)
+        controller.state shouldBe(ChooseTarget)
+      }
+
+      "set invalid bockstone target" in {
+        controller.setPlayerCount(2)
+        controller.state = SetBlockStone
+        controller.takeInput(0,15)
+        controller.state shouldBe(SetBlockStone)
+      }
+
+      "input in state beforeEndOfTurn" in {
+        controller.setPlayerCount(2)
+        controller.state = BeforeEndOfTurn
+        controller.takeInput(0,15)
+        controller.state shouldBe(BeforeEndOfTurn)
+      }
+
+      "input while state is print" in {
+        controller.setPlayerCount(2)
+        controller.state = Print
+        controller.takeInput(2,14)
+        controller.state shouldBe(Print)
+      }
+
     }
   }
 
