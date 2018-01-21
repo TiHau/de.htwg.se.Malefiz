@@ -18,55 +18,62 @@ class FileIO extends FileIOInterface{
   }
 
   def gameBoardToJson(controller: ControllerInterface): JsObject = {
-    var jsObject= new JsObject(new TreeMap())
-    var jsObjectBoard =new JsObject(new TreeMap())
-    var jsObjectController =new JsObject(new TreeMap())
-    val playerCount = controller.gameBoard.playerCount
-    jsObjectBoard.+( "playerCount"->JsNumber(playerCount))
-    for (y <- 0 to 15) {
-      for (x <- 0 to 16) {
-        val abstractField = controller.gameBoard.board(x)(y)
-        val isfreeSpace = abstractField.isFreeSpace()
-        jsObjectBoard.+("isFreeSpace"->JsBoolean(isfreeSpace))
-        if (!isfreeSpace) {
-          val field = abstractField.asInstanceOf[Field]
-          val avariable=field.avariable
-          jsObjectBoard.+("avariable"->JsBoolean(avariable))
-          val x = field.x
-          jsObjectBoard.+("x"->JsNumber(x))
-          val y =field.y
-          jsObjectBoard.+("y"->JsNumber(y))
-          val stone = field.stone
-          val sort = stone.sort
-          jsObjectBoard.fields +"sort"->JsString(sort.toString)
-          if (stone.sort == 'p') {
-            val playerStone = stone.asInstanceOf[PlayerStone]
-            val startFieldX = playerStone.startField.asInstanceOf[Field].x
-            jsObjectBoard.fields +"startX"->JsNumber(startFieldX)
-            val startFieldY = playerStone.startField.asInstanceOf[Field].y
-            jsObjectBoard.fields +"startY"->JsNumber(startFieldY)
-            val playerColor = playerStone.playerColor
-            jsObjectBoard.fields +"playerColor"->JsNumber(playerColor)
+    var jsObjectFields = JsObject(Seq("test"-> JsString("test")))
+
+      for (y <- 0 to 15) {
+        for (x <- 0 to 16) {
+          val abstractField = controller.gameBoard.board(x)(y)
+          val isfreeSpace = abstractField.isFreeSpace()
+          "isFreeSpace" -> JsBoolean(isfreeSpace)
+          if (!isfreeSpace) {
+            val field = abstractField.asInstanceOf[Field]
+            val avariable = field.avariable
+            "avariable" -> JsBoolean(avariable)
+            val x = field.x
+            "x" -> JsNumber(x)
+            val y = field.y
+            "y" -> JsNumber(y)
+            val stone = field.stone
+            val sort = stone.sort
+            "sort" -> JsString(sort.toString)
+            if (stone.sort == 'p') {
+              val playerStone = stone.asInstanceOf[PlayerStone]
+              val startFieldX = playerStone.startField.asInstanceOf[Field].x
+              "startX" -> JsNumber(startFieldX)
+              val startFieldY = playerStone.startField.asInstanceOf[Field].y
+              "startY" -> JsNumber(startFieldY)
+              val playerColor = playerStone.playerColor
+              "playerColor" -> JsNumber(playerColor)
+            }
           }
         }
       }
-    }
 
+    val playerCount = controller.gameBoard.playerCount
+    var jsObjectBoard =JsObject(Seq(
+    "playerCount"->JsNumber(playerCount),
+      "fields" -> jsObjectFields
+
+    )
+    )
     val activeColor  =controller.activePlayer.color
-    jsObjectController.fields +"activeColor"->JsNumber(activeColor)
     val diced = controller.diced
-    jsObjectController.fields +"diced"->JsNumber(diced)
     val state = controller.state
-    jsObjectController.fields +"state"->JsString(state.toString)
     val needToSetBlockStone = controller.needToSetBlockStone
-    jsObjectController.fields +"needToSetBlockStone"->JsBoolean(needToSetBlockStone)
     val commandNotExecuted = controller.commandNotExecuted
-    jsObjectController.fields +"commandNotExecuted"->JsBoolean(commandNotExecuted)
-
-    jsObject.+ ("gameBoard" -> jsObjectBoard)
-    jsObject.+ ("controller"-> jsObjectController)
+    var jsObjectController = JsObject(Seq(
+    "activeColor"->JsNumber(activeColor),
+    "diced"->JsNumber(diced),
+    "state"->JsString(state.toString),
+    "needToSetBlockStone"->JsBoolean(needToSetBlockStone),
+    "commandNotExecuted"->JsBoolean(commandNotExecuted)
+    )
+    )
+    var jsObject:JsObject= JsObject(Seq(
+      "gameBoard" -> jsObjectBoard,
+      "controller"-> jsObjectController
+    ))
     jsObject
-
   }
 
 
