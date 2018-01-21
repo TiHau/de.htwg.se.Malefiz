@@ -2,11 +2,14 @@ package de.htwg.se.malefiz.aview
 
 
 import java.awt.{Color, Font, Toolkit}
+
 import de.htwg.se.malefiz.util.Observer
 import de.htwg.se.malefiz.controller.{ControllerInterface, State}
+
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
+import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
 
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {
@@ -160,7 +163,10 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       contents += new MenuItem(Action("New") {
         controller.reset()
       })
-      contents += new MenuItem(Action("Save") {})
+      contents += new MenuItem(Action("Save") {
+        val fileIO = new FileIO
+        fileIO.save(controller)
+      })
       contents += new MenuItem(Action("Load") {})
       contents += new MenuItem(Action("Quit") {
         sys.exit(0)

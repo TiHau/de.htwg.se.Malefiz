@@ -1,5 +1,8 @@
 package de.htwg.se.malefiz.model.fileio
 
-trait FileIOInterface {
+import de.htwg.se.malefiz.controller.ControllerInterface
 
+trait FileIOInterface {
+ // def load:Option[ControllerInterface]
+  def save(controller:ControllerInterface):Unit
 }
