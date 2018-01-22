@@ -10,7 +10,8 @@ trait ControllerInterface extends Observable with Publisher{
   private val six = 6
   def undo() : Unit
   def redo(): Unit
-  def setPlayerCount(countPlayer: Int): Unit
+  def newGame(countPlayer: Int): Unit
+  def setPlayerCount(playerCount: Int): Unit
   def gameBoard:GameBoardInterface
   def endTurn(): Unit
   def takeInput(X:Int,Y:Int): Unit

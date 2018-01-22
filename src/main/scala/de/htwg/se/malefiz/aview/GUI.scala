@@ -9,7 +9,7 @@ import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
-import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
+import de.htwg.se.malefiz.model.fileio.fileioxml.FileIO
 
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {
@@ -239,15 +239,15 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     location = new Point(screenX / 3, screenY / 3)
     contents = new FlowPanel() {
       contents += Button("2 Player") {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         dispose
       }
       contents += Button("3 Player") {
-        controller.setPlayerCount(3)
+        controller.newGame(3)
         dispose
       }
       contents += Button("4 Player") {
-        controller.setPlayerCount(4)
+        controller.newGame(4)
         dispose
       }
     }
