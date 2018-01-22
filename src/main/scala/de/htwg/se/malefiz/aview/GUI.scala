@@ -166,8 +166,12 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       contents += new MenuItem(Action("Save") {
         val fileIO = new FileIO
         fileIO.save(controller)
+        repaint()
       })
-      contents += new MenuItem(Action("Load") {})
+      contents += new MenuItem(Action("Load") {
+        val fileIO = new FileIO
+        fileIO.load(controller)
+      })
       contents += new MenuItem(Action("Quit") {
         sys.exit(0)
       })

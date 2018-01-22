@@ -7,10 +7,9 @@ import de.htwg.se.malefiz.model.gameboard._
 import scala.swing.Publisher
 
 trait ControllerInterface extends Observable with Publisher{
-  def activePlayer:Player
+  private val six = 6
   def undo() : Unit
   def redo(): Unit
-  def diced:Int
   def setPlayerCount(countPlayer: Int): Unit
   def gameBoard:GameBoardInterface
   def endTurn(): Unit
@@ -19,5 +18,6 @@ trait ControllerInterface extends Observable with Publisher{
   var state: State.Value = Print
   var needToSetBlockStone = false
   var commandNotExecuted = true
-
+  var activePlayer: Player = gameBoard.player3
+  var diced: Int = six
 }

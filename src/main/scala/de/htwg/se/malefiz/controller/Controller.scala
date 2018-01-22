@@ -8,12 +8,9 @@ import de.htwg.se.malefiz.controller.State._
 import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
-
+  private val six = 6
   private val logger = Logger(classOf[Controller])
   private val undoManager = new UndoManager()
-  private val six = 6
-  var activePlayer: Player = gameBoard.player3
-  var diced: Int = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 

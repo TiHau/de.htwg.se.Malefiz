@@ -1,14 +1,49 @@
 package de.htwg.se.malefiz.model.fileio.fileioJson
 
-import de.htwg.se.malefiz.controller.ControllerInterface
+import de.htwg.se.malefiz.controller.{Controller, ControllerInterface}
 import de.htwg.se.malefiz.model.fileio.FileIOInterface
 import de.htwg.se.malefiz.model.gameboard.{Field, PlayerStone}
 import play.api.libs.json._
+import de.htwg.se.malefiz.controller.State._
+
+import scala.io.Source
 
 
 class FileIO extends FileIOInterface{
-  //override def load: Option[ControllerInterface] = ???
+  override def load(controller:ControllerInterface): Unit = {
+    val source: String = Source.fromFile("gameSavedMalefiz.json").getLines.mkString
+    val json: JsValue = Json.parse(source)
+    restoreController(json,controller)
 
+
+  }
+  private def restoreController(json: JsValue,controller:ControllerInterface): Unit ={
+    val activeColor = (json \ "controller" \ "activeColor").get.toString().toInt
+    val diced = (json \ "controller" \ "diced").get.toString().toInt
+    val state = (json \ "controller" \ "state").get.toString()
+    val needToSetBlockStone = (json \ "controller" \ "needToSetBlockStone").get.toString().toBoolean
+    val commandNotExecuted = (json \ "controller" \ "commandNotExecuted").get.toString().toBoolean
+    activeColor match {
+      case 1 => controller.activePlayer = controller.gameBoard.player1
+      case 2 => controller.activePlayer = controller.gameBoard.player2
+      case 3 => controller.activePlayer = controller.gameBoard.player3
+      case 4 => controller.activePlayer = controller.gameBoard.player4
+    }
+    controller.diced = diced
+    state match{
+      case "Print" => controller.state = Print
+      case "SetPlayerCount" => controller.state = SetPlayerCount
+      case "ChoosePlayerStone" => controller.state = ChoosePlayerStone
+      case "ChooseTarget" => controller.state = ChooseTarget
+      case "SetBlockStone" => controller.state = SetBlockStone
+      case "PlayerWon" => controller.state = PlayerWon
+      case "BeforeEndOfTurn" => controller.state = BeforeEndOfTurn
+      case "EndTurn" => controller.state = EndTurn
+      case _=>
+    }
+    controller.needToSetBlockStone = needToSetBlockStone
+    controller.commandNotExecuted = commandNotExecuted
+  }
   override def save(controller: ControllerInterface): Unit ={
     import  java.io._
     val pw = new PrintWriter(new File("gameSavedMalefiz.json"))
@@ -18,12 +53,12 @@ class FileIO extends FileIOInterface{
 
   def gameBoardToJson(controller: ControllerInterface): JsObject = {
     var i = 0
-    var jsObjectFields:JsObject = JsObject(Seq("field" + i-> JsString("")))
+    var jsObjectFields:JsObject = JsObject(Seq(""-> JsString("")))
       for (y <- 0 to 15) {
         for (x <- 0 to 16) {
           val abstractField = controller.gameBoard.board(x)(y)
           val isfreeSpace = abstractField.isFreeSpace()
-          jsObjectFields = jsObjectFields ++ JsObject(Seq("isFreeSpace"+i -> JsBoolean(isfreeSpace)))
+          jsObjectFields = jsObjectFields ++ JsObject(Seq("isFreeSpace" + i -> JsBoolean(isfreeSpace)))
           if (!isfreeSpace) {
             val field = abstractField.asInstanceOf[Field]
             val avariable = field.avariable
