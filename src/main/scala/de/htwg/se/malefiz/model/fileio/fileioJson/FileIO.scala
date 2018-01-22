@@ -15,6 +15,7 @@ class FileIO extends FileIOInterface{
     val json: JsValue = Json.parse(source)
     restoreGameBoard(json,controller)
     restoreController(json,controller)
+    controller.notifyObservers()
   }
   private def restoreController(json: JsValue,controller:ControllerInterface): Unit ={
     val activeColor = (json \ "controller" \ "activeColor").get.toString().toInt
@@ -43,7 +44,6 @@ class FileIO extends FileIOInterface{
       case "\"BeforeEndOfTurn\"" => controller.state = BeforeEndOfTurn
       case "\"EndTurn\"" => controller.state = EndTurn
     }
-    controller.notifyObservers()
     controller.needToSetBlockStone = needToSetBlockStone
     controller.commandNotExecuted = commandNotExecuted
   }
