@@ -13,8 +13,8 @@ class FileIO extends FileIOInterface{
   override def load(controller:ControllerInterface): Unit = {
     val source: String = Source.fromFile("gameSavedMalefiz.json").getLines.mkString
     val json: JsValue = Json.parse(source)
-    restoreController(json,controller)
     restoreGameBoard(json,controller)
+    restoreController(json,controller)
   }
   private def restoreController(json: JsValue,controller:ControllerInterface): Unit ={
     val activeColor = (json \ "controller" \ "activeColor").get.toString().toInt
@@ -35,22 +35,15 @@ class FileIO extends FileIOInterface{
     controller.diced = diced
     state match{
       case "\"Print\"" => controller.state = Print
-        controller.notifyObservers()
       case "\"SetPlayerCount\"" => controller.state = SetPlayerCount
-        controller.notifyObservers()
       case "\"ChoosePlayerStone\"" => controller.state = ChoosePlayerStone
-        controller.notifyObservers()
       case "\"ChooseTarget\"" => controller.state = ChooseTarget
-        controller.notifyObservers()
       case "\"SetBlockStone\"" => controller.state = SetBlockStone
-        controller.notifyObservers()
       case "\"PlayerWon\"" => controller.state = PlayerWon
-        controller.notifyObservers()
       case "\"BeforeEndOfTurn\"" => controller.state = BeforeEndOfTurn
-        controller.notifyObservers()
       case "\"EndTurn\"" => controller.state = EndTurn
-        controller.notifyObservers()
     }
+    controller.notifyObservers()
     controller.needToSetBlockStone = needToSetBlockStone
     controller.commandNotExecuted = commandNotExecuted
   }
@@ -58,11 +51,11 @@ class FileIO extends FileIOInterface{
 
   private def restoreGameBoard(json: JsValue,controller:ControllerInterface): Unit ={
     val playerCount = (json \ "gameBoard" \ "playerCount").get.toString().toInt
-    controller.gameBoard.setPlayerCountByLoad(playerCount)
+    controller.setPlayerCount(playerCount)
     var i = 0
     for (y <- 0 to 15) {
       for (x <- 0 to 16) {
-
+        val isFreeSpace = (json \ "gameBoard" \ "fields" \ "isFreeSpace").get.toString().toBoolean
        /* if (!isfreeSpace) {
 
             "avariable" + i
@@ -100,13 +93,9 @@ class FileIO extends FileIOInterface{
       for (y <- 0 to 15) {
         for (x <- 0 to 16) {
           val abstractField = controller.gameBoard.board(x)(y)
-          val isfreeSpace = abstractField.isFreeSpace()
-          jsObjectFields = jsObjectFields ++ JsObject(Seq("isFreeSpace" + i -> JsBoolean(isfreeSpace)))
-          if (!isfreeSpace) {
+          if (!abstractField.isFreeSpace()) {
             val field = abstractField.asInstanceOf[Field]
             val avariable = field.avariable
-            val x = field.x
-            val y = field.y
             val stone = field.stone
             val sort = stone.sort
             jsObjectFields = jsObjectFields ++ JsObject(Seq(
