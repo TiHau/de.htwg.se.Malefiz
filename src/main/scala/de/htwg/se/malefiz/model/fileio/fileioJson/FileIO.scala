@@ -83,12 +83,11 @@ class FileIO extends FileIOInterface{
   override def save(controller: ControllerInterface): Unit ={
     import  java.io._
     val pw = new PrintWriter(new File("saveFile.json"))
-    pw.write(Json.prettyPrint(gameBoardToJson(controller)))
+    pw.write(Json.prettyPrint(gameToJson(controller)))
     pw.close()
   }
 
-  def gameBoardToJson(controller: ControllerInterface): JsObject = {
-    var i = 0
+  def gameToJson(controller: ControllerInterface): JsObject = {
     var jsObjectFields:JsObject = JsObject(Seq(""-> JsString("")))
       for (y <- 0 to 15) {
         for (x <- 0 to 16) {
@@ -99,8 +98,8 @@ class FileIO extends FileIOInterface{
             val stone = field.stone
             val sort = stone.sort
             jsObjectFields = jsObjectFields ++ JsObject(Seq(
-              "avariable" + i -> JsBoolean(avariable),
-              "x" + i -> JsNumber(x),
+              "avariable" -> JsBoolean(avariable),
+              "x" -> JsNumber(x),
               "y" + i -> JsNumber(y),
               "sort" + i -> JsString(sort.toString)))
             if (stone.sort == 'p') {
