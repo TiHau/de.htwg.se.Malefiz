@@ -58,7 +58,33 @@ class FileIO extends FileIOInterface{
 
   private def restoreGameBoard(json: JsValue,controller:ControllerInterface): Unit ={
     val playerCount = (json \ "gameBoard" \ "playerCount").get.toString().toInt
-    //controller.gameBoard.playerCount = playerCount
+    controller.gameBoard.setPlayerCountByLoad(playerCount)
+    var i = 0
+    for (y <- 0 to 15) {
+      for (x <- 0 to 16) {
+
+       /* if (!isfreeSpace) {
+
+            "avariable" + i
+            "x" + i
+            "y" + i
+            "sort"
+          if (stone.sort == 'p') {
+            val playerStone = stone.asInstanceOf[PlayerStone]
+            val startFieldX = playerStone.startField.asInstanceOf[Field].x
+            val startFieldY = playerStone.startField.asInstanceOf[Field].y
+            val playerColor = playerStone.playerColor
+
+              "startX" + i
+              "startY" + i
+              "playerColor"
+            ))
+          }
+        }*/
+        i+=1
+      }
+    }
+
 
   }
   override def save(controller: ControllerInterface): Unit ={
@@ -76,7 +102,6 @@ class FileIO extends FileIOInterface{
           val abstractField = controller.gameBoard.board(x)(y)
           val isfreeSpace = abstractField.isFreeSpace()
           jsObjectFields = jsObjectFields ++ JsObject(Seq("isFreeSpace" + i -> JsBoolean(isfreeSpace)))
-          if (!isfreeSpace) {
             val field = abstractField.asInstanceOf[Field]
             val avariable = field.avariable
             val x = field.x
@@ -99,7 +124,6 @@ class FileIO extends FileIOInterface{
                 "playerColor" + i -> JsNumber(playerColor)
               ))
             }
-          }
           i+=1
         }
       }

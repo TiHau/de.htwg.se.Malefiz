@@ -368,4 +368,10 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
 
+  override def setPlayerCountByLoad(pCount: Int): Unit = {
+    playerCount = pCount
+    buildMalefitzGameBoard(board)
+    setBlockStones(board)
+    setPlayerStones(board,playerCount)
+  }
 }

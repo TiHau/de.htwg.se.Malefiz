@@ -16,6 +16,7 @@ trait GameBoardInterface extends Publisher {
   def forceMoveStone(current: Field, dest: Field): Unit
   def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit
   def unmarkPossibleMoves(): Unit
+  def setPlayerCountByLoad(pCount:Int):Unit
   def checkWin: Boolean
   val player1 = Player(one)
   val player2 = Player(two)
