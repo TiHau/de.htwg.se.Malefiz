@@ -113,7 +113,7 @@ class FileIO extends FileIOInterface{
               "avariable" + i -> JsBoolean(avariable),
               "x" + i -> JsNumber(x),
               "y" + i -> JsNumber(y),
-              "sort" -> JsString(sort.toString)))
+              "sort" + i -> JsString(sort.toString)))
             if (stone.sort == 'p') {
               val playerStone = stone.asInstanceOf[PlayerStone]
               val startFieldX = playerStone.startField.asInstanceOf[Field].x
