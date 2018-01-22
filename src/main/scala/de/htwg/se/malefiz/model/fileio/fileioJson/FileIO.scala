@@ -102,6 +102,7 @@ class FileIO extends FileIOInterface{
           val abstractField = controller.gameBoard.board(x)(y)
           val isfreeSpace = abstractField.isFreeSpace()
           jsObjectFields = jsObjectFields ++ JsObject(Seq("isFreeSpace" + i -> JsBoolean(isfreeSpace)))
+          if (!isfreeSpace) {
             val field = abstractField.asInstanceOf[Field]
             val avariable = field.avariable
             val x = field.x
@@ -124,6 +125,7 @@ class FileIO extends FileIOInterface{
                 "playerColor" + i -> JsNumber(playerColor)
               ))
             }
+          }
           i+=1
         }
       }
