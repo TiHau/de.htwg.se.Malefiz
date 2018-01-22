@@ -14,8 +14,7 @@ class FileIO extends FileIOInterface{
     val source: String = Source.fromFile("gameSavedMalefiz.json").getLines.mkString
     val json: JsValue = Json.parse(source)
     restoreController(json,controller)
-
-
+    restoreGameBoard(json,controller)
   }
   private def restoreController(json: JsValue,controller:ControllerInterface): Unit ={
     val activeColor = (json \ "controller" \ "activeColor").get.toString().toInt
@@ -54,6 +53,13 @@ class FileIO extends FileIOInterface{
     }
     controller.needToSetBlockStone = needToSetBlockStone
     controller.commandNotExecuted = commandNotExecuted
+  }
+
+
+  private def restoreGameBoard(json: JsValue,controller:ControllerInterface): Unit ={
+    val playerCount = (json \ "gameBoard" \ "playerCount").get.toString().toInt
+    //controller.gameBoard.playerCount = playerCount
+
   }
   override def save(controller: ControllerInterface): Unit ={
     import  java.io._
