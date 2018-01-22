@@ -23,23 +23,34 @@ class FileIO extends FileIOInterface{
     val state = (json \ "controller" \ "state").get.toString()
     val needToSetBlockStone = (json \ "controller" \ "needToSetBlockStone").get.toString().toBoolean
     val commandNotExecuted = (json \ "controller" \ "commandNotExecuted").get.toString().toBoolean
-    activeColor match {
-      case 1 => controller.activePlayer = controller.gameBoard.player1
-      case 2 => controller.activePlayer = controller.gameBoard.player2
-      case 3 => controller.activePlayer = controller.gameBoard.player3
-      case 4 => controller.activePlayer = controller.gameBoard.player4
+    if(activeColor == 1) {
+       controller.activePlayer = controller.gameBoard.player1
+    } else if(activeColor==2) {
+      controller.activePlayer = controller.gameBoard.player2
+    } else if(activeColor==3) {
+      controller.activePlayer = controller.gameBoard.player3
+    } else {
+      controller.activePlayer = controller.gameBoard.player4
     }
+
     controller.diced = diced
     state match{
-      case "Print" => controller.state = Print
-      case "SetPlayerCount" => controller.state = SetPlayerCount
-      case "ChoosePlayerStone" => controller.state = ChoosePlayerStone
-      case "ChooseTarget" => controller.state = ChooseTarget
-      case "SetBlockStone" => controller.state = SetBlockStone
-      case "PlayerWon" => controller.state = PlayerWon
-      case "BeforeEndOfTurn" => controller.state = BeforeEndOfTurn
-      case "EndTurn" => controller.state = EndTurn
-      case _=>
+      case "\"Print\"" => controller.state = Print
+        controller.notifyObservers()
+      case "\"SetPlayerCount\"" => controller.state = SetPlayerCount
+        controller.notifyObservers()
+      case "\"ChoosePlayerStone\"" => controller.state = ChoosePlayerStone
+        controller.notifyObservers()
+      case "\"ChooseTarget\"" => controller.state = ChooseTarget
+        controller.notifyObservers()
+      case "\"SetBlockStone\"" => controller.state = SetBlockStone
+        controller.notifyObservers()
+      case "\"PlayerWon\"" => controller.state = PlayerWon
+        controller.notifyObservers()
+      case "\"BeforeEndOfTurn\"" => controller.state = BeforeEndOfTurn
+        controller.notifyObservers()
+      case "\"EndTurn\"" => controller.state = EndTurn
+        controller.notifyObservers()
     }
     controller.needToSetBlockStone = needToSetBlockStone
     controller.commandNotExecuted = commandNotExecuted

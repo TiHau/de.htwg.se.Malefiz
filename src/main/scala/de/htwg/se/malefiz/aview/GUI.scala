@@ -171,6 +171,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       contents += new MenuItem(Action("Load") {
         val fileIO = new FileIO
         fileIO.load(controller)
+        repaint()
       })
       contents += new MenuItem(Action("Quit") {
         sys.exit(0)
@@ -208,22 +209,27 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
       case State.ChoosePlayerStone =>
         message = "Chose one of your Stones"
+        repaint()
 
       case State.ChooseTarget =>
         message = "Chose a Target Field"
+        repaint()
 
       case State.PlayerWon =>
         val wonUI = new WinUI
         wonUI.visible = true
+        repaint()
 
       case State.SetPlayerCount =>
         controller.commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
+        repaint()
       case State.BeforeEndOfTurn =>
         message = "Press Enter to end your turn or Backspace to undo"
+        repaint()
 
-      case EndTurn =>
+      case EndTurn => repaint()
     }
   }
 
