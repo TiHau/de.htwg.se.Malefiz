@@ -36,7 +36,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
   private def readInput: Option[Int] = {
     val line = scala.io.StdIn.readLine()
     line match {
-      case "count" => controller.setPlayerCount(4)
+      case "count" => controller.newGame(4)
         None
       case "exit" => sys.exit(0)
       case "restart" =>
@@ -67,14 +67,15 @@ case class TUI(controller: ControllerInterface) extends Observer {
     controller.state match {
       case State.Print => printGameBoard()
       case State.SetBlockStone =>
-
         logger.info("Set destination for hit Blockstone(First Input X then Y)\n")
+        printGameBoard()
       case State.ChoosePlayerStone =>
-
         logger.info("Type in Coordinates of your PlayerStone(First Input X then Y)\n")
+        printGameBoard()
       case State.SetPlayerCount =>
       case State.ChooseTarget =>
         logger.info("Set destination for your Stone(First Input X then Y)\n")
+        printGameBoard()
       case State.PlayerWon => logger.info("Player: " + controller.activePlayer.color + " Won the Game\n")
       case State.BeforeEndOfTurn => logger.info("Please type \"enter\" to go to next Move ore \"undo\" to revert\n")
       case State.EndTurn =>

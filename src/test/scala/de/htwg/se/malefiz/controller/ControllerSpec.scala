@@ -14,7 +14,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(new GameBoard(4))
       val player = Player(1)
       "can change player count specific" in {
-        controller.setPlayerCount(2) equals (controller.gameBoard.playerCount)
+        controller.newGame(2) equals (controller.gameBoard.playerCount)
       }
 
     }
@@ -124,7 +124,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.activePlayer shouldBe (controller.gameBoard.player1)
       }
       "change player from 4 to 1 with Playercount = 2" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.activePlayer = controller.gameBoard.player4
         controller.endTurn()
         controller.activePlayer shouldBe (controller.gameBoard.player1)
@@ -142,7 +142,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe (ChoosePlayerStone)
       }
       "beat a PlayerStone" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         var p4S = controller.activePlayer.stones(4)
         controller.diced = 1
         controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
@@ -156,7 +156,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "beat a BlockStone" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.activePlayer = controller.gameBoard.player1
         controller.diced = 5
         controller.takeInput(2,14)
@@ -170,7 +170,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "undo before end of turn" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.activePlayer = controller.gameBoard.player1
         controller.diced = 1
         controller.state = ChoosePlayerStone
@@ -187,28 +187,28 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "set invalid playerstone target" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.state = ChooseTarget
         controller.takeInput(0,15)
         controller.state shouldBe(ChooseTarget)
       }
 
       "set invalid bockstone target" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.state = SetBlockStone
         controller.takeInput(0,15)
         controller.state shouldBe(SetBlockStone)
       }
 
       "input in state beforeEndOfTurn" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.state = BeforeEndOfTurn
         controller.takeInput(0,15)
         controller.state shouldBe(BeforeEndOfTurn)
       }
 
       "input while state is print" in {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         controller.state = Print
         controller.takeInput(2,14)
         controller.state shouldBe(Print)
