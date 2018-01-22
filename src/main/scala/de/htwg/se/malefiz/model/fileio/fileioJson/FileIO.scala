@@ -11,7 +11,7 @@ import scala.io.Source
 
 class FileIO extends FileIOInterface{
   override def load(controller:ControllerInterface): Unit = {
-    val source: String = Source.fromFile("gameSavedMalefiz.json").getLines.mkString
+    val source: String = Source.fromFile("saveFile.json").getLines.mkString
     val json: JsValue = Json.parse(source)
     restoreGameBoard(json,controller)
     restoreController(json,controller)
