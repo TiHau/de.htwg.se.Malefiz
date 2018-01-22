@@ -82,7 +82,7 @@ class FileIO extends FileIOInterface{
   }
   override def save(controller: ControllerInterface): Unit ={
     import  java.io._
-    val pw = new PrintWriter(new File("gameSavedMalefiz.json"))
+    val pw = new PrintWriter(new File("saveFile.json"))
     pw.write(Json.prettyPrint(gameBoardToJson(controller)))
     pw.close()
   }
@@ -107,11 +107,9 @@ class FileIO extends FileIOInterface{
               val playerStone = stone.asInstanceOf[PlayerStone]
               val startFieldX = playerStone.startField.asInstanceOf[Field].x
               val startFieldY = playerStone.startField.asInstanceOf[Field].y
-              val playerColor = playerStone.playerColor
               jsObjectFields = jsObjectFields ++ JsObject(Seq(
                 "startX" + i -> JsNumber(startFieldX),
-                "startY" + i -> JsNumber(startFieldY),
-                "playerColor" + i -> JsNumber(playerColor)
+                "startY" + i -> JsNumber(startFieldY)
               ))
             }
           }
