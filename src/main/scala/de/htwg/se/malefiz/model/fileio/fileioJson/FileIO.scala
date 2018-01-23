@@ -47,14 +47,14 @@ class FileIO extends FileIOInterface {
     val jsV:JsValue = Json.parse("" + (json \ "board" \\ "fields").head + "")
     val fieldNodes = jsV.validate[List[JsValue]].get
     for (fieldNode <- fieldNodes ){
-
-      if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) { // ab hier Fehler weiß noch nicht welhalb 
+      println(fieldNode)
+      if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) {
 
         val x = (fieldNode \ "x").get.toString.toInt
         val y = (fieldNode \ "y").get.toString().toInt
         controller.gameBoard.board(x)(y).asInstanceOf[Field].avariable = (fieldNode \ "avariable").get.toString.toBoolean
 
-        (fieldNode \ "sort").get.toString.last match {
+        (fieldNode \ "sort").get.toString.last match { // Ab hier Fehler
           case 'p' =>
 
             val startFieldX = (fieldNode \ "startFieldX").get.toString.toInt
@@ -102,7 +102,7 @@ class FileIO extends FileIOInterface {
           for {
             x <- 0 to 16
             y <- 0 to 15
-          } yield JsObject(Seq("field"->fieldToJson(controller.gameBoard, x, y)))
+          } yield fieldToJson(controller.gameBoard, x, y)
         ),
         "playerCount" -> JsNumber(controller.gameBoard.playerCount)
       )
