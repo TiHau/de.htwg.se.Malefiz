@@ -10,7 +10,7 @@ object Malefiz {
     val controller = Controller(GameBoard(4))
     val tui = new TUI(controller)
     val gui = new GUI(controller)
-    while(true){
+    while (true) {
       tui.readLine()
     }
   }

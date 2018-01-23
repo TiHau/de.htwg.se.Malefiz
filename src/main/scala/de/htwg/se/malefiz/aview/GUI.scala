@@ -1,13 +1,14 @@
 package de.htwg.se.malefiz.aview
 
+import java.awt.{ Color, Font, Toolkit }
 
-import java.awt.{Color, Font, Toolkit}
 import de.htwg.se.malefiz.util.Observer
-import de.htwg.se.malefiz.controller.{ControllerInterface, State}
+import de.htwg.se.malefiz.controller.{ ControllerInterface, State }
+
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
-
+import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val dim = Toolkit.getDefaultToolkit.getScreenSize
@@ -37,7 +38,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
       }
     }
-
 
     override def paint(g: Graphics2D): Unit = {
       //Background
@@ -93,24 +93,15 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
               check = 0
               x += 1
             }
-          case '-'
-          => setStoneColorWithoutBackground(Color.WHITE)
-          case 'o'
-          => setStoneColorWithoutBackground(Color.BLACK)
-          case '1'
-          => setStoneColorWithoutBackground(Color.RED)
-          case '2'
-          => setStoneColorWithoutBackground(Color.GREEN)
-          case '3'
-          => setStoneColorWithoutBackground(Color.YELLOW)
-          case '4'
-          => setStoneColorWithoutBackground(Color.BLUE)
-          case 'x'
-          => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
-          case 'P'
-          => setStoneColorWithBackgroundPainting(Color.MAGENTA)
-          case 'B'
-          => setStoneColorWithBackgroundPainting(Color.WHITE)
+          case '-' => setStoneColorWithoutBackground(Color.WHITE)
+          case 'o' => setStoneColorWithoutBackground(Color.BLACK)
+          case '1' => setStoneColorWithoutBackground(Color.RED)
+          case '2' => setStoneColorWithoutBackground(Color.GREEN)
+          case '3' => setStoneColorWithoutBackground(Color.YELLOW)
+          case '4' => setStoneColorWithoutBackground(Color.BLUE)
+          case 'x' => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
+          case 'P' => setStoneColorWithBackgroundPainting(Color.MAGENTA)
+          case 'B' => setStoneColorWithBackgroundPainting(Color.WHITE)
           case _ =>
         }
       }
@@ -160,8 +151,16 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       contents += new MenuItem(Action("New") {
         controller.reset()
       })
-      contents += new MenuItem(Action("Save") {})
-      contents += new MenuItem(Action("Load") {})
+      contents += new MenuItem(Action("Save") {
+        val fileIO = new FileIO
+        fileIO.save(controller)
+        repaint()
+      })
+      contents += new MenuItem(Action("Load") {
+        val fileIO = new FileIO
+        fileIO.load(controller)
+        repaint()
+      })
       contents += new MenuItem(Action("Quit") {
         sys.exit(0)
       })
@@ -177,7 +176,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
       })
     }
-
 
   }
 
@@ -198,22 +196,27 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
       case State.ChoosePlayerStone =>
         message = "Chose one of your Stones"
+        repaint()
 
       case State.ChooseTarget =>
         message = "Chose a Target Field"
+        repaint()
 
       case State.PlayerWon =>
         val wonUI = new WinUI
         wonUI.visible = true
+        repaint()
 
       case State.SetPlayerCount =>
         controller.commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
+        repaint()
       case State.BeforeEndOfTurn =>
         message = "Press Enter to end your turn or Backspace to undo"
+        repaint()
 
-      case EndTurn =>
+      case EndTurn => repaint()
     }
   }
 
@@ -223,15 +226,15 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     location = new Point(screenX / 3, screenY / 3)
     contents = new FlowPanel() {
       contents += Button("2 Player") {
-        controller.setPlayerCount(2)
+        controller.newGame(2)
         dispose
       }
       contents += Button("3 Player") {
-        controller.setPlayerCount(3)
+        controller.newGame(3)
         dispose
       }
       contents += Button("4 Player") {
-        controller.setPlayerCount(4)
+        controller.newGame(4)
         dispose
       }
     }

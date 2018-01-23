@@ -22,3 +22,5 @@ libraryDependencies += "org.scala-lang" % "scala-swing" % "2.11+"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
+
+libraryDependencies += "com.typesafe.play" %% "play-json" % "2.5.15"

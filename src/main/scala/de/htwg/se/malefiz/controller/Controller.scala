@@ -8,19 +8,19 @@ import de.htwg.se.malefiz.controller.State._
 import scala.swing.Publisher
 
 case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
-
+  private val six = 6
   private val logger = Logger(classOf[Controller])
   private val undoManager = new UndoManager()
-  private val six = 6
-  var activePlayer: Player = gameBoard.player3
-  var diced: Int = six
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
-
-  def setPlayerCount(countPlayer: Int): Unit = {
+  def newGame(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
     nextTurn()
+  }
+
+  def setPlayerCount(playerCount: Int): Unit = {
+    gameBoard = GameBoard(playerCount)
   }
 
   def undo(): Unit = {
@@ -206,4 +206,9 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
       false
     }
   }
+
+  def setChoosenPlayerStone(newStone: PlayerStone): Unit = chosenPlayerStone = newStone
+  def getChoosenPlayerStone(): PlayerStone = chosenPlayerStone
+  def setDestField(newField: Field): Unit = destField = newField
+  def getDestField(): Field = destField
 }

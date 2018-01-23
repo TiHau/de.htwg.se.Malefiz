@@ -30,7 +30,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
   buildMalefitzGameBoard(board)
   setBlockStones(board)
 
-
   player1.stones(nu2) = PlayerStone(board(nu1)(nu14), board(nu1)(nu14), player1.color)
   player1.stones(nu1) = PlayerStone(board(nu1)(nu15), board(nu1)(nu15), player1.color)
   player1.stones(nu0) = PlayerStone(board(nu2)(nu14), board(nu2)(nu14), player1.color)
@@ -55,9 +54,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
   player4.stones(nu3) = PlayerStone(board(nu15)(nu14), board(nu15)(nu14), player4.color)
   player4.stones(nu4) = PlayerStone(board(nu15)(nu15), board(nu15)(nu15), player4.color)
 
-
   setPlayerStones(board, playerCount)
-
 
   private def buildMalefitzGameBoard(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
     val empty = EmptySpace()
@@ -87,7 +84,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
           board(nu6)(y) = Field(nu6, y, FreeStone())
           board(nu10)(y) = Field(nu10, y, FreeStone())
 
-
         case 7 => for (i <- nu0 to nu16) {
           if (i >= nu4 && i <= nu12) {
             board(i)(y) = Field(i, y, FreeStone())
@@ -96,7 +92,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
         case 8 =>
           board(nu12)(y) = Field(nu12, y, FreeStone())
           board(nu4)(y) = Field(nu4, y, FreeStone())
-
 
         case 9 => for (i <- nu0 to nu16) {
           if (i >= nu2 && i <= nu14) {
@@ -161,8 +156,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
             } else {
               jsb.append("|P|")
             }
-            case 'b'
-            => if (!s.avariable) {
+            case 'b' => if (!s.avariable) {
               jsb.append("|-|")
             } else {
               jsb.append("|B|")
@@ -180,9 +174,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     jsb.toString()
   }
 
-  private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]]
-
-  = {
+  private def setBlockStones(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
     board(nu8)(nu1) = Field(nu8, nu1, BlockStone())
     board(nu8)(nu3) = Field(nu8, nu3, BlockStone())
     board(nu8)(nu4) = Field(nu8, nu4, BlockStone())
@@ -213,7 +205,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
 
     if (playerCount >= 3) {
 
-
       board(nu5)(nu14) = Field(nu5, nu14, player2.stones(nu2))
       board(nu5)(nu15) = Field(nu5, nu15, player2.stones(nu1))
       board(nu6)(nu14) = Field(nu6, nu14, player2.stones(nu0))
@@ -232,7 +223,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
 
     board
   }
-
 
   def moveStone(current: Field, dest: Field): Option[Stone] = {
     if (validField(dest.x, dest.y) && board(dest.x)(dest.y).asInstanceOf[Field].avariable) {
@@ -283,7 +273,7 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
   def setBlockStoneOnField(field: Field): Unit = {
-      board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
+    board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
 
   def removeBlockStoneOnField(field: Field): Unit = {
