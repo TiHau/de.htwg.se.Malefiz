@@ -1,5 +1,7 @@
 package de.htwg.se.malefiz.model.fileio.fileioJson
 
+import java.nio.file.{Files, Paths}
+
 import de.htwg.se.malefiz.controller.{Controller, ControllerInterface, State}
 import de.htwg.se.malefiz.model.fileio.FileIOInterface
 import de.htwg.se.malefiz.model.gameboard._
@@ -11,12 +13,13 @@ import scala.io.Source
 
 class FileIO extends FileIOInterface {
   override def load(controller: ControllerInterface): Unit = {
-    val source: String = Source.fromFile("saveFile.json").getLines.mkString
-    val json: JsValue = Json.parse(source)
-    loadBoard(json, controller)
-    loadController(json, controller)
-
-    controller.notifyObservers()
+    if(Files.exists(Paths.get("saveFile.json"))) {
+      val source: String = Source.fromFile("saveFile.json").getLines.mkString
+      val json: JsValue = Json.parse(source)
+      loadBoard(json, controller)
+      loadController(json, controller)
+      controller.notifyObservers()
+    }
   }
 
   private def loadController(json: JsValue, controller: ControllerInterface): Unit = {
@@ -41,10 +44,11 @@ class FileIO extends FileIOInterface {
   private def loadBoard(json: JsValue, controller: ControllerInterface): Unit = {
     val playerCount = json \ "board" \ "playerCount"
     controller.setPlayerCount(playerCount.get.toString().toInt)
+    val jsV:JsValue = Json.parse("" + (json \ "board" \\ "fields").head + "")
+    val fieldNodes = jsV.validate[List[JsValue]].get
+    for (fieldNode <- fieldNodes ){
 
-    val fieldNodes = json \ "board" \\ "fields"
-    for (fieldNode <- fieldNodes) {
-      if (!(fieldNode \ "isFreeSpace").get.toString().toBoolean) {
+      if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) { // ab hier Fehler
 
         val x = (fieldNode \ "x").get.toString.toInt
         val y = (fieldNode \ "y").get.toString().toInt
@@ -98,7 +102,7 @@ class FileIO extends FileIOInterface {
           for {
             x <- 0 to 16
             y <- 0 to 15
-          } yield fieldToJson(controller.gameBoard, x, y)
+          } yield JsObject(Seq("field"->fieldToJson(controller.gameBoard, x, y)))
         ),
         "playerCount" -> JsNumber(controller.gameBoard.playerCount)
       )
