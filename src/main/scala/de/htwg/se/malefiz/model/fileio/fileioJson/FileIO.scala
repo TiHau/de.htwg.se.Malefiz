@@ -48,14 +48,11 @@ class FileIO extends FileIOInterface {
     val fieldNodes = jsV.validate[List[JsValue]].get
     for (fieldNode <- fieldNodes ){
       if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) {
-
         val x = (fieldNode \ "x").get.toString.toInt
         val y = (fieldNode \ "y").get.toString().toInt
         controller.gameBoard.board(x)(y).asInstanceOf[Field].avariable = (fieldNode \ "avariable").get.toString.toBoolean
-
         (fieldNode \ "sort").get.toString.charAt(1) match {
           case 'p' =>
-
             val startFieldX = (fieldNode \ "startFieldX").get.toString.toInt
             val startFieldY = (fieldNode \ "startFieldY").get.toString.toInt
 
