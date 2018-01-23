@@ -1,17 +1,20 @@
 package de.htwg.se.malefiz.controller
 
+import com.google.inject.{Guice, Injector}
+import de.htwg.se.malefiz.MalefizModule
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.model.gameboard.{ Field, GameBoard, Player, PlayerStone }
+import de.htwg.se.malefiz.model.gameboard.{Field, GameBoard, Player, PlayerStone}
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class ControllerSpec extends WordSpec with Matchers {
+  val injector: Injector = Guice.createInjector(new MalefizModule)
   "A Controller" when {
     "new set" should {
-      val controller = new Controller(new GameBoard(4))
+      val controller = injector.getInstance(classOf[ControllerInterface])
       val player = Player(1)
       "can change player count specific" in {
         controller.newGame(2) equals (controller.gameBoard.playerCount)
@@ -21,7 +24,7 @@ class ControllerSpec extends WordSpec with Matchers {
   }
   "A Controller" when {
     "reset" should {
-      val controller = new Controller(new GameBoard(4))
+      val controller = injector.getInstance(classOf[ControllerInterface])
       "can reset" in {
         controller.reset()
         controller.state should be(SetPlayerCount)
@@ -32,7 +35,7 @@ class ControllerSpec extends WordSpec with Matchers {
 
   "A Controller" when {
     "started" should {
-      val controller = new Controller(new GameBoard(4))
+      val controller = injector.getInstance(classOf[ControllerInterface])
       "when set Target" in {
         val ret = controller.setTarget(3, 14)
         ret shouldBe (false)

@@ -16,6 +16,7 @@ trait ControllerInterface extends Observable with Publisher {
   def endTurn(): Unit
   def takeInput(X: Int, Y: Int): Unit
   def reset(): Unit
+  def setTarget(x: Int, y: Int): Boolean
   def setChoosenPlayerStone(newStone: PlayerStone): Unit
   def getChoosenPlayerStone(): PlayerStone
   def setDestField(newField: Field): Unit

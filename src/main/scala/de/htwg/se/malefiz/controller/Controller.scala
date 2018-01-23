@@ -1,13 +1,18 @@
 package de.htwg.se.malefiz.controller
 
+import com.google.inject.{Guice, Inject, Injector}
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.malefiz.MalefizModule
 import de.htwg.se.malefiz.util.UndoManager
 import de.htwg.se.malefiz.model.gameboard._
 import de.htwg.se.malefiz.controller.State._
 
 import scala.swing.Publisher
 
-case class Controller(var gameBoard: GameBoardInterface) extends ControllerInterface with Publisher {
+case class Controller @Inject() () extends ControllerInterface with Publisher {
+  private val injector: Injector = Guice.createInjector(new MalefizModule)
+  var gameBoard = injector.getInstance(classOf[GameBoardInterface])
+
   private val six = 6
   private val logger = Logger(classOf[Controller])
   private val undoManager = new UndoManager()
@@ -211,4 +216,5 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   def getChoosenPlayerStone(): PlayerStone = chosenPlayerStone
   def setDestField(newField: Field): Unit = destField = newField
   def getDestField(): Field = destField
+
 }
