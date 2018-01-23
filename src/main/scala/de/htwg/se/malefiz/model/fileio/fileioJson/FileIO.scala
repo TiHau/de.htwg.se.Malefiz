@@ -47,14 +47,13 @@ class FileIO extends FileIOInterface {
     val jsV:JsValue = Json.parse("" + (json \ "board" \\ "fields").head + "")
     val fieldNodes = jsV.validate[List[JsValue]].get
     for (fieldNode <- fieldNodes ){
-      println(fieldNode)
       if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) {
 
         val x = (fieldNode \ "x").get.toString.toInt
         val y = (fieldNode \ "y").get.toString().toInt
         controller.gameBoard.board(x)(y).asInstanceOf[Field].avariable = (fieldNode \ "avariable").get.toString.toBoolean
 
-        (fieldNode \ "sort").get.toString.last match { // Ab hier Fehler
+        (fieldNode \ "sort").get.toString.charAt(1) match { // Ab hier Fehler
           case 'p' =>
 
             val startFieldX = (fieldNode \ "startFieldX").get.toString.toInt
