@@ -276,11 +276,23 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
 
-  def removeBlockStoneOnField(field: Field): Unit = {
+  def removeStoneOnField(field: Field): Unit = {
     board(field.x)(field.y).asInstanceOf[Field].stone = new FreeStone
   }
 
-  def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit = {
+  def markPossibleMoves(stone: PlayerStone, player: Player, diced: Int): Unit = {
+    if (stone.actualField == stone.startField) {
+      val x = player.stones(0).startField.asInstanceOf[Field].x
+      val y = player.stones(0).startField.asInstanceOf[Field].y
+      markPossibleMovesR(x, y, diced, ' ', player.color)
+    } else {
+      val x = stone.actualField.asInstanceOf[Field].x
+      val y = stone.actualField.asInstanceOf[Field].y
+      markPossibleMovesR(x, y, diced, ' ', player.color)
+    }
+  }
+
+  private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit = {
     if (depth == 0) {
       //Dont hit your own kind
       if (board(x)(y).asInstanceOf[Field].stone.sort == 'p' && board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor == playerColor) {

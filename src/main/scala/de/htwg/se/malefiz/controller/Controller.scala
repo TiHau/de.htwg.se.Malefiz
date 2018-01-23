@@ -19,6 +19,9 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
+  override def loadSavedGame(): Unit = ???
+  override def saveGame(): Unit = ???
+
   def newGame(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
     nextTurn()
@@ -113,7 +116,7 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
         }
       }
       case ChooseTarget => {
-        if (setTarget(x, y)) {
+        if (setTargetForPlayerStone(x, y)) {
           chooseTarget()
         }
       }
@@ -177,7 +180,7 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
     }
   }
 
-  def setTarget(x: Int, y: Int): Boolean = {
+  def setTargetForPlayerStone(x: Int, y: Int): Boolean = {
     if (gameBoard.checkDestForPlayerStone(x, y)) {
       destField = gameBoard.board(x)(y).asInstanceOf[Field]
       true
@@ -216,5 +219,4 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   def getChoosenPlayerStone(): PlayerStone = chosenPlayerStone
   def setDestField(newField: Field): Unit = destField = newField
   def getDestField(): Field = destField
-
 }

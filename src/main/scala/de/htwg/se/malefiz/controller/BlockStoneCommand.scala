@@ -10,7 +10,7 @@ class BlockStoneCommand(field: Field, controller: ControllerInterface) extends C
   }
 
   override def undoStep(): Unit = {
-    controller.gameBoard.removeBlockStoneOnField(field)
+    controller.gameBoard.removeStoneOnField(field)
     controller.needToSetBlockStone = true
   }
 
