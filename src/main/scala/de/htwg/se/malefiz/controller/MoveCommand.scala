@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.util.Command
-import de.htwg.se.malefiz.model.gameboard.{ Field, PlayerStone, Stone }
+import de.htwg.se.malefiz.model.gameboard.{Field, FreeStone, PlayerStone, Stone}
 
 class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerInterface) extends Command {
 
@@ -24,6 +24,9 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
     controller.gameBoard.forceMoveStone(destField, currentField)
     destField.stone = hitStone
     if (hitStone.sort == 'p') {
+      val x = hitStone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].x
+      val y = hitStone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y
+      controller.gameBoard.board(x)(y).asInstanceOf[Field].stone = FreeStone()
       hitStone.asInstanceOf[PlayerStone].actualField = destField
     }
 
