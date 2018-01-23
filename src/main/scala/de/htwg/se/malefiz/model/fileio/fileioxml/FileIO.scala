@@ -57,7 +57,6 @@ class FileIO extends FileIOInterface {
     controller.needToSetBlockStone = (controllerNode \\ "needToSetBlockStone").text.trim.toBoolean
     controller.diced = (controllerNode \\ "diced").text.trim.toInt
     controller.commandNotExecuted = (controllerNode \\ "commandNotExecuted").text.trim.toBoolean
-    // controller.setChoosenPlayerStone((controllerNode \\ "commandNotExecuted").text.trim)
 
     controller.activePlayer = (controllerNode \\ "activePlayer").text.trim.toInt match {
       case 1 =>
@@ -113,7 +112,7 @@ class FileIO extends FileIOInterface {
             {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
           </startX>
           <startY>
-            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
+            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].y}
           </startY>
         </choosenPlayerStone>
         <destField>
