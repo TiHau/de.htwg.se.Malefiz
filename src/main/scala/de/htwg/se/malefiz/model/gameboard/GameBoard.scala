@@ -1,9 +1,12 @@
 package de.htwg.se.malefiz.model.gameboard
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
+
 import scala.collection.mutable
 import scala.swing.Publisher
 
-case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publisher {
+case class GameBoard @Inject() (@Named("DefaultSize") var playerCount: Int) extends GameBoardInterface with Publisher {
   private val nu0 = 0
   private val nu1 = 1
   private val nu2 = 2
@@ -21,40 +24,6 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
   private val nu14 = 14
   private val nu15 = 15
   private val nu16 = 16
-
-  if (playerCount > 4) {
-    playerCount = 4
-  } else if (playerCount < 2) {
-    playerCount = 2
-  }
-  buildMalefitzGameBoard(board)
-  setBlockStones(board)
-
-  player1.stones(nu2) = PlayerStone(board(nu1)(nu14), board(nu1)(nu14), player1.color)
-  player1.stones(nu1) = PlayerStone(board(nu1)(nu15), board(nu1)(nu15), player1.color)
-  player1.stones(nu0) = PlayerStone(board(nu2)(nu14), board(nu2)(nu14), player1.color)
-  player1.stones(nu3) = PlayerStone(board(nu3)(nu14), board(nu3)(nu14), player1.color)
-  player1.stones(nu4) = PlayerStone(board(nu3)(nu15), board(nu3)(nu15), player1.color)
-
-  player2.stones(nu2) = PlayerStone(board(nu5)(nu14), board(nu5)(nu14), player2.color)
-  player2.stones(nu1) = PlayerStone(board(nu5)(nu15), board(nu5)(nu15), player2.color)
-  player2.stones(nu0) = PlayerStone(board(nu6)(nu14), board(nu6)(nu14), player2.color)
-  player2.stones(nu3) = PlayerStone(board(nu7)(nu14), board(nu7)(nu14), player2.color)
-  player2.stones(nu4) = PlayerStone(board(nu7)(nu15), board(nu7)(nu15), player2.color)
-
-  player3.stones(nu2) = PlayerStone(board(nu9)(nu14), board(nu9)(nu14), player3.color)
-  player3.stones(nu1) = PlayerStone(board(nu9)(nu15), board(nu9)(nu15), player3.color)
-  player3.stones(nu0) = PlayerStone(board(nu10)(nu14), board(nu10)(nu14), player3.color)
-  player3.stones(nu3) = PlayerStone(board(nu11)(nu14), board(nu11)(nu14), player3.color)
-  player3.stones(nu4) = PlayerStone(board(nu11)(nu15), board(nu11)(nu15), player3.color)
-
-  player4.stones(nu2) = PlayerStone(board(nu13)(nu14), board(nu13)(nu14), player4.color)
-  player4.stones(nu1) = PlayerStone(board(nu13)(nu15), board(nu13)(nu15), player4.color)
-  player4.stones(nu0) = PlayerStone(board(nu14)(nu14), board(nu14)(nu14), player4.color)
-  player4.stones(nu3) = PlayerStone(board(nu15)(nu14), board(nu15)(nu14), player4.color)
-  player4.stones(nu4) = PlayerStone(board(nu15)(nu15), board(nu15)(nu15), player4.color)
-
-  setPlayerStones(board, playerCount)
 
   private def buildMalefitzGameBoard(board: Array[Array[AbstractField]]): Array[Array[AbstractField]] = {
     val empty = EmptySpace()
@@ -276,11 +245,23 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     board(field.x)(field.y).asInstanceOf[Field].stone = new BlockStone
   }
 
-  def removeBlockStoneOnField(field: Field): Unit = {
+  def removeStoneOnField(field: Field): Unit = {
     board(field.x)(field.y).asInstanceOf[Field].stone = new FreeStone
   }
 
-  def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit = {
+  def markPossibleMoves(stone: PlayerStone, player: Player, diced: Int): Unit = {
+    if (stone.actualField == stone.startField) {
+      val x = player.stones(0).startField.asInstanceOf[Field].x
+      val y = player.stones(0).startField.asInstanceOf[Field].y
+      markPossibleMovesR(x, y, diced, ' ', player.color)
+    } else {
+      val x = stone.actualField.asInstanceOf[Field].x
+      val y = stone.actualField.asInstanceOf[Field].y
+      markPossibleMovesR(x, y, diced, ' ', player.color)
+    }
+  }
+
+  private def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit = {
     if (depth == 0) {
       //Dont hit your own kind
       if (board(x)(y).asInstanceOf[Field].stone.sort == 'p' && board(x)(y).asInstanceOf[Field].stone.asInstanceOf[PlayerStone].playerColor == playerColor) {
@@ -358,4 +339,40 @@ case class GameBoard(var playerCount: Int) extends GameBoardInterface with Publi
     }
   }
 
+  override def createBoard = {
+    if (playerCount > 4) {
+      playerCount = 4
+    } else if (playerCount < 2) {
+      playerCount = 2
+    }
+    buildMalefitzGameBoard(board)
+    setBlockStones(board)
+
+    player1.stones(nu2) = PlayerStone(board(nu1)(nu14), board(nu1)(nu14), player1.color)
+    player1.stones(nu1) = PlayerStone(board(nu1)(nu15), board(nu1)(nu15), player1.color)
+    player1.stones(nu0) = PlayerStone(board(nu2)(nu14), board(nu2)(nu14), player1.color)
+    player1.stones(nu3) = PlayerStone(board(nu3)(nu14), board(nu3)(nu14), player1.color)
+    player1.stones(nu4) = PlayerStone(board(nu3)(nu15), board(nu3)(nu15), player1.color)
+
+    player2.stones(nu2) = PlayerStone(board(nu5)(nu14), board(nu5)(nu14), player2.color)
+    player2.stones(nu1) = PlayerStone(board(nu5)(nu15), board(nu5)(nu15), player2.color)
+    player2.stones(nu0) = PlayerStone(board(nu6)(nu14), board(nu6)(nu14), player2.color)
+    player2.stones(nu3) = PlayerStone(board(nu7)(nu14), board(nu7)(nu14), player2.color)
+    player2.stones(nu4) = PlayerStone(board(nu7)(nu15), board(nu7)(nu15), player2.color)
+
+    player3.stones(nu2) = PlayerStone(board(nu9)(nu14), board(nu9)(nu14), player3.color)
+    player3.stones(nu1) = PlayerStone(board(nu9)(nu15), board(nu9)(nu15), player3.color)
+    player3.stones(nu0) = PlayerStone(board(nu10)(nu14), board(nu10)(nu14), player3.color)
+    player3.stones(nu3) = PlayerStone(board(nu11)(nu14), board(nu11)(nu14), player3.color)
+    player3.stones(nu4) = PlayerStone(board(nu11)(nu15), board(nu11)(nu15), player3.color)
+
+    player4.stones(nu2) = PlayerStone(board(nu13)(nu14), board(nu13)(nu14), player4.color)
+    player4.stones(nu1) = PlayerStone(board(nu13)(nu15), board(nu13)(nu15), player4.color)
+    player4.stones(nu0) = PlayerStone(board(nu14)(nu14), board(nu14)(nu14), player4.color)
+    player4.stones(nu3) = PlayerStone(board(nu15)(nu14), board(nu15)(nu14), player4.color)
+    player4.stones(nu4) = PlayerStone(board(nu15)(nu15), board(nu15)(nu15), player4.color)
+
+    setPlayerStones(board, playerCount)
+    this
+  }
 }

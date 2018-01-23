@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.util.Command
-import de.htwg.se.malefiz.model.gameboard.{Field, FreeStone, PlayerStone, Stone}
+import de.htwg.se.malefiz.model.gameboard.{ Field, FreeStone, PlayerStone, Stone }
 
 class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerInterface) extends Command {
 
@@ -30,15 +30,7 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
       hitStone.asInstanceOf[PlayerStone].actualField = destField
     }
 
-    if (stone.actualField == stone.startField) {
-      val x = controller.activePlayer.stones(0).startField.asInstanceOf[Field].x
-      val y = controller.activePlayer.stones(0).startField.asInstanceOf[Field].y
-      controller.gameBoard.markPossibleMovesR(x, y, controller.diced, ' ', controller.activePlayer.color)
-    } else {
-      val x = stone.actualField.asInstanceOf[Field].x
-      val y = stone.actualField.asInstanceOf[Field].y
-      controller.gameBoard.markPossibleMovesR(x, y, controller.diced, ' ', controller.activePlayer.color)
-    }
+    controller.gameBoard.markPossibleMoves(stone, controller.activePlayer, controller.diced)
     controller.needToSetBlockStone = false
   }
 

@@ -56,7 +56,6 @@ class FileIO extends FileIOInterface {
     ).asInstanceOf[Field])
 
     controller.needToSetBlockStone = (json \ "controller" \ "needToSetBlockStone").get.toString().toBoolean
-    controller.commandNotExecuted = (json \ "controller" \ "commandNotExecuted").get.toString().toBoolean
   }
 
   private def loadBoard(json: JsValue, controller: ControllerInterface): Unit = {
@@ -116,8 +115,7 @@ class FileIO extends FileIOInterface {
           "x" -> JsNumber(controller.getDestField().x),
           "y" -> JsNumber(controller.getDestField().y)
         ),
-        "needToSetBlockStone" -> JsBoolean(controller.needToSetBlockStone),
-        "commandNotExecuted" -> JsBoolean(controller.commandNotExecuted)
+        "needToSetBlockStone" -> JsBoolean(controller.needToSetBlockStone)
       ),
       "board" -> Json.obj(
         "fields" -> Json.toJson(
