@@ -78,6 +78,7 @@ trait GameBoardInterface extends Publisher {
     * @return true, wenn ein Spielerstein auf dem Zielfed steht
     */
   def checkWin: Boolean
+  def createBoard: GameBoardInterface
   val player1 = Player(one)
   val player2 = Player(two)
   val player3 = Player(three)

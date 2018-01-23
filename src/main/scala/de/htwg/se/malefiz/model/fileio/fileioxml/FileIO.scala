@@ -104,37 +104,37 @@ class FileIO extends FileIOInterface {
     <game>
       <controller>
         <activePlayer>
-          {controller.activePlayer.color}
+          { controller.activePlayer.color }
         </activePlayer>
         <diced>
-          {controller.diced}
+          { controller.diced }
         </diced>
         <state>
-          {controller.state}
+          { controller.state }
         </state>
         <choosenPlayerStone>
           <startX>
-            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
+            { controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x }
           </startX>
           <startY>
-            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
+            { controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x }
           </startY>
         </choosenPlayerStone>
         <destField>
           <x>
-            {controller.getDestField().x}
+            { controller.getDestField().x }
           </x>
           <y>
-            {controller.getDestField().y}
+            { controller.getDestField().y }
           </y>
         </destField>
         <needToSetBlockStone>
-          {controller.needToSetBlockStone}
+          { controller.needToSetBlockStone }
         </needToSetBlockStone>
         <commandNotExecuted>
-          {controller.commandNotExecuted}
+          { controller.commandNotExecuted }
         </commandNotExecuted>
-      </controller>{boardToXml(controller.gameBoard)}
+      </controller>{ boardToXml(controller.gameBoard) }
     </game>
 
   }
@@ -142,11 +142,13 @@ class FileIO extends FileIOInterface {
   private def boardToXml(board: GameBoardInterface) = {
     <board>
       <playerCount>
-        {board.playerCount}
-      </playerCount>{for {
-      x <- 0 to 16
-      y <- 0 to 15
-    } yield fieldToXml(board, x, y)}
+        { board.playerCount }
+      </playerCount>{
+        for {
+          x <- 0 to 16
+          y <- 0 to 15
+        } yield fieldToXml(board, x, y)
+      }
     </board>
   }
 
@@ -160,37 +162,37 @@ class FileIO extends FileIOInterface {
         val startFieldY = field.stone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y
         <field>
           <x>
-            {x}
+            { x }
           </x>
           <y>
-            {y}
+            { y }
           </y>
           <sort>
-            {sort}
+            { sort }
           </sort>
           <avariable>
-            {avariable}
+            { avariable }
           </avariable>
           <startFieldX>
-            {startFieldX}
+            { startFieldX }
           </startFieldX>
           <startFieldY>
-            {startFieldY}
+            { startFieldY }
           </startFieldY>
         </field>
       } else {
         <field>
           <x>
-            {x}
+            { x }
           </x>
           <y>
-            {y}
+            { y }
           </y>
           <sort>
-            {sort}
+            { sort }
           </sort>
           <avariable>
-            {avariable}
+            { avariable }
           </avariable>
         </field>
       }
