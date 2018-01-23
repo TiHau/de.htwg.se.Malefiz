@@ -1,10 +1,10 @@
 package de.htwg.se.malefiz.controller
 
-import com.google.inject.{Guice, Injector}
+import com.google.inject.{ Guice, Injector }
 import de.htwg.se.malefiz.MalefizModule
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.model.gameboard.{Field, GameBoard, Player, PlayerStone}
+import de.htwg.se.malefiz.model.gameboard.{ Field, GameBoard, Player, PlayerStone }
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner

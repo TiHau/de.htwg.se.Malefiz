@@ -1,6 +1,8 @@
 package de.htwg.se.malefiz.controller
 
-import com.google.inject.{Guice, Inject, Injector}
+import com.google.inject.name.Names
+import com.google.inject.{ Guice, Inject, Injector }
+import net.codingwell.scalaguice.InjectorExtensions._
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.malefiz.MalefizModule
 import de.htwg.se.malefiz.util.UndoManager
@@ -10,22 +12,34 @@ import de.htwg.se.malefiz.controller.State._
 import scala.swing.Publisher
 
 case class Controller @Inject() () extends ControllerInterface with Publisher {
-  private val injector: Injector = Guice.createInjector(new MalefizModule)
-  var gameBoard = injector.getInstance(classOf[GameBoardInterface])
-
+  val injector: Injector = Guice.createInjector(new MalefizModule)
+  var gameBoard = injector.instance[GameBoardInterface](Names.named("default")).createBoard
+  activePlayer = gameBoard.player3
   private val six = 6
   private val logger = Logger(classOf[Controller])
   private val undoManager = new UndoManager()
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
-  def newGame(countPlayer: Int): Unit = {
-    gameBoard = GameBoard(countPlayer)
+  def newGame(playerCount: Int): Unit = {
+    if (playerCount <= 2) {
+      gameBoard = injector.instance[GameBoardInterface](Names.named("tiny")).createBoard
+    } else if (playerCount == 3) {
+      gameBoard = injector.instance[GameBoardInterface](Names.named("small")).createBoard
+    } else {
+      injector.instance[GameBoardInterface](Names.named("default")).createBoard
+    }
     nextTurn()
   }
 
   def setPlayerCount(playerCount: Int): Unit = {
-    gameBoard = GameBoard(playerCount)
+    if (playerCount <= 2) {
+      gameBoard = injector.instance[GameBoardInterface](Names.named("tiny")).createBoard
+    } else if (playerCount == 3) {
+      gameBoard = injector.instance[GameBoardInterface](Names.named("small")).createBoard
+    } else {
+      injector.instance[GameBoardInterface](Names.named("default")).createBoard
+    }
   }
 
   def undo(): Unit = {

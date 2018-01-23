@@ -17,6 +17,7 @@ trait GameBoardInterface extends Publisher {
   def markPossibleMovesR(x: Int, y: Int, depth: Int, cameFrom: Char, playerColor: Int): Unit
   def unmarkPossibleMoves(): Unit
   def checkWin: Boolean
+  def createBoard: GameBoardInterface
   val player1 = Player(one)
   val player2 = Player(two)
   val player3 = Player(three)
