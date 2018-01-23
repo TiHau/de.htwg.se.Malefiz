@@ -207,4 +207,9 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
       false
     }
   }
+
+  def setChoosenPlayerStone(newStone: PlayerStone): Unit = chosenPlayerStone = newStone
+  def getChoosenPlayerStone(): PlayerStone = chosenPlayerStone
+  def setDestField(newField: Field): Unit = destField = newField
+  def getDestField(): Field = destField
 }

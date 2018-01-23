@@ -1,10 +1,9 @@
 package de.htwg.se.malefiz.model.fileio.fileioJson
 
-import de.htwg.se.malefiz.controller.{Controller, ControllerInterface, State}
+import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import de.htwg.se.malefiz.model.fileio.FileIOInterface
 import de.htwg.se.malefiz.model.gameboard._
 import play.api.libs.json._
-import de.htwg.se.malefiz.controller.State._
 
 import scala.io.Source
 
@@ -39,8 +38,7 @@ class FileIO extends FileIOInterface {
 
 
   private def loadBoard(json: JsValue, controller: ControllerInterface): Unit = {
-    val playerCount = json \ "board" \ "playerCount"
-    controller.setPlayerCount(playerCount.get.toString().toInt)
+    controller.setPlayerCount((json \ "board" \ "playerCount").get.toString().toInt)
 
     val fieldNodes = json \ "board" \\ "fields"
     for (fieldNode <- fieldNodes) {

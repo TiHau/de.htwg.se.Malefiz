@@ -9,7 +9,7 @@ import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
-import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
+import de.htwg.se.malefiz.model.fileio.fileioxml.FileIO
 
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {

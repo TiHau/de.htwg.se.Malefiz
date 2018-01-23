@@ -57,6 +57,7 @@ class FileIO extends FileIOInterface {
     controller.needToSetBlockStone = (controllerNode \\ "needToSetBlockStone").text.trim.toBoolean
     controller.diced = (controllerNode \\ "diced").text.trim.toInt
     controller.commandNotExecuted = (controllerNode \\ "commandNotExecuted").text.trim.toBoolean
+    // controller.setChoosenPlayerStone((controllerNode \\ "commandNotExecuted").text.trim)
 
     controller.activePlayer = (controllerNode \\ "activePlayer").text.trim.toInt match {
       case 1 =>
@@ -69,6 +70,26 @@ class FileIO extends FileIOInterface {
         controller.gameBoard.player4
     }
     controller.state = State.fromString((controllerNode \\ "state").text.trim).get
+
+    val startFieldX = (controllerNode \\ "choosenPlayerStone" \ "startX").text.trim.toInt
+    val startFieldY = (controllerNode \\ "choosenPlayerStone" \ "startY").text.trim.toInt
+    val playerStones =
+      controller.gameBoard.player1.stones ++
+        controller.gameBoard.player2.stones ++
+        controller.gameBoard.player3.stones ++
+        controller.gameBoard.player4.stones
+
+    for (playerStone <- playerStones) {
+      if (playerStone.startField.asInstanceOf[Field].x == startFieldX && playerStone.startField.asInstanceOf[Field].y == startFieldY) {
+        controller.setChoosenPlayerStone(playerStone)
+      }
+    }
+
+    controller.setDestField(controller.gameBoard.board(
+      (controllerNode \\ "destField" \ "x").text.trim.toInt
+    )(
+      (controllerNode \\ "destField" \ "y").text.trim.toInt
+    ).asInstanceOf[Field])
   }
 
   override def save(controller: ControllerInterface): Unit = {
@@ -87,6 +108,22 @@ class FileIO extends FileIOInterface {
         <state>
           {controller.state}
         </state>
+        <choosenPlayerStone>
+          <startX>
+            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
+          </startX>
+          <startY>
+            {controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x}
+          </startY>
+        </choosenPlayerStone>
+        <destField>
+          <x>
+            {controller.getDestField().x}
+          </x>
+          <y>
+            {controller.getDestField().y}
+          </y>
+        </destField>
         <needToSetBlockStone>
           {controller.needToSetBlockStone}
         </needToSetBlockStone>
