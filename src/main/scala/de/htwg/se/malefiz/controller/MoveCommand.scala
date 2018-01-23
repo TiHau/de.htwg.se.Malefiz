@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.util.Command
-import de.htwg.se.malefiz.model.gameboard.{Field, PlayerStone, Stone}
+import de.htwg.se.malefiz.model.gameboard.{ Field, PlayerStone, Stone }
 
 class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerInterface) extends Command {
 

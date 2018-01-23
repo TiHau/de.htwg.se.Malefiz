@@ -1,11 +1,11 @@
 package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.util.Command
-import de.htwg.se.malefiz.model.gameboard.{AbstractField, Field, PlayerStone}
+import de.htwg.se.malefiz.model.gameboard.{ AbstractField, Field, PlayerStone }
 
 class ChooseCommand(stone: PlayerStone, controller: ControllerInterface) extends Command {
 
-  override def doStep(): Unit =   {
+  override def doStep(): Unit = {
     if (stone.actualField == stone.startField) {
       val x = controller.activePlayer.stones(0).startField.asInstanceOf[Field].x
       val y = controller.activePlayer.stones(0).startField.asInstanceOf[Field].y

@@ -1,6 +1,6 @@
 package de.htwg.se.malefiz.model.gameboard
 import org.junit.runner.RunWith
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{ Matchers, WordSpec }
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
@@ -22,35 +22,35 @@ class GameBoardSpec extends WordSpec with Matchers {
     }
   }
   "A GameBoard" when {
-      "seted all" should {
-        val board = GameBoard(4)
+    "seted all" should {
+      val board = GameBoard(4)
 
-        "have 20 Player Stones" in {
-          var count = 0
-          for (y <- 0 to 15) {
-            for (x <- 0 to 16) {
-              if (!board.board(x)(y).isFreeSpace()) {
-                val field = board.board(x)(y).asInstanceOf[Field]
-                if (field.stone.sort == 'p') {
-                  count += 1
-                }
+      "have 20 Player Stones" in {
+        var count = 0
+        for (y <- 0 to 15) {
+          for (x <- 0 to 16) {
+            if (!board.board(x)(y).isFreeSpace()) {
+              val field = board.board(x)(y).asInstanceOf[Field]
+              if (field.stone.sort == 'p') {
+                count += 1
               }
             }
           }
-          count shouldBe (20)
         }
+        count shouldBe (20)
       }
     }
-    "A GameBoard" when {
-      "toSting" should {
-        val board = GameBoard(4)
+  }
+  "A GameBoard" when {
+    "toSting" should {
+      val board = GameBoard(4)
 
-        "return a  which is not empty" in {
+      "return a  which is not empty" in {
 
-          board.toString().isEmpty shouldBe (false)
-        }
+        board.toString().isEmpty shouldBe (false)
       }
     }
+  }
 
   "A GameBoard" when {
     "not win" should {
@@ -62,23 +62,23 @@ class GameBoardSpec extends WordSpec with Matchers {
       }
     }
   }
-  "A GameBoard" when{
-    "wrong Parameter" should{
+  "A GameBoard" when {
+    "wrong Parameter" should {
       val board = GameBoard(10)
-      "should have playercount 4" in{
-        board.playerCount shouldBe(4)
+      "should have playercount 4" in {
+        board.playerCount shouldBe (4)
       }
       val board2 = GameBoard(1)
-      "should have playercount 2" in{
-        board2.playerCount shouldBe(2)
+      "should have playercount 2" in {
+        board2.playerCount shouldBe (2)
       }
     }
   }
-  "A GameBoard" when{
-    "move Stone" should{
+  "A GameBoard" when {
+    "move Stone" should {
       val board = GameBoard(10)
-      "Returns Option None" in{
-        board.moveStone(board.board(3)(14).asInstanceOf[Field],board.board(8)(0).asInstanceOf[Field]) should be(None)
+      "Returns Option None" in {
+        board.moveStone(board.board(3)(14).asInstanceOf[Field], board.board(8)(0).asInstanceOf[Field]) should be(None)
       }
     }
   }

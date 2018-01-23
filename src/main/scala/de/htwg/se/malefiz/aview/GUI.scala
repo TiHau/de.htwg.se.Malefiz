@@ -1,16 +1,14 @@
 package de.htwg.se.malefiz.aview
 
-
-import java.awt.{Color, Font, Toolkit}
+import java.awt.{ Color, Font, Toolkit }
 
 import de.htwg.se.malefiz.util.Observer
-import de.htwg.se.malefiz.controller.{ControllerInterface, State}
+import de.htwg.se.malefiz.controller.{ ControllerInterface, State }
 
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
-import de.htwg.se.malefiz.model.fileio.fileioxml.FileIO
-
+import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val dim = Toolkit.getDefaultToolkit.getScreenSize
@@ -40,7 +38,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
       }
     }
-
 
     override def paint(g: Graphics2D): Unit = {
       //Background
@@ -96,24 +93,15 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
               check = 0
               x += 1
             }
-          case '-'
-          => setStoneColorWithoutBackground(Color.WHITE)
-          case 'o'
-          => setStoneColorWithoutBackground(Color.BLACK)
-          case '1'
-          => setStoneColorWithoutBackground(Color.RED)
-          case '2'
-          => setStoneColorWithoutBackground(Color.GREEN)
-          case '3'
-          => setStoneColorWithoutBackground(Color.YELLOW)
-          case '4'
-          => setStoneColorWithoutBackground(Color.BLUE)
-          case 'x'
-          => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
-          case 'P'
-          => setStoneColorWithBackgroundPainting(Color.MAGENTA)
-          case 'B'
-          => setStoneColorWithBackgroundPainting(Color.WHITE)
+          case '-' => setStoneColorWithoutBackground(Color.WHITE)
+          case 'o' => setStoneColorWithoutBackground(Color.BLACK)
+          case '1' => setStoneColorWithoutBackground(Color.RED)
+          case '2' => setStoneColorWithoutBackground(Color.GREEN)
+          case '3' => setStoneColorWithoutBackground(Color.YELLOW)
+          case '4' => setStoneColorWithoutBackground(Color.BLUE)
+          case 'x' => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
+          case 'P' => setStoneColorWithBackgroundPainting(Color.MAGENTA)
+          case 'B' => setStoneColorWithBackgroundPainting(Color.WHITE)
           case _ =>
         }
       }
@@ -188,7 +176,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
       })
     }
-
 
   }
 

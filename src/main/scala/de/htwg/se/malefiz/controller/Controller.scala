@@ -14,7 +14,6 @@ case class Controller(var gameBoard: GameBoardInterface) extends ControllerInter
   private var chosenPlayerStone = gameBoard.player1.stones(0)
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
-
   def newGame(countPlayer: Int): Unit = {
     gameBoard = GameBoard(countPlayer)
     nextTurn()

@@ -2,7 +2,7 @@ package de.htwg.se.malefiz.controller
 
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.model.gameboard.{Field, GameBoard, Player, PlayerStone}
+import de.htwg.se.malefiz.model.gameboard.{ Field, GameBoard, Player, PlayerStone }
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -148,25 +148,25 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
 
         controller.state = ChoosePlayerStone
-        controller.takeInput(2,14)
-        controller.takeInput(2,13)
-        p4S.actualField shouldBe(p4S.startField)
+        controller.takeInput(2, 14)
+        controller.takeInput(2, 13)
+        p4S.actualField shouldBe (p4S.startField)
         controller.undo()
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe(p4S)
+        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe (p4S)
       }
 
       "beat a BlockStone" in {
         controller.newGame(2)
         controller.activePlayer = controller.gameBoard.player1
         controller.diced = 5
-        controller.takeInput(2,14)
-        controller.takeInput(4,11)
-        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
+        controller.takeInput(2, 14)
+        controller.takeInput(4, 11)
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe ('p')
 
         controller.undo()
-        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('b')
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe ('b')
         controller.redo()
-        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe('p')
+        controller.gameBoard.board(4)(11).asInstanceOf[Field].stone.sort shouldBe ('p')
       }
 
       "undo before end of turn" in {
@@ -174,49 +174,48 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.activePlayer = controller.gameBoard.player1
         controller.diced = 1
         controller.state = ChoosePlayerStone
-        controller.takeInput(3,14)
-        controller.state shouldBe(ChooseTarget)
-        controller.takeInput(2,13)
-        controller.state shouldBe(BeforeEndOfTurn)
+        controller.takeInput(3, 14)
+        controller.state shouldBe (ChooseTarget)
+        controller.takeInput(2, 13)
+        controller.state shouldBe (BeforeEndOfTurn)
         controller.redo()
-        controller.state shouldBe(BeforeEndOfTurn)
+        controller.state shouldBe (BeforeEndOfTurn)
         controller.undo()
-        controller.state shouldBe(ChooseTarget)
+        controller.state shouldBe (ChooseTarget)
         controller.redo()
-        controller.state shouldBe(BeforeEndOfTurn)
+        controller.state shouldBe (BeforeEndOfTurn)
       }
 
       "set invalid playerstone target" in {
         controller.newGame(2)
         controller.state = ChooseTarget
-        controller.takeInput(0,15)
-        controller.state shouldBe(ChooseTarget)
+        controller.takeInput(0, 15)
+        controller.state shouldBe (ChooseTarget)
       }
 
       "set invalid bockstone target" in {
         controller.newGame(2)
         controller.state = SetBlockStone
-        controller.takeInput(0,15)
-        controller.state shouldBe(SetBlockStone)
+        controller.takeInput(0, 15)
+        controller.state shouldBe (SetBlockStone)
       }
 
       "input in state beforeEndOfTurn" in {
         controller.newGame(2)
         controller.state = BeforeEndOfTurn
-        controller.takeInput(0,15)
-        controller.state shouldBe(BeforeEndOfTurn)
+        controller.takeInput(0, 15)
+        controller.state shouldBe (BeforeEndOfTurn)
       }
 
       "input while state is print" in {
         controller.newGame(2)
         controller.state = Print
-        controller.takeInput(2,14)
-        controller.state shouldBe(Print)
+        controller.takeInput(2, 14)
+        controller.state shouldBe (Print)
       }
 
     }
   }
-
 
 }
 

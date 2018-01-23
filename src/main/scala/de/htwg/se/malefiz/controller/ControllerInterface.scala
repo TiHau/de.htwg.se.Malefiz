@@ -6,16 +6,16 @@ import de.htwg.se.malefiz.model.gameboard._
 
 import scala.swing.Publisher
 
-trait ControllerInterface extends Observable with Publisher{
+trait ControllerInterface extends Observable with Publisher {
   private val six = 6
-  def undo() : Unit
+  def undo(): Unit
   def redo(): Unit
   def newGame(countPlayer: Int): Unit
   def setPlayerCount(playerCount: Int): Unit
-  def gameBoard:GameBoardInterface
+  def gameBoard: GameBoardInterface
   def endTurn(): Unit
-  def takeInput(X:Int,Y:Int): Unit
-  def reset():Unit
+  def takeInput(X: Int, Y: Int): Unit
+  def reset(): Unit
   def setChoosenPlayerStone(newStone: PlayerStone): Unit
   def getChoosenPlayerStone(): PlayerStone
   def setDestField(newField: Field): Unit

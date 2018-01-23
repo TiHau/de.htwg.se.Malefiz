@@ -2,7 +2,7 @@ package de.htwg.se.malefiz.aview
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.malefiz.util.Observer
-import de.htwg.se.malefiz.controller.{ControllerInterface, State}
+import de.htwg.se.malefiz.controller.{ ControllerInterface, State }
 
 case class TUI(controller: ControllerInterface) extends Observer {
   private val logger = Logger(classOf[TUI])
@@ -30,13 +30,13 @@ case class TUI(controller: ControllerInterface) extends Observer {
     }
     controller.takeInput(x, y)
 
-
   }
 
   private def readInput: Option[Int] = {
     val line = scala.io.StdIn.readLine()
     line match {
-      case "count" => controller.newGame(4)
+      case "count" =>
+        controller.newGame(4)
         None
       case "exit" => sys.exit(0)
       case "restart" =>
