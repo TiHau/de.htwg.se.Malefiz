@@ -48,7 +48,7 @@ class FileIO extends FileIOInterface {
     val fieldNodes = jsV.validate[List[JsValue]].get
     for (fieldNode <- fieldNodes ){
 
-      if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) { // ab hier Fehler
+      if (!(fieldNode \ "isFreeSpace").get.toString.toBoolean) { // ab hier Fehler weiß noch nicht welhalb 
 
         val x = (fieldNode \ "x").get.toString.toInt
         val y = (fieldNode \ "y").get.toString().toInt
