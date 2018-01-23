@@ -10,7 +10,7 @@ Malefiz
 
 ## About the Project
 A Scala implementation of the board-game **Malefiz**  
-Malefiz is a widely used board game by [Ravensburger](ravensburger.com) and was created in 1959 by Werner Schöppner
+Malefiz is a widely used board game by [Ravensburger](https://www.ravensburger.de/start/index.html) and was created in 1959 by Werner Schöppner
 
 ## Purpose of the Project
 The project was developed in the context of the lecture "Software Engineering" at the University of Applied Science Konstanz, Germany. (WS 17/18)  
