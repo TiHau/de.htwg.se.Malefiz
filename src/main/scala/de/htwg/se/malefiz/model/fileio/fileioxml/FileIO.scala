@@ -1,5 +1,7 @@
 package de.htwg.se.malefiz.model.fileio.fileioxml
 
+import java.nio.file.{Files, Paths}
+
 import de.htwg.se.malefiz.controller.{ControllerInterface, State}
 import de.htwg.se.malefiz.model.fileio.FileIOInterface
 import de.htwg.se.malefiz.model.gameboard._
@@ -8,13 +10,15 @@ import scala.xml.NodeSeq
 
 class FileIO extends FileIOInterface {
   override def load(controller: ControllerInterface): Unit = {
-    val file = xml.XML.loadFile("saveFile.xml")
-    val boardNode: NodeSeq = file \\ "board"
-    loadBoard(boardNode, controller)
-    val controllerNode = file \\ "controller"
-    loadController(controllerNode, controller)
+    if(Files.exists(Paths.get("saveFile.json"))) {
+      val file = xml.XML.loadFile("saveFile.xml")
+      val boardNode: NodeSeq = file \\ "board"
+      loadBoard(boardNode, controller)
+      val controllerNode = file \\ "controller"
+      loadController(controllerNode, controller)
 
-    controller.notifyObservers()
+      controller.notifyObservers()
+    }
   }
 
   private def loadBoard(boardNode: NodeSeq, controller: ControllerInterface): Unit = {
