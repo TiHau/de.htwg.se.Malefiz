@@ -60,8 +60,6 @@ class FileIO extends FileIOInterface {
   private def loadController(controllerNode: NodeSeq, controller: ControllerInterface): Unit = {
     controller.needToSetBlockStone = (controllerNode \\ "needToSetBlockStone").text.trim.toBoolean
     controller.diced = (controllerNode \\ "diced").text.trim.toInt
-    controller.commandNotExecuted = (controllerNode \\ "commandNotExecuted").text.trim.toBoolean
-    // controller.setChoosenPlayerStone((controllerNode \\ "commandNotExecuted").text.trim)
 
     controller.activePlayer = (controllerNode \\ "activePlayer").text.trim.toInt match {
       case 1 =>
@@ -131,9 +129,6 @@ class FileIO extends FileIOInterface {
         <needToSetBlockStone>
           { controller.needToSetBlockStone }
         </needToSetBlockStone>
-        <commandNotExecuted>
-          { controller.commandNotExecuted }
-        </commandNotExecuted>
       </controller>{ boardToXml(controller.gameBoard) }
     </game>
 

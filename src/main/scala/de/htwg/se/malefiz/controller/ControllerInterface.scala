@@ -12,8 +12,7 @@ trait ControllerInterface extends Observable with Publisher {
 
   var state: State.Value = Print
   var needToSetBlockStone = false
-  var commandNotExecuted = true
-  var activePlayer: Player = gameBoard.player3
+  var activePlayer: Player = new Player(six)
   var diced: Int = six
 
   /**

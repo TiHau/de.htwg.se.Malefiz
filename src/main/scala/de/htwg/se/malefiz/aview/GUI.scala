@@ -8,7 +8,6 @@ import de.htwg.se.malefiz.controller.{ ControllerInterface, State }
 import scala.swing.event._
 import scala.swing._
 import de.htwg.se.malefiz.controller.State._
-import de.htwg.se.malefiz.model.fileio.fileioJson.FileIO
 
 class GUI(controller: ControllerInterface) extends Frame with Observer {
   private val dim = Toolkit.getDefaultToolkit.getScreenSize
@@ -152,13 +151,11 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         controller.reset()
       })
       contents += new MenuItem(Action("Save") {
-        val fileIO = new FileIO
-        fileIO.save(controller)
+        controller.saveGame()
         repaint()
       })
       contents += new MenuItem(Action("Load") {
-        val fileIO = new FileIO
-        fileIO.load(controller)
+        controller.loadSavedGame()
         repaint()
       })
       contents += new MenuItem(Action("Quit") {
@@ -208,7 +205,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         repaint()
 
       case State.SetPlayerCount =>
-        controller.commandNotExecuted = true
         val countUI = new CountUI
         countUI.visible = true
         repaint()
