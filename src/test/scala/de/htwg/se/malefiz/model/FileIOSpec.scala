@@ -36,6 +36,7 @@ class FileIOSpec extends WordSpec with Matchers {
 
       }
       "should can save and load then file exists and restore count with player 2" in {
+        controller.activePlayer = controller.gameBoard.player2
         controller.setPlayerCount(3)
         fileIO.save(controller)
         controller.setPlayerCount(4)
@@ -45,6 +46,7 @@ class FileIOSpec extends WordSpec with Matchers {
 
       }
       "should can save and load then file exists and restore count with player 1" in {
+        controller.activePlayer = controller.gameBoard.player1
         controller.setPlayerCount(2)
         fileIO.save(controller)
         controller.setPlayerCount(4)
@@ -54,6 +56,7 @@ class FileIOSpec extends WordSpec with Matchers {
 
       }
       "should can save and load then file exists and restore count with player 4" in {
+        controller.activePlayer = controller.gameBoard.player4
         controller.setPlayerCount(3)
         fileIO.save(controller)
         controller.setPlayerCount(4)
