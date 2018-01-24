@@ -1,10 +1,10 @@
 package de.htwg.se.malefiz.controller
 
-import com.google.inject.{ Guice, Injector }
+import com.google.inject.{Guice, Injector}
 import de.htwg.se.malefiz.MalefizModule
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.controller._
-import de.htwg.se.malefiz.model.gameboard.{ Field, GameBoard, Player, PlayerStone }
+import de.htwg.se.malefiz.model.gameboard._
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -217,6 +217,86 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe (Print)
       }
 
+      "when a new Games with 3 Players starts" in {
+        controller.newGame(3)
+        controller.state shouldBe(ChoosePlayerStone)
+        controller.activePlayer shouldBe(controller.gameBoard.player4)
+        controller.needToSetBlockStone shouldBe(false)
+      }
+
+      "when a new Game with 4 Players starts" in {
+        controller.newGame(4)
+        controller.state shouldBe(ChoosePlayerStone)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
+        controller.needToSetBlockStone shouldBe(false)
+      }
+
+      "when a new playerCount of 2 is set" in {
+        controller.setPlayerCount(2)
+        controller.state shouldBe(ChoosePlayerStone)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
+        controller.needToSetBlockStone shouldBe(false)
+      }
+
+      "when a new playerCount of 3 is set" in {
+        controller.setPlayerCount(3)
+        controller.state shouldBe(ChoosePlayerStone)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
+        controller.needToSetBlockStone shouldBe(false)
+      }
+
+      "when a new playerCount of 4 is set" in {
+        controller.setPlayerCount(4)
+        controller.state shouldBe(ChoosePlayerStone)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
+        controller.needToSetBlockStone shouldBe(false)
+      }
+
+      "when input comes in in SetPlayerCount State" in {
+        controller.newGame(4)
+        controller.state = SetPlayerCount
+        controller.takeInput(0,0)
+        controller.state shouldBe(SetPlayerCount)
+      }
+
+      "when input comes in in EndTurn state" in {
+        controller.newGame(4)
+        controller.state = EndTurn
+        controller.takeInput(0,0)
+        controller.state shouldBe(EndTurn)
+      }
+
+
+      "when input comes in in PlayerWon state" in {
+        controller.newGame(4)
+        controller.state = PlayerWon
+        controller.takeInput(0,0)
+        controller.state shouldBe(PlayerWon)
+      }
+
+
+      "getter/setter tests" in {
+        controller.newGame(4)
+        val testField = Field(8,0,FreeStone())
+        controller.setDestField(testField)
+        controller.getDestField() shouldBe(testField)
+
+        val testPlayerStone = controller.gameBoard.player1.stones(0)
+        controller.setChoosenPlayerStone(testPlayerStone)
+        controller.getChoosenPlayerStone() shouldBe(testPlayerStone)
+      }
+
+      "save and load" in {
+        controller.newGame(4)
+        val oldState = controller.state
+        val oldDiced = controller.diced
+        val oldPlayer = controller.activePlayer
+        controller.saveGame()
+        controller.loadSavedGame()
+        controller.state shouldBe(oldState)
+        controller.diced shouldBe(oldDiced)
+        controller.activePlayer shouldBe(oldPlayer)
+      }
     }
   }
 
