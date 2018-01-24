@@ -1,8 +1,7 @@
 package de.htwg.se.malefiz
 
 import com.google.inject.{ Guice, Injector }
-import de.htwg.se.malefiz.controller.{ Controller, ControllerInterface }
-import de.htwg.se.malefiz.model.gameboard.{ GameBoard, GameBoardInterface }
+import de.htwg.se.malefiz.controller.{ControllerInterface }
 import de.htwg.se.malefiz.aview.TUI
 import de.htwg.se.malefiz.aview.GUI
 
