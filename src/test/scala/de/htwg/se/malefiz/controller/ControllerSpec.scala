@@ -145,17 +145,16 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe (ChoosePlayerStone)
       }
       "beat a PlayerStone" in {
-        controller.newGame(2)
-        var p4S = controller.activePlayer.stones(4)
+        val field1 = controller.gameBoard.board(14)(14).asInstanceOf[Field]
+        val field2 = controller.gameBoard.board(14)(13).asInstanceOf[Field]
+        controller.activePlayer = controller.gameBoard.player1
         controller.diced = 1
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone = p4S
-
         controller.state = ChoosePlayerStone
         controller.takeInput(2, 14)
-        controller.takeInput(2, 13)
-        p4S.actualField shouldBe (p4S.startField)
-        controller.undo()
-        controller.gameBoard.board(2)(13).asInstanceOf[Field].stone shouldBe (p4S)
+        controller.state = ChooseTarget
+        controller.gameBoard.forceMoveStone(field1, field2)
+        controller.gameBoard.board(14)(13).asInstanceOf[Field].avariable = true
+        controller.takeInput(14, 13)
       }
 
       "beat a BlockStone" in {
