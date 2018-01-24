@@ -108,12 +108,12 @@ class FileIO extends FileIOInterface {
         "diced" -> JsNumber(controller.diced),
         "state" -> JsString(controller.state.toString),
         "choosenPlayerStone" -> Json.obj(
-          "startX" -> JsNumber(controller.getChoosenPlayerStone().startField.asInstanceOf[Field].x),
-          "startY" -> JsNumber(controller.getChoosenPlayerStone().startField.asInstanceOf[Field].y)
+          "startX" -> JsNumber(controller.getChoosenPlayerStone.startField.asInstanceOf[Field].x),
+          "startY" -> JsNumber(controller.getChoosenPlayerStone.startField.asInstanceOf[Field].y)
         ),
         "destField" -> Json.obj(
-          "x" -> JsNumber(controller.getDestField().x),
-          "y" -> JsNumber(controller.getDestField().y)
+          "x" -> JsNumber(controller.getDestField.x),
+          "y" -> JsNumber(controller.getDestField.y)
         ),
         "needToSetBlockStone" -> JsBoolean(controller.needToSetBlockStone)
       ),
