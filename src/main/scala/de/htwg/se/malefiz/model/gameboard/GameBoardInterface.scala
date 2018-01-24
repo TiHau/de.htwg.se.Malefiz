@@ -19,19 +19,19 @@ trait GameBoardInterface extends Publisher {
   /**
    * Setzt einen Blockstein auf ein übergebenes Feld. Das Feld sollte vorher mit
    * <code>checkDestForBlockStone(x: Int, y: Int): Boolean</code> überprüft werden.
-   * @param field
+   * @param field Ein Freies Feld
    */
   def setBlockStoneOnField(field: Field): Unit
 
   /**
-   * Setzt den Stein des Felds auf einen FreeStone
-   * @param field
+   * Entfernt den Stein des Felds und setzt ihn auf einen FreeStone
+   * @param field Ein Feld
    */
   def removeStoneOnField(field: Field): Unit
 
   /**
    * Setzt den übergebenen Spielerstein wieder auf sein Startfeld zurück
-   * @param stone
+   * @param stone Ein Spielerstein
    */
   def resetPlayerStone(stone: PlayerStone): Unit
 
@@ -46,7 +46,7 @@ trait GameBoardInterface extends Publisher {
   /**
    * Versetzt den Stein von f1 nach f2. Überprüft ob das Zielfeld im Spielbereich liegt und ob avaribale= true ist
    * Der Stein auf f1 wird auf FreeStone gesetzt.
-   * @param current
+   * @param current Aktuelles Feld
    * @param dest Zielfeld
    * @return Den geschlagenen Stein oder None
    */
@@ -55,8 +55,8 @@ trait GameBoardInterface extends Publisher {
   /**
    * Versetzt einene Stein.Ohne das Zielfeld zu überprüfen.
    * Der Stein auf f1 wird auf FreeStone gesetzt.
-   * @param current
-   * @param dest
+   * @param current Aktuelles Feld
+   * @param dest Zielfeld
    */
   def forceMoveStone(current: Field, dest: Field): Unit
 

@@ -12,7 +12,7 @@ trait ControllerInterface extends Observable with Publisher {
 
   var state: State.Value = Print
   var needToSetBlockStone = false
-  var activePlayer: Player = new Player(six)
+  var activePlayer: Player = Player(six)
   var diced: Int = six
 
   /**
@@ -49,27 +49,27 @@ trait ControllerInterface extends Observable with Publisher {
 
   /**
    * Setzt das Zielfeld auf die Übergebenen Koordinaten, übeprüft ab es ein gültiges Zielfeld ist
-   * @param x
-   * @param y
+   * @param x X-Koordinate
+   * @param y y-Koordinate
    * @return true, wenn das Zielfeld gültig ist
    */
   def setTargetForPlayerStone(x: Int, y: Int): Boolean
 
   /**
    * Setzt den ausgwählten Spielerstein
-   * @param newStone
+   * @param newStone neuer Spielerstein
    */
   def setChoosenPlayerStone(newStone: PlayerStone): Unit
 
   /**
    * Liefert den ausgewählten Spielerstein
-   * @return
+   * @return ausgewählter Spielerstein
    */
-  def getChoosenPlayerStone(): PlayerStone
+  def getChoosenPlayerStone: PlayerStone
 
   /**
    * Setzt das Zielfeld
-   * @param newField
+   * @param newField neues Zielfeld
    */
   def setDestField(newField: Field): Unit
 
@@ -77,5 +77,5 @@ trait ControllerInterface extends Observable with Publisher {
    * Liefert das Zielfeld
    * @return
    */
-  def getDestField(): Field
+  def getDestField: Field
 }

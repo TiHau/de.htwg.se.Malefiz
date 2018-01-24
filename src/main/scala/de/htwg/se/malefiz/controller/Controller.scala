@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import com.google.inject.name.Names
-import com.google.inject.{ Guice, Inject, Injector }
+import com.google.inject.{Guice, Inject, Injector}
 import net.codingwell.scalaguice.InjectorExtensions._
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.malefiz.MalefizModule
@@ -12,9 +12,9 @@ import de.htwg.se.malefiz.model.fileio.FileIOInterface
 
 import scala.swing.Publisher
 
-case class Controller @Inject() () extends ControllerInterface with Publisher {
+case class Controller @Inject()() extends ControllerInterface with Publisher {
   val injector: Injector = Guice.createInjector(new MalefizModule)
-  var gameBoard = injector.instance[GameBoardInterface](Names.named("default")).createBoard
+  var gameBoard: GameBoardInterface = injector.instance[GameBoardInterface](Names.named("default")).createBoard
   activePlayer = gameBoard.player3
   private val six = 6
   private val logger = Logger(classOf[Controller])
@@ -24,6 +24,7 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   private var destField = gameBoard.board(8)(0).asInstanceOf[Field]
 
   override def loadSavedGame(): Unit = fileIO.load(this)
+
   override def saveGame(): Unit = fileIO.save(this)
 
   def newGame(playerCount: Int): Unit = {
@@ -57,14 +58,13 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
       case ChooseTarget =>
         state = ChoosePlayerStone
         notifyObservers()
-      case BeforeEndOfTurn => {
+      case BeforeEndOfTurn =>
         if (needToSetBlockStone) {
           state = SetBlockStone
         } else {
           state = ChooseTarget
         }
         notifyObservers()
-      }
       case SetBlockStone =>
         state = ChooseTarget
         notifyObservers()
@@ -85,14 +85,13 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
         case ChoosePlayerStone =>
           state = ChooseTarget
           notifyObservers()
-        case ChooseTarget => {
+        case ChooseTarget =>
           if (needToSetBlockStone) {
             state = SetBlockStone
           } else {
             state = BeforeEndOfTurn
           }
           notifyObservers()
-        }
         case SetBlockStone =>
           state = BeforeEndOfTurn
           notifyObservers()
@@ -126,25 +125,18 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
     state match {
       case Print =>
       case SetPlayerCount =>
-      case ChoosePlayerStone => {
+      case ChoosePlayerStone =>
         if (checkValidPlayerStone(x, y)) {
           chooseStone()
         }
-      }
-      case ChooseTarget => {
+      case ChooseTarget =>
         if (setTargetForPlayerStone(x, y)) {
           chooseTarget()
         }
-      }
-      case SetBlockStone => {
+      case SetBlockStone =>
         if (setTargetForBlockStone(x, y)) {
-          undoManager.doStep(new BlockStoneCommand(destField, this))
-          state = Print
-          notifyObservers()
-          state = BeforeEndOfTurn
-          notifyObservers()
+          setBlockStone()
         }
-      }
       case PlayerWon =>
       case BeforeEndOfTurn =>
       case EndTurn =>
@@ -154,6 +146,14 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   def reset(): Unit = {
     activePlayer = gameBoard.player3
     state = SetPlayerCount
+    notifyObservers()
+  }
+
+  private def setBlockStone(): Unit = {
+    undoManager.doStep(new BlockStoneCommand(destField, this))
+    state = Print
+    notifyObservers()
+    state = BeforeEndOfTurn
     notifyObservers()
   }
 
@@ -232,7 +232,10 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   }
 
   def setChoosenPlayerStone(newStone: PlayerStone): Unit = chosenPlayerStone = newStone
-  def getChoosenPlayerStone(): PlayerStone = chosenPlayerStone
+
+  def getChoosenPlayerStone: PlayerStone = chosenPlayerStone
+
   def setDestField(newField: Field): Unit = destField = newField
-  def getDestField(): Field = destField
+
+  def getDestField: Field = destField
 }
