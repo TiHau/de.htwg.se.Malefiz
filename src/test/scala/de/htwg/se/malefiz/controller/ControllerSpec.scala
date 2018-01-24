@@ -305,7 +305,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state = ChooseTarget
         controller.takeInput(6,13)
         controller.undo()
-        controller.state = EndTurn
+        controller.state = BeforeEndOfTurn
         controller.takeInput(0,0)
 
       }
