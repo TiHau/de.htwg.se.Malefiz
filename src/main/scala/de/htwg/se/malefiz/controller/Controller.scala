@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import com.google.inject.name.Names
-import com.google.inject.{Guice, Inject, Injector}
+import com.google.inject.{ Guice, Inject, Injector }
 import net.codingwell.scalaguice.InjectorExtensions._
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.malefiz.MalefizModule
@@ -32,7 +32,7 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
     } else if (playerCount == 3) {
       gameBoard = injector.instance[GameBoardInterface](Names.named("small")).createBoard
     } else {
-      injector.instance[GameBoardInterface](Names.named("default")).createBoard
+      gameBoard = injector.instance[GameBoardInterface](Names.named("default")).createBoard
     }
     nextTurn()
   }
@@ -43,7 +43,7 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
     } else if (playerCount == 3) {
       gameBoard = injector.instance[GameBoardInterface](Names.named("small")).createBoard
     } else {
-      injector.instance[GameBoardInterface](Names.named("default")).createBoard
+      gameBoard = injector.instance[GameBoardInterface](Names.named("default")).createBoard
     }
   }
 
