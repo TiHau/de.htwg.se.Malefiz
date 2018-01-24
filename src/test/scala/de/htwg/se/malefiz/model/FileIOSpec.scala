@@ -16,6 +16,7 @@ class FileIOSpec extends WordSpec with Matchers {
   val injector: Injector = Guice.createInjector(new MalefizModule)
   val fileIO: FileIOInterface = injector.instance[FileIOInterface]
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  controller.setPlayerCount(2)
   "A FileIO" when {
     "gameStart" should {
 
@@ -27,6 +28,12 @@ class FileIOSpec extends WordSpec with Matchers {
         fileIO.save(controller)
         Files.exists(Paths.get("saveFile.json")) || Files.exists(Paths.get("saveFile.xml")) shouldBe (true)
 
+      }
+
+      "should can load the game with by new controller with same playercount" in {
+        controller.reset()
+        fileIO.load(controller)
+        controller.gameBoard.playerCount shouldBe (2)
       }
 
     }
