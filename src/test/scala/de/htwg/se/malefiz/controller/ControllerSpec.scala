@@ -55,6 +55,8 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.takeInput(10, 14)
         controller.undo()
         controller.state shouldBe ChoosePlayerStone
+        controller.undo()
+        controller.state shouldBe ChoosePlayerStone
         controller.redo()
         controller.state shouldBe ChooseTarget
       }
