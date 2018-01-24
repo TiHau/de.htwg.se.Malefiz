@@ -10,7 +10,7 @@ import scala.xml.NodeSeq
 
 class FileIO extends FileIOInterface {
   override def load(controller: ControllerInterface): Unit = {
-    if (Files.exists(Paths.get("saveFile.json"))) {
+    if (Files.exists(Paths.get("saveFile.xml"))) {
       val file = xml.XML.loadFile("saveFile.xml")
       val boardNode: NodeSeq = file \\ "board"
       loadBoard(boardNode, controller)
