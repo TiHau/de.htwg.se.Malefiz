@@ -145,6 +145,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.state shouldBe (ChoosePlayerStone)
       }
       "beat a PlayerStone" in {
+        controller.newGame(2)
         val field1 = controller.gameBoard.board(14)(14).asInstanceOf[Field]
         val field2 = controller.gameBoard.board(14)(13).asInstanceOf[Field]
         controller.activePlayer = controller.gameBoard.player1
@@ -155,6 +156,8 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.gameBoard.forceMoveStone(field1, field2)
         controller.gameBoard.board(14)(13).asInstanceOf[Field].avariable = true
         controller.takeInput(14, 13)
+        controller.undo()
+        controller.state shouldBe ChooseTarget
       }
 
       "beat a BlockStone" in {

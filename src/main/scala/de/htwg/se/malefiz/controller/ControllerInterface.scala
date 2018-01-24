@@ -11,20 +11,20 @@ trait ControllerInterface extends Observable with Publisher {
   private val six = 6
 
   /**
-    * Der aktuelle Spielzustand
-    */
+   * Der aktuelle Spielzustand
+   */
   var state: State.Value = Print
   /**
-    * Boolen wert der festlegt ob ein Blockstein gesetzt werden muss
-    */
+   * Boolen wert der festlegt ob ein Blockstein gesetzt werden muss
+   */
   var needToSetBlockStone = false
   /**
-    * Der Spieler der aktuell am Zug ist
-    */
+   * Der Spieler der aktuell am Zug ist
+   */
   var activePlayer: Player = Player(six)
   /**
-    * Die gewürfelte Zahl
-    */
+   * Die gewürfelte Zahl
+   */
   var diced: Int = six
 
   /**
@@ -50,21 +50,21 @@ trait ControllerInterface extends Observable with Publisher {
   def redo(): Unit
 
   /**
-    * Erstellt ein neues Spiel
-    * @param countPlayer Spieleranzahl
-    */
+   * Erstellt ein neues Spiel
+   * @param countPlayer Spieleranzahl
+   */
   def newGame(countPlayer: Int): Unit
 
   /**
-    * Setzt die Spieleranzahl
-    * @param playerCount Spieleranzahl
-    */
+   * Setzt die Spieleranzahl
+   * @param playerCount Spieleranzahl
+   */
   def setPlayerCount(playerCount: Int): Unit
 
   /**
-    * Liefert das GameBoard
-    * @return GameBoard
-    */
+   * Liefert das GameBoard
+   * @return GameBoard
+   */
   def gameBoard: GameBoardInterface
 
   /**
@@ -73,16 +73,16 @@ trait ControllerInterface extends Observable with Publisher {
   def endTurn(): Unit
 
   /**
-    * Bekommt Koordinaten eines Felds und führt in Abhängigkeit des aktuellen Spielstatuses
-    * die jeweilige Operationen aus
-    * @param x X-Koordinate
-    * @param y Y-Koordinate
-    */
+   * Bekommt Koordinaten eines Felds und führt in Abhängigkeit des aktuellen Spielstatuses
+   * die jeweilige Operationen aus
+   * @param x X-Koordinate
+   * @param y Y-Koordinate
+   */
   def takeInput(x: Int, y: Int): Unit
 
   /**
-    * Setzt Spiel zurück
-    */
+   * Setzt Spiel zurück
+   */
   def reset(): Unit
 
   /**

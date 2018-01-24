@@ -11,37 +11,37 @@ trait GameBoardInterface extends Publisher {
   private val y = 16
 
   /**
-    * Spieler 1
-    */
+   * Spieler 1
+   */
   val player1 = Player(one)
   /**
-    * Spieler 2
-    */
+   * Spieler 2
+   */
   val player2 = Player(two)
   /**
-    * Spieler 3
-    */
+   * Spieler 3
+   */
   val player3 = Player(three)
   /**
-    * Spieler 4
-    */
+   * Spieler 4
+   */
   val player4 = Player(four)
 
   /**
-    * Das Spielfeld
-    */
+   * Das Spielfeld
+   */
   val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
 
   /**
-    * Initialisiert Felder neu
-    * @return neues GameBoard
-    */
+   * Initialisiert Felder neu
+   * @return neues GameBoard
+   */
   def createBoard: GameBoardInterface
 
   /**
-    * Liefert die Anzahl von Spielern
-    * @return Anzahl
-    */
+   * Liefert die Anzahl von Spielern
+   * @return Anzahl
+   */
   def playerCount: Int
 
   /**
