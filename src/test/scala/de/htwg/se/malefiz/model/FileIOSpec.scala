@@ -15,25 +15,21 @@ import org.scalatest.junit.JUnitRunner
 class FileIOSpec extends WordSpec with Matchers {
   val injector: Injector = Guice.createInjector(new MalefizModule)
   val fileIO: FileIOInterface = injector.instance[FileIOInterface]
-  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  var controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   controller.setPlayerCount(2)
   "A FileIO" when {
     "gameStart" should {
 
       "have no existing File" in {
-        Files.exists(Paths.get("saveFile.json")) && Files.exists(Paths.get("saveFile.xml")) shouldBe (false)
+        Files.exists(Paths.get("saveFile.json")) && Files.exists(Paths.get("saveFile.xml")) shouldBe false
       }
 
-      "should can save and then file exists" in {
+      "should can save and load then file exists and restore count" in {
         fileIO.save(controller)
-        Files.exists(Paths.get("saveFile.json")) || Files.exists(Paths.get("saveFile.xml")) shouldBe (true)
-
-      }
-
-      "should can load the game with by new controller with same playercount" in {
-        controller.reset()
         fileIO.load(controller)
-        controller.gameBoard.playerCount shouldBe (2)
+        Files.exists(Paths.get("saveFile.json")) || Files.exists(Paths.get("saveFile.xml")) shouldBe true
+        controller.gameBoard.playerCount shouldBe 2
+
       }
 
     }
