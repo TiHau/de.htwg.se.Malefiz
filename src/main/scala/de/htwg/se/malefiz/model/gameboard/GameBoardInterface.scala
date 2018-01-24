@@ -7,6 +7,42 @@ trait GameBoardInterface extends Publisher {
   private val two = 2
   private val three = 3
   private val four = 4
+  private val x = 17
+  private val y = 16
+
+  /**
+    * Spieler 1
+    */
+  val player1 = Player(one)
+  /**
+    * Spieler 2
+    */
+  val player2 = Player(two)
+  /**
+    * Spieler 3
+    */
+  val player3 = Player(three)
+  /**
+    * Spieler 4
+    */
+  val player4 = Player(four)
+
+  /**
+    * Das Spielfeld
+    */
+  val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
+
+  /**
+    * Initialisiert Felder neu
+    * @return neues GameBoard
+    */
+  def createBoard: GameBoardInterface
+
+  /**
+    * Liefert die Anzahl von Spielern
+    * @return Anzahl
+    */
+  def playerCount: Int
 
   /**
    * Überprüft ob an den übergebenen Koordinaten ein Blockstein gesetzt werden darf
@@ -78,14 +114,5 @@ trait GameBoardInterface extends Publisher {
    * @return true, wenn ein Spielerstein auf dem Zielfed steht
    */
   def checkWin: Boolean
-  def createBoard: GameBoardInterface
-  val player1 = Player(one)
-  val player2 = Player(two)
-  val player3 = Player(three)
-  val player4 = Player(four)
-  def playerCount: Int
-  private val x = 17
-  private val y = 16
-  val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
 
 }
