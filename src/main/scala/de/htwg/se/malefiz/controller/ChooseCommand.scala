@@ -5,8 +5,7 @@ import de.htwg.se.malefiz.model.gameboard.PlayerStone
 
 class ChooseCommand(stone: PlayerStone, controller: ControllerInterface) extends Command {
 
-  override def doStep(): Unit =
-    controller.gameBoard.markPossibleMoves(stone, controller.activePlayer, controller.diced)
+  override def doStep(): Unit = controller.gameBoard.markPossibleMoves(stone, controller.activePlayer, controller.diced)
 
   override def undoStep(): Unit = controller.gameBoard.unmarkPossibleMoves()
 

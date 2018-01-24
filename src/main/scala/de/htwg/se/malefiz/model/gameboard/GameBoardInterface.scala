@@ -7,6 +7,42 @@ trait GameBoardInterface extends Publisher {
   private val two = 2
   private val three = 3
   private val four = 4
+  private val x = 17
+  private val y = 16
+
+  /**
+    * Spieler 1
+    */
+  val player1 = Player(one)
+  /**
+    * Spieler 2
+    */
+  val player2 = Player(two)
+  /**
+    * Spieler 3
+    */
+  val player3 = Player(three)
+  /**
+    * Spieler 4
+    */
+  val player4 = Player(four)
+
+  /**
+    * Das Spielfeld
+    */
+  val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
+
+  /**
+    * Initialisiert Felder neu
+    * @return neues GameBoard
+    */
+  def createBoard: GameBoardInterface
+
+  /**
+    * Liefert die Anzahl von Spielern
+    * @return Anzahl
+    */
+  def playerCount: Int
 
   /**
    * Überprüft ob an den übergebenen Koordinaten ein Blockstein gesetzt werden darf
@@ -19,19 +55,19 @@ trait GameBoardInterface extends Publisher {
   /**
    * Setzt einen Blockstein auf ein übergebenes Feld. Das Feld sollte vorher mit
    * <code>checkDestForBlockStone(x: Int, y: Int): Boolean</code> überprüft werden.
-   * @param field
+   * @param field Ein Freies Feld
    */
   def setBlockStoneOnField(field: Field): Unit
 
   /**
-   * Setzt den Stein des Felds auf einen FreeStone
-   * @param field
+   * Entfernt den Stein des Felds und setzt ihn auf einen FreeStone
+   * @param field Ein Feld
    */
   def removeStoneOnField(field: Field): Unit
 
   /**
    * Setzt den übergebenen Spielerstein wieder auf sein Startfeld zurück
-   * @param stone
+   * @param stone Ein Spielerstein
    */
   def resetPlayerStone(stone: PlayerStone): Unit
 
@@ -46,7 +82,7 @@ trait GameBoardInterface extends Publisher {
   /**
    * Versetzt den Stein von f1 nach f2. Überprüft ob das Zielfeld im Spielbereich liegt und ob avaribale= true ist
    * Der Stein auf f1 wird auf FreeStone gesetzt.
-   * @param current
+   * @param current Aktuelles Feld
    * @param dest Zielfeld
    * @return Den geschlagenen Stein oder None
    */
@@ -55,8 +91,8 @@ trait GameBoardInterface extends Publisher {
   /**
    * Versetzt einene Stein.Ohne das Zielfeld zu überprüfen.
    * Der Stein auf f1 wird auf FreeStone gesetzt.
-   * @param current
-   * @param dest
+   * @param current Aktuelles Feld
+   * @param dest Zielfeld
    */
   def forceMoveStone(current: Field, dest: Field): Unit
 
@@ -78,14 +114,5 @@ trait GameBoardInterface extends Publisher {
    * @return true, wenn ein Spielerstein auf dem Zielfed steht
    */
   def checkWin: Boolean
-  def createBoard: GameBoardInterface
-  val player1 = Player(one)
-  val player2 = Player(two)
-  val player3 = Player(three)
-  val player4 = Player(four)
-  def playerCount: Int
-  private val x = 17
-  private val y = 16
-  val board: Array[Array[AbstractField]] = Array.ofDim[AbstractField](x, y)
 
 }

@@ -5,7 +5,7 @@ import de.htwg.se.malefiz.controller.{ ControllerInterface }
 trait FileIOInterface {
 
   /**
-   * Läd den gewspeicherten Spielstand
+   * Läd den gespeicherten Spielstand
    * @param controller
    */
   def load(controller: ControllerInterface): Unit
