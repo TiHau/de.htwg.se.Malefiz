@@ -11,18 +11,24 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
   private var hitStone = new Stone('f')
 
   override def doStep(): Unit = {
+
     hitStone = controller.gameBoard.moveStone(currentField, destField).get
+
     hitStone.sort match {
       case 'p' => controller.gameBoard.resetPlayerStone(hitStone.asInstanceOf[PlayerStone])
       case 'f' =>
       case 'b' => controller.needToSetBlockStone = true
     }
+
     controller.gameBoard.unmarkPossibleMoves()
   }
 
   override def undoStep(): Unit = {
+
     controller.gameBoard.forceMoveStone(destField, currentField)
+
     destField.stone = hitStone
+
     if (hitStone.sort == 'p') {
       val x = hitStone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].x
       val y = hitStone.asInstanceOf[PlayerStone].startField.asInstanceOf[Field].y
@@ -31,6 +37,7 @@ class MoveCommand(stone: PlayerStone, destField: Field, controller: ControllerIn
     }
 
     controller.gameBoard.markPossibleMoves(stone, controller.activePlayer, controller.diced)
+
     controller.needToSetBlockStone = false
   }
 

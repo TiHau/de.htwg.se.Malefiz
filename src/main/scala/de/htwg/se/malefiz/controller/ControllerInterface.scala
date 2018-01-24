@@ -10,9 +10,21 @@ trait ControllerInterface extends Observable with Publisher {
 
   private val six = 6
 
+  /**
+    * Der aktuelle Spielzustand
+    */
   var state: State.Value = Print
+  /**
+    * Boolen wert der festlegt ob ein Blockstein gesetzt werden muss
+    */
   var needToSetBlockStone = false
-  var activePlayer: Player = new Player(six)
+  /**
+    * Der Spieler der aktuell am Zug ist
+    */
+  var activePlayer: Player = Player(six)
+  /**
+    * Die gewürfelte Zahl
+    */
   var diced: Int = six
 
   /**
@@ -36,40 +48,66 @@ trait ControllerInterface extends Observable with Publisher {
    * Aktualisiert den Spielstatus
    */
   def redo(): Unit
+
+  /**
+    * Erstellt ein neues Spiel
+    * @param countPlayer Spieleranzahl
+    */
   def newGame(countPlayer: Int): Unit
+
+  /**
+    * Setzt die Spieleranzahl
+    * @param playerCount Spieleranzahl
+    */
   def setPlayerCount(playerCount: Int): Unit
+
+  /**
+    * Liefert das GameBoard
+    * @return GameBoard
+    */
   def gameBoard: GameBoardInterface
 
   /**
    * beendet den Zug und startet den nächsten
    */
   def endTurn(): Unit
+
+  /**
+    * Bekommt Koordinaten eines Felds und führt in Abhängigkeit des aktuellen Spielstatuses
+    * die jeweilige Operationen aus
+    * @param x X-Koordinate
+    * @param y Y-Koordinate
+    */
   def takeInput(x: Int, y: Int): Unit
+
+  /**
+    * Setzt Spiel zurück
+    */
   def reset(): Unit
 
   /**
    * Setzt das Zielfeld auf die Übergebenen Koordinaten, übeprüft ab es ein gültiges Zielfeld ist
-   * @param x
-   * @param y
+   * @param x X-Koordinate
+   * @param y y-Koordinate
    * @return true, wenn das Zielfeld gültig ist
    */
   def setTargetForPlayerStone(x: Int, y: Int): Boolean
 
   /**
    * Setzt den ausgwählten Spielerstein
-   * @param newStone
+   * @param newStone neuer Spielerstein
    */
   def setChoosenPlayerStone(newStone: PlayerStone): Unit
 
   /**
    * Liefert den ausgewählten Spielerstein
-   * @return
+   * @return ausgewählter Spielerstein
    */
-  def getChoosenPlayerStone(): PlayerStone
+  def getChoosenPlayerStone: PlayerStone
 
   /**
    * Setzt das Zielfeld
-   * @param newField
+   * @param newField neues Zielfeld
    */
   def setDestField(newField: Field): Unit
 
@@ -77,5 +115,5 @@ trait ControllerInterface extends Observable with Publisher {
    * Liefert das Zielfeld
    * @return
    */
-  def getDestField(): Field
+  def getDestField: Field
 }
