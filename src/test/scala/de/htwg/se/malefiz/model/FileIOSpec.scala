@@ -16,10 +16,10 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class FileIOSpec extends WordSpec with Matchers {
 
-  var injector: Injector = Guice.createInjector(new MalefizModuleJsonSpec)
-  val fileIO: FileIOInterface = injector.instance[FileIOInterface]
-  var controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   "A FileIO Json" when {
+    val injector: Injector = Guice.createInjector(new MalefizModuleJsonSpec)
+    val fileIO: FileIOInterface = injector.instance[FileIOInterface]
+    val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
     "gameStart" should {
       if (Files.exists(Paths.get("saveFile.json"))) {
         Files.delete(Paths.get("saveFile.json"))
@@ -80,7 +80,9 @@ class FileIOSpec extends WordSpec with Matchers {
     }
   }
   "A FileIO Xml" when {
-    injector = Guice.createInjector(new MalefizModuleXmlSpec)
+    val injector: Injector = Guice.createInjector(new MalefizModuleXmlSpec)
+    val fileIO: FileIOInterface = injector.instance[FileIOInterface]
+    val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
     "gameStart" should {
       if (Files.exists(Paths.get("saveFile.json"))) {
         Files.delete(Paths.get("saveFile.json"))
