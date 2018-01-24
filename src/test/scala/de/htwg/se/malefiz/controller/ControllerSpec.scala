@@ -285,6 +285,18 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.setChoosenPlayerStone(testPlayerStone)
         controller.getChoosenPlayerStone() shouldBe(testPlayerStone)
       }
+
+      "save and load" in {
+        controller.newGame(4)
+        val oldState = controller.state
+        val oldDiced = controller.diced
+        val oldPlayer = controller.activePlayer
+        controller.saveGame()
+        controller.loadSavedGame()
+        controller.state shouldBe(oldState)
+        controller.diced shouldBe(oldDiced)
+        controller.activePlayer shouldBe(oldPlayer)
+      }
     }
   }
 
