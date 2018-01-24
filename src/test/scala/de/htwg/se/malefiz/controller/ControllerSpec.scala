@@ -232,21 +232,21 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "when a new playerCount of 2 is set" in {
-        controller.newGame(2)
+        controller.setPlayerCount(2)
         controller.state shouldBe(ChoosePlayerStone)
-        controller.activePlayer shouldBe(controller.gameBoard.player1)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
         controller.needToSetBlockStone shouldBe(false)
       }
 
       "when a new playerCount of 3 is set" in {
-        controller.newGame(3)
+        controller.setPlayerCount(3)
         controller.state shouldBe(ChoosePlayerStone)
-        controller.activePlayer shouldBe(controller.gameBoard.player4)
+        controller.activePlayer shouldBe(controller.gameBoard.player2)
         controller.needToSetBlockStone shouldBe(false)
       }
 
       "when a new playerCount of 4 is set" in {
-        controller.newGame(4)
+        controller.setPlayerCount(4)
         controller.state shouldBe(ChoosePlayerStone)
         controller.activePlayer shouldBe(controller.gameBoard.player2)
         controller.needToSetBlockStone shouldBe(false)
@@ -261,9 +261,9 @@ class ControllerSpec extends WordSpec with Matchers {
 
       "when input comes in in EndTurn state" in {
         controller.newGame(4)
-        controller.state = SetPlayerCount
+        controller.state = EndTurn
         controller.takeInput(0,0)
-        controller.state shouldBe(SetPlayerCount)
+        controller.state shouldBe(EndTurn)
       }
 
 
