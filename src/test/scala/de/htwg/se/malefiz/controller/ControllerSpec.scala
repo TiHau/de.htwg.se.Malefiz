@@ -297,6 +297,18 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.diced shouldBe(oldDiced)
         controller.activePlayer shouldBe(oldPlayer)
       }
+
+      "when an unreachable State of the Game somehow is reached" in {
+        controller.newGame(4)
+        controller.setChoosenPlayerStone(controller.activePlayer.stones(0))
+        controller.diced = 1
+        controller.state = ChooseTarget
+        controller.takeInput(6,13)
+        controller.undo()
+        controller.state = EndTurn
+        controller.takeInput(0,0)
+
+      }
     }
   }
 
