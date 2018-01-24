@@ -15,7 +15,7 @@ class MalefizModule extends AbstractModule with ScalaModule {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind[GameBoardInterface].to[GameBoard]
     bind[ControllerInterface].to[Controller]
-    bind[FileIOInterface].to[fileioxml.FileIO]
+    bind[FileIOInterface].to[fileioJson.FileIO]
     bind[GameBoardInterface].annotatedWithName("default").toInstance(GameBoard(defaultSize))
     bind[GameBoardInterface].annotatedWithName("tiny").toInstance(GameBoard(tiny))
     bind[GameBoardInterface].annotatedWithName("small").toInstance(GameBoard(small))

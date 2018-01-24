@@ -19,6 +19,9 @@ class FileIOSpec extends WordSpec with Matchers {
   controller.setPlayerCount(2)
   "A FileIO" when {
     "gameStart" should {
+      if (Files.exists(Paths.get("saveFile.json"))) {
+        Files.delete(Paths.get("saveFile.json"))
+      } else if (Files.exists(Paths.get("saveFile.xml"))) { Files.delete(Paths.get("saveFile.xml")) }
 
       "have no existing File" in {
         Files.exists(Paths.get("saveFile.json")) && Files.exists(Paths.get("saveFile.xml")) shouldBe false
@@ -26,6 +29,7 @@ class FileIOSpec extends WordSpec with Matchers {
 
       "should can save and load then file exists and restore count" in {
         fileIO.save(controller)
+        controller.setPlayerCount(4)
         fileIO.load(controller)
         Files.exists(Paths.get("saveFile.json")) || Files.exists(Paths.get("saveFile.xml")) shouldBe true
         controller.gameBoard.playerCount shouldBe 2
