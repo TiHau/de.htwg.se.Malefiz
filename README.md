@@ -17,9 +17,16 @@ Malefiz is a widely used board game by [Ravensburger](https://www.ravensburger.d
 The project was developed in the context of the lecture "Software Engineering" at the University of Applied Science Konstanz, Germany. (WS 17/18)  
 The goal of this project was to learn and apply these following components:
 
-* version control with git
-* layered architecture
-* design patterns
+* Version control with git
+* Layered architecture (MVC)
+* Design patterns
+* Timemanagement with Scrum
+* Code-Coverage using [coveralls.io](https://coveralls.io/)
+* Learning the scala programming language
+* Logging
+* Event oriented parallel running GUI & TUI
+* Continuous integration using [Travis-CI](https://travis-ci.org/)
+* Dependency injection
 
 ## Game Instructions
 ### Goal of the game
