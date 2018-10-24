@@ -88,10 +88,8 @@ class FileIO extends FileIOInterface {
     }
 
     controller.setDestField(controller.gameBoard.board(
-      (controllerNode \\ "destField" \ "x").text.trim.toInt
-    )(
-      (controllerNode \\ "destField" \ "y").text.trim.toInt
-    ).asInstanceOf[Field])
+      (controllerNode \\ "destField" \ "x").text.trim.toInt)(
+        (controllerNode \\ "destField" \ "y").text.trim.toInt).asInstanceOf[Field])
   }
 
   override def save(controller: ControllerInterface): Unit = {

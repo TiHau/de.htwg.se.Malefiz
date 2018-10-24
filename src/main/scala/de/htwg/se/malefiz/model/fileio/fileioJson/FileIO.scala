@@ -50,10 +50,8 @@ class FileIO extends FileIOInterface {
     }
 
     controller.setDestField(controller.gameBoard.board(
-      (json \ "controller" \ "destField" \ "x").get.toString().toInt
-    )(
-      (json \ "controller" \ "destField" \ "y").get.toString().toInt
-    ).asInstanceOf[Field])
+      (json \ "controller" \ "destField" \ "x").get.toString().toInt)(
+        (json \ "controller" \ "destField" \ "y").get.toString().toInt).asInstanceOf[Field])
 
     controller.needToSetBlockStone = (json \ "controller" \ "needToSetBlockStone").get.toString().toBoolean
   }
@@ -109,24 +107,18 @@ class FileIO extends FileIOInterface {
         "state" -> JsString(controller.state.toString),
         "choosenPlayerStone" -> Json.obj(
           "startX" -> JsNumber(controller.getChoosenPlayerStone.startField.asInstanceOf[Field].x),
-          "startY" -> JsNumber(controller.getChoosenPlayerStone.startField.asInstanceOf[Field].y)
-        ),
+          "startY" -> JsNumber(controller.getChoosenPlayerStone.startField.asInstanceOf[Field].y)),
         "destField" -> Json.obj(
           "x" -> JsNumber(controller.getDestField.x),
-          "y" -> JsNumber(controller.getDestField.y)
-        ),
-        "needToSetBlockStone" -> JsBoolean(controller.needToSetBlockStone)
-      ),
+          "y" -> JsNumber(controller.getDestField.y)),
+        "needToSetBlockStone" -> JsBoolean(controller.needToSetBlockStone)),
       "board" -> Json.obj(
         "fields" -> Json.toJson(
           for {
             x <- 0 to 16
             y <- 0 to 15
-          } yield fieldToJson(controller.gameBoard, x, y)
-        ),
-        "playerCount" -> JsNumber(controller.gameBoard.playerCount)
-      )
-    )
+          } yield fieldToJson(controller.gameBoard, x, y)),
+        "playerCount" -> JsNumber(controller.gameBoard.playerCount)))
   }
 
   def fieldToJson(gameBoard: GameBoardInterface, x: Int, y: Int): JsObject = {
@@ -143,21 +135,18 @@ class FileIO extends FileIOInterface {
           "sort" -> JsString(sort.toString),
           "avariable" -> JsBoolean(field.avariable),
           "startFieldX" -> JsNumber(startFieldX),
-          "startFieldY" -> JsNumber(startFieldY)
-        )
+          "startFieldY" -> JsNumber(startFieldY))
       } else {
         Json.obj(
           "isFreeSpace" -> JsBoolean(gameBoard.board(x)(y).isFreeSpace()),
           "x" -> JsNumber(x),
           "y" -> JsNumber(y),
           "sort" -> JsString(sort.toString),
-          "avariable" -> JsBoolean(field.avariable)
-        )
+          "avariable" -> JsBoolean(field.avariable))
       }
     } else {
       Json.obj(
-        "isFreeSpace" -> JsBoolean(true)
-      )
+        "isFreeSpace" -> JsBoolean(true))
     }
   }
 }
