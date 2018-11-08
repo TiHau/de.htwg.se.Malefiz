@@ -99,7 +99,10 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
           case '3' => setStoneColorWithoutBackground(Color.YELLOW)
           case '4' => setStoneColorWithoutBackground(Color.BLUE)
           case 'x' => setStoneColorWithBackgroundPainting(new Color(238, 118, 0))
-          case 'P' => setStoneColorWithBackgroundPainting(Color.MAGENTA)
+          case 'G' => setStoneColorWithAlternateBackgroundPainting(Color.RED)
+          case 'K' => setStoneColorWithAlternateBackgroundPainting(Color.BLUE)
+          case 'J' => setStoneColorWithAlternateBackgroundPainting(Color.YELLOW)
+          case 'H' => setStoneColorWithAlternateBackgroundPainting(Color.GREEN)
           case 'B' => setStoneColorWithBackgroundPainting(Color.WHITE)
           case _ =>
         }
@@ -115,6 +118,15 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
       def setStoneColorWithBackgroundPainting(color: Color): Unit = {
         if (check == 1) {
           g.setColor(new Color(238, 118, 0))
+          g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
+            ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
+          check += 1
+          g.setColor(color)
+        }
+      }
+      def setStoneColorWithAlternateBackgroundPainting(color: Color): Unit = {
+        if (check == 1) {
+          g.setColor(Color.MAGENTA)
           g.fillOval(20 + ((size.width - 50) / 17) * x, 100 + ((size.height - 110) / 16) * y,
             ((size.width - 50) / 17) - 2, ((size.height - 110) / 16) - 2)
           check += 1

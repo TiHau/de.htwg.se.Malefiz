@@ -12,7 +12,7 @@ case class TUI(controller: ControllerInterface) extends Observer {
   controller.add(this)
 
   def printGameBoard(): Unit = {
-    logger.info("Gameboard: \n" +
+    logger.info("\nGameboard: \n" +
       controller.gameBoard.toString +
       "\nPlayer: " + controller.activePlayer.color +
       "\nDiced: " + controller.diced

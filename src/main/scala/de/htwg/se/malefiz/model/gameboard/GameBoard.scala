@@ -123,7 +123,14 @@ case class GameBoard @Inject() (@Named("DefaultSize") var playerCount: Int) exte
             case 'p' => if (!s.avariable) {
               jsb.append("|" + s.stone.asInstanceOf[PlayerStone].playerColor + "|")
             } else {
-              jsb.append("|P|")
+              s.stone.asInstanceOf[PlayerStone].playerColor match {
+                case 1=>   jsb.append("|G|")
+                case 2=>  jsb.append("|H|")
+                case 3=>  jsb.append("|J|")
+                case 4 => jsb.append("|K|")
+                case _=> jsb.append("|P|")
+              }
+
             }
             case 'b' => if (!s.avariable) {
               jsb.append("|-|")
