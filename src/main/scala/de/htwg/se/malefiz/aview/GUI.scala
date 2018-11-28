@@ -28,9 +28,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
         controller.takeInput(rectX, rectY)
 
       case KeyPressed(_, Key.Enter, _, _) => {
-        if (controller.state == BeforeEndOfTurn) {
           controller.endTurn()
-        }
       }
       case KeyPressed(_, Key.BackSpace, _, _) => {
         controller.undo()

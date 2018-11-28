@@ -101,8 +101,10 @@ case class Controller @Inject() () extends ControllerInterface with Publisher {
   }
 
   def endTurn(): Unit = {
-    state = EndTurn
-    nextTurn()
+    if (state == BeforeEndOfTurn) {
+      state = EndTurn
+      nextTurn()
+    }
   }
 
   private def nextTurn(): Unit = {
