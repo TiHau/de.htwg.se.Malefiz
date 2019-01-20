@@ -1,7 +1,7 @@
 package de.htwg.se.malefiz.controller
 
 import com.google.inject.name.Names
-import com.google.inject.{ Guice, Inject, Injector }
+import com.google.inject.{Guice, Inject, Injector}
 import net.codingwell.scalaguice.InjectorExtensions._
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.malefiz.MalefizModule
@@ -9,6 +9,7 @@ import de.htwg.se.malefiz.util.UndoManager
 import de.htwg.se.malefiz.model.gameboard._
 import de.htwg.se.malefiz.controller.State._
 import de.htwg.se.malefiz.model.fileio.FileIOInterface
+import play.api.libs.json.JsObject
 
 import scala.swing.Publisher
 
