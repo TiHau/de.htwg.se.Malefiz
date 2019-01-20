@@ -112,24 +112,29 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "change player from 3 to 4" in {
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.activePlayer shouldBe controller.gameBoard.player4
       }
       "change player from 4 to 2" in {
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.activePlayer shouldBe controller.gameBoard.player2
       }
       "change player from 1 to 3" in {
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.activePlayer shouldBe controller.gameBoard.player3
       }
       "change player from 2 to 1" in {
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.activePlayer shouldBe controller.gameBoard.player1
       }
       "change player from 4 to 1 with Playercount = 2" in {
         controller.newGame(2)
         controller.activePlayer = controller.gameBoard.player4
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.activePlayer shouldBe controller.gameBoard.player1
 
@@ -137,6 +142,7 @@ class ControllerSpec extends WordSpec with Matchers {
       "check win" in {
         controller.gameBoard.board(8)(0).asInstanceOf[Field].stone =
           PlayerStone(controller.gameBoard.board(8)(0), controller.gameBoard.board(8)(0), 1)
+        controller.state = BeforeEndOfTurn
         controller.endTurn()
         controller.state shouldBe PlayerWon
       }
